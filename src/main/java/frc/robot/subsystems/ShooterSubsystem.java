@@ -35,10 +35,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(shootWhenReady){
-        if(state == 0){
-            state = 1;
-        }
+    if(shootWhenReady && state == 0){
+        state = 1;
     }
     manageShooterRollers();
     printDashboard();
