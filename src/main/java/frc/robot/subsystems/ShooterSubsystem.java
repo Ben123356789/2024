@@ -40,7 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
             state = 1;
         }
     }
-    shootRoutine();
+    manageShooterRollers();
     printDashboard();
   }
   
@@ -50,7 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
 
-  public void shootRoutine(){
+  public void manageShooterRollers(){
     switch(state){
         case 1:
             intakeBottomStartPos = intakeBottom.getEncoder().getPosition();
