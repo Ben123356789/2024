@@ -27,6 +27,6 @@ public class PigeonSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Pigeon Acc X", accelAngles[0]);
     SmartDashboard.putNumber("Pigeon Acc Y", accelAngles[1]);
     SmartDashboard.putNumber("Pigeon Acc Z", accelAngles[2]);
-    SmartDashboard.putNumber("Pigeon Current Temp °C", pigeon.getTemp());
+    SmartDashboard.putNumber("Pigeon Current Temp [C]", pigeon.getTemp());
   }
 }
