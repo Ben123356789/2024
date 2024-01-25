@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class IntakeSubsystem extends SubsystemBase {
-  enum IntakeState {
+public class FlumperSubsystem extends SubsystemBase {
+  enum FlumperState {
     Eat,
     Stop,
     Spit;
@@ -28,21 +28,21 @@ public class IntakeSubsystem extends SubsystemBase {
   boolean reverse = false;
   double speed;
 
-  public IntakeSubsystem() {
+  public FlumperSubsystem() {
     intakeMotor = new CANSparkMax(Constants.INTAKE_ID, MotorType.kBrushless);
     intakeMotor.setInverted(reverse);
   }
 
-  public void set(IntakeState state) {
+  public void set(FlumperState state) {
     set(state.speed());
   }
   public void set(double speed) {
     this.speed = speed;
   }
 
-  public void eat() { set(IntakeState.Eat); }
-  public void stop() { set(IntakeState.Stop); }
-  public void spit() { set(IntakeState.Spit); }
+  public void eat() { set(FlumperState.Eat); }
+  public void stop() { set(FlumperState.Stop); }
+  public void spit() { set(FlumperState.Spit); }
 
   @Override
   public void periodic() {
