@@ -18,6 +18,7 @@ public class ShooterSubsystem extends SubsystemBase {
   int state;
   double intakeBottomStartPos;
   double intakeTopStartPos;
+  public boolean shootWhenReady;
   
   public ShooterSubsystem() {
     shooterTop = new CANSparkMax(Constants.ShooterTopID, MotorType.kBrushless);
@@ -34,12 +35,20 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(shootWhenReady){
+        if(state == 0){
+            state = 1;
+        }
+    }
+    shootRoutine();
     printDashboard();
   }
   
   public void intakeInit() {
     shooterTimer.restart();
   }
+
+
 
   public void shootRoutine(){
     switch(state){
@@ -73,6 +82,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 shooterTop.set(1);
             } else{
                 state = 0;
+                shootWhenReady = false;
             }
             break;
         default:
