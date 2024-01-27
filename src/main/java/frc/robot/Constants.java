@@ -19,8 +19,8 @@ public final class Constants {
     public static final int CLIMBER_RIGHT_ID = 0;
 
     public static final int SHOULDER_LEFT_MOTOR_ID = 0;
-    //Following values are in degrees
     public static final int SHOULDER_RIGHT_MOTOR_ID = 0;
+    //Following values are in degrees
     public static final int SHOULDER_STOWED_POSITION = 0;
     public static final int SHOULDER_INTAKE_POSITION = 0;
     public static final int SHOULDER_SOURCE_POSITION = 0;
