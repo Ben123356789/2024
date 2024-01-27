@@ -8,16 +8,21 @@ import frc.robot.JMath;
 import frc.robot.PIDMotor;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    PIDMotor elevatorMotor = new PIDMotor(Constants.ELEVATOR_ID, 0, 0, 0, 0, ControlType.kPosition, 0);
+    static final int ID = 0;
+    static final double ENCODER_LOWEST = 0.0;
+    static final double ENCODER_HIGHEST = 0.0;
+    static final double HEIGHT = 9.0;
+
+    PIDMotor elevatorMotor = new PIDMotor(ID, 0, 0, 0, 0, ControlType.kPosition, 0);
 
     public ElevatorSubsystem() {}
 
     public void setHeight(double height) {
-        setUnchecked(JMath.clamp(height, 0.0, Constants.ELEVATOR_HEIGHT));
+        setUnchecked(JMath.clamp(height, 0.0, HEIGHT));
     }
 
     void setUnchecked(double height) {
-        double pos = JMath.map(height, 0.0, Constants.ELEVATOR_HEIGHT, Constants.ELEVATOR_LOWEST, Constants.ELEVATOR_HIGHEST);
+        double pos = JMath.map(height, 0.0, HEIGHT, ENCODER_LOWEST, ENCODER_HIGHEST);
         elevatorMotor.targetRaw(pos);
     }
 

@@ -9,26 +9,39 @@ import frc.robot.JMath;
 import frc.robot.PIDMotor;
 
 public class ClimberSubsystem extends SubsystemBase {
-    PIDMotor climberMotor = new PIDMotor(Constants.ELEVATOR_ID, 0, 0, 0, 0, ControlType.kPosition, 0);
-    Servo ratchetServo = new Servo(Constants.CLIMBER_SERVO_CHANNEL);
+    static final int LEFT_ID = 0;
+    static final int RIGHT_ID = 0;
+    static final double ENCODER_LOWEST = 0.0;
+    static final double ENCODER_HIGHEST = 0.0;
+    static final double HEIGHT = 0.0;
+
+    static final int SERVO_CHANNEL = 0;
+    static final double SERVO_DISENGAGE_POS = 0.0;
+    static final double SERVO_ENGAGE_POS = 0.0;
+
+    PIDMotor leftMotor = new PIDMotor(LEFT_ID, 0, 0, 0, 0, ControlType.kPosition, 0);
+    PIDMotor rightMotor = new PIDMotor(RIGHT_ID, 0, 0, 0, 0, ControlType.kPosition, 0);
+
+    Servo ratchetServo = new Servo(SERVO_CHANNEL);
 
     public ClimberSubsystem() {}
 
     public void setHeight(double height) {
-        setUnchecked(JMath.clamp(height, 0.0, Constants.CLIMBER_HEIGHT));
+        setUnchecked(JMath.clamp(height, 0.0, HEIGHT));
     }
 
     void setUnchecked(double height) {
-        double pos = JMath.map(height, 0.0, Constants.CLIMBER_HEIGHT, Constants.CLIMBER_LOWEST, Constants.CLIMBER_HIGHEST);
-        climberMotor.targetRaw(pos);
+        double pos = JMath.map(height, 0.0, HEIGHT, ENCODER_LOWEST, ENCODER_HIGHEST);
+        leftMotor.targetRaw(pos);
+        rightMotor.targetRaw(pos);
     }
 
     public void engageRatchet() {
-        ratchetServo.setPosition(Constants.CLIMBER_SERVO_ENGAGE_POS);
+        ratchetServo.setPosition(SERVO_ENGAGE_POS);
     }
 
     public void disengageRatchet() {
-        ratchetServo.setPosition(Constants.CLIMBER_SERVO_DISENGAGE_POS);
+        ratchetServo.setPosition(SERVO_DISENGAGE_POS);
     }
 
     @Override public void periodic() { }
