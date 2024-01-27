@@ -6,9 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class FlumperSubsystem extends SubsystemBase {
-  static final int MOTOR_ID = 0;
-  
+public class FlumperSubsystem extends SubsystemBase {  
   public enum FlumperState {
     Eat,
     Stop,

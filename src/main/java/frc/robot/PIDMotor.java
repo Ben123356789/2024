@@ -11,7 +11,7 @@ public class PIDMotor {
     
     double p, i, d, f;
     double target = 0.0;
-    double rotationsPerUnit;
+    double ticksPerUnit;
 
     RelativeEncoder encoder;
     CANSparkMax motor;
@@ -25,7 +25,7 @@ public class PIDMotor {
         this.d = d;
         this.f = f;
 
-        this.rotationsPerUnit = rotationsPerUnit;
+        this.ticksPerUnit = rotationsPerUnit;
 
         motor = new CANSparkMax(deviceID, MotorType.kBrushless);
         controller = motor.getPIDController();
@@ -46,17 +46,17 @@ public class PIDMotor {
         controller.setIAccum(0);
     }
 
-    public double toRotations(double units) {
-        return units * rotationsPerUnit;
+    public double toTicks(double units) {
+        return units * ticksPerUnit;
     }
 
-    public void targetRaw(double rawTarget) {
-        this.target = rawTarget;
+    public void targetRaw(double ticks) {
+        this.target = ticks;
         controller.setReference(target, ctype);
     }
 
-    public void target(double target) {
-        targetRaw(toRotations(target));
+    public void target(double units) {
+        targetRaw(toTicks(units));
     }
 
     public void set(double speed) {
@@ -65,5 +65,9 @@ public class PIDMotor {
 
     public void setControlType(ControlType ctype) {
         this.ctype = ctype;
+    }
+    
+    public void setInverted(boolean state){
+        motor.setInverted(state);
     }
 }
