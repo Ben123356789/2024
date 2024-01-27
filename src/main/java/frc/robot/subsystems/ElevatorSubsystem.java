@@ -12,15 +12,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {}
 
-    double target = Constants.ELEVATOR_HEIGHT / 2;
-
-    public void set(double height) {
+    public void setHeight(double height) {
         setUnchecked(JMath.clamp(height, 0.0, Constants.ELEVATOR_HEIGHT));
     }
 
     void setUnchecked(double height) {
         double pos = JMath.map(height, 0.0, Constants.ELEVATOR_HEIGHT, Constants.ELEVATOR_LOWEST, Constants.ELEVATOR_HIGHEST);
-        elevatorMotor.target(pos);
+        elevatorMotor.targetRaw(pos);
     }
 
     @Override public void periodic() { }
