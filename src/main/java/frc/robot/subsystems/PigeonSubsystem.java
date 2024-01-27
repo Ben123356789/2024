@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 public class PigeonSubsystem extends SubsystemBase {
@@ -10,14 +12,19 @@ public class PigeonSubsystem extends SubsystemBase {
   public short[] accelAngles = {0,0,0};
   
   public PigeonSubsystem() {
-    pigeon = new WPI_PigeonIMU(1);
+    pigeon = new WPI_PigeonIMU(Constants.PIGEON_ID);
   }
 
   @Override
   public void periodic() {
-    pigeon.getRawGyro(angles);
-    pigeon.getBiasedAccelerometer(accelAngles);
-    printDashboard();
+    try {
+      pigeon.getRawGyro(angles);
+      pigeon.getBiasedAccelerometer(accelAngles);
+      printDashboard();
+
+    } catch (Exception e) {
+      System.out.println(e);
+    }
   }
 
   public void printDashboard(){

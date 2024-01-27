@@ -1,15 +1,13 @@
 package frc.robot.subsystems;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ExtraMath;
 
 public class LEDSubsystem extends SubsystemBase {
     AddressableLED ledStrip;
@@ -130,12 +128,7 @@ public class LEDSubsystem extends SubsystemBase {
     // length, filled in with the 2nd colour
     public void twoColourProgressBar(Strip strip, AddressableLEDBuffer buffer,
             double percentage, Color color1, Color color2) {
-        if (percentage > 1) {
-            percentage = 1;
-        }
-        if (percentage < 0) {
-            percentage = 0;
-        }
+        ExtraMath.clamp(percentage, 0, 1);
         int numLEDs = (int) (strip.length * percentage);
         setColour(color2, buffer, strip);
         for (var i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {

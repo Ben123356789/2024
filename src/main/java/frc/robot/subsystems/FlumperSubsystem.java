@@ -6,9 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class FlumperSubsystem extends SubsystemBase {
-  static final int MOTOR_ID = 0;
-  
+public class FlumperSubsystem extends SubsystemBase {  
   public enum FlumperState {
     Eat,
     Stop,
@@ -30,7 +28,7 @@ public class FlumperSubsystem extends SubsystemBase {
   double speed;
 
   public FlumperSubsystem() {
-    intakeMotor = new CANSparkMax(MOTOR_ID, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(Constants.FLUMPER_ID, MotorType.kBrushless);
     intakeMotor.setInverted(reverse);
   }
 
