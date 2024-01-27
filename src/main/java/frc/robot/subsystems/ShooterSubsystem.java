@@ -10,15 +10,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class ShooterSubsystem extends SubsystemBase {
-  CANSparkMax shooterTop;
-  CANSparkMax shooterBottom;
-  CANSparkMax intakeTop;
-  CANSparkMax intakeBottom;
+  CANSparkMax shooterTop, shooterBottom, intakeTop, intakeBottom;
+
   Timer shooterTimer;
   int state;
   double intakeBottomStartPos;
   double intakeTopStartPos;
   public boolean shootWhenReady;
+  public double motorPower;
   
   public ShooterSubsystem() {
     shooterTop = new CANSparkMax(Constants.ShooterTopID, MotorType.kBrushless);
@@ -38,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
     if(shootWhenReady && state == 0){
         state = 1;
     }
-    manageShooterRollers();
+    manageShooterRollers(true, motorPower);
     printDashboard();
   }
   
@@ -48,46 +47,53 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
 
-  public void manageShooterRollers(){
+  public void manageShooterRollers(boolean shootFront, double shooterPowerPercent){
+    CANSparkMax inTop, inBottom, outTop, outBottom;
+
+    // ignore memory leak all is fine trust
+    inBottom = (shootFront ? intakeBottom : shooterBottom);
+    inTop = (shootFront ? intakeTop : shooterTop);
+    outBottom = (shootFront ? shooterBottom : intakeBottom);
+    outTop = (shootFront ? shooterTop : intakeTop);
+
     switch(state){
         case 1:
-            intakeBottomStartPos = intakeBottom.getEncoder().getPosition();
-            intakeTopStartPos = intakeTop.getEncoder().getPosition();
+            intakeBottomStartPos = inBottom.getEncoder().getPosition();
+            intakeTopStartPos = inTop.getEncoder().getPosition();
             state = 2;
             break;
         case 2:
-            if(intakeBottomStartPos - intakeBottom.getEncoder().getPosition() >= 1.5 || intakeTopStartPos - intakeTop.getEncoder().getPosition() >= 1.5){
+            if(intakeBottomStartPos - inBottom.getEncoder().getPosition() >= 1.5 || intakeTopStartPos - inTop.getEncoder().getPosition() >= 1.5){
                 state = 3;
             } else{
-                intakeBottom.set(-0.25);
-                intakeTop.set(-0.25);
+                inBottom.set(-0.25);
+                inTop.set(-0.25);
             }
-            intakeBottom.getEncoder().getPosition();
             break;
         case 3:
-            if(shooterTop.getEncoder().getVelocity() >= 10000 || shooterBottom.getEncoder().getVelocity() >= 10000){
+            if(outTop.getEncoder().getVelocity() >= 10000/shooterPowerPercent && outBottom.getEncoder().getVelocity() >= 10000/shooterPowerPercent){
                 shooterTimer.restart();
                 state = 4;
             } else{
-                shooterBottom.set(1);
-                shooterTop.set(1);
+                outBottom.set(shooterPowerPercent);
+                outTop.set(shooterPowerPercent);
             }
         case 4:
             if(shooterTimer.get() < 1.5){
-                intakeBottom.set(1);
-                intakeTop.set(1);
-                shooterBottom.set(1);
-                shooterTop.set(1);
+                inBottom.set(1);
+                inTop.set(1);
+                outBottom.set(shooterPowerPercent);
+                outTop.set(shooterPowerPercent);
             } else{
                 state = 0;
                 shootWhenReady = false;
             }
             break;
         default:
-            intakeBottom.set(0);
-            intakeTop.set(0);
-            shooterBottom.set(0);
-            shooterTop.set(0);
+            inBottom.set(0);
+            inTop.set(0);
+            outBottom.set(0);
+            outTop.set(0);
             break;
     }
   }
