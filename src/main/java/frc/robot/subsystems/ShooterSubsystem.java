@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -20,10 +21,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public double motorPower;
   
   public ShooterSubsystem() {
-    shooterTop = new CANSparkMax(Constants.ShooterTopID, MotorType.kBrushless);
-    shooterBottom = new CANSparkMax(Constants.ShooterBottomID, MotorType.kBrushless);
-    intakeTop = new CANSparkMax(Constants.IntakeTopID, MotorType.kBrushless);
-    intakeBottom = new CANSparkMax(Constants.IntakeBottomID, MotorType.kBrushless);
+    shooterTop = new CANSparkMax(Constants.SHOOTER_TOP_ID, MotorType.kBrushless);
+    shooterBottom = new CANSparkMax(Constants.SHOOTER_BOTTOM_ID, MotorType.kBrushless);
+    intakeTop = new CANSparkMax(Constants.INTAKE_TOP_ID, MotorType.kBrushless);
+    intakeBottom = new CANSparkMax(Constants.INTAKE_BOTTOM_ID, MotorType.kBrushless);
     shooterTimer = new Timer();
     state = 0;
     intakeBottomStartPos = 0;
@@ -57,12 +58,12 @@ public class ShooterSubsystem extends SubsystemBase {
     outTop = (shootFront ? shooterTop : intakeTop);
 
     switch(state){
-        case 1:
+        case 1: //Step 1: Get starting position of intakes
             intakeBottomStartPos = inBottom.getEncoder().getPosition();
             intakeTopStartPos = inTop.getEncoder().getPosition();
             state = 2;
             break;
-        case 2:
+        case 2: //Step 2: Pull note back so it won't get caught on shooters
             if(intakeBottomStartPos - inBottom.getEncoder().getPosition() >= 1.5 || intakeTopStartPos - inTop.getEncoder().getPosition() >= 1.5){
                 state = 3;
             } else{
@@ -70,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 inTop.set(-0.25);
             }
             break;
-        case 3:
+        case 3: //Step 3: Wait for rollers to reach maximum velocity
             if(outTop.getEncoder().getVelocity() >= 10000/shooterPowerPercent && outBottom.getEncoder().getVelocity() >= 10000/shooterPowerPercent){
                 shooterTimer.restart();
                 state = 4;
@@ -78,7 +79,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 outBottom.set(shooterPowerPercent);
                 outTop.set(shooterPowerPercent);
             }
-        case 4:
+        case 4: //Step 4: Shoot note at full power for 1.5 seconds
             if(shooterTimer.get() < 1.5){
                 inBottom.set(1);
                 inTop.set(1);
@@ -89,7 +90,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 shootWhenReady = false;
             }
             break;
-        default:
+        default: //Motors shut off
             inBottom.set(0);
             inTop.set(0);
             outBottom.set(0);

@@ -30,7 +30,7 @@ public class FlumperSubsystem extends SubsystemBase {
   double speed;
 
   public FlumperSubsystem() {
-    intakeMotor = new CANSparkMax(MOTOR_ID, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(Constants.FLUMPER_ID, MotorType.kBrushless);
     intakeMotor.setInverted(reverse);
   }
 
