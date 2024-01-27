@@ -19,7 +19,7 @@ public class RobotContainer {
     configureBindings();
     //pigeonSubsystem = new PigeonSubsystem();
     limelight1 = new LimelightSubsystem();
-    pdp = new PowerDistribution(1, ModuleType.kRev);
+    pdp = new PowerDistribution(1, ModuleType.kCTRE);
     ledSubsystem = new LEDSubsystem(limelight1, pdp);
   }
 

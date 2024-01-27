@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,10 +24,11 @@ public class LEDSubsystem extends SubsystemBase {
     final AddressableLEDBuffer offBuffer;
     final AddressableLEDBuffer voltageBuffer;
 
-    boolean isSeeingNote;
     LimelightSubsystem limelight1;
     PowerDistribution pdp;
-//hi
+    boolean[] conditions;
+    int functionIndex = -1;
+
     public LEDSubsystem(LimelightSubsystem limelight, PowerDistribution pdp) {
         leftStrip = new Strip(6, 0);
         rightStrip = new Strip(7, 13);
@@ -43,6 +47,8 @@ public class LEDSubsystem extends SubsystemBase {
 
         this.limelight1 = limelight;
         this.pdp = pdp;
+
+        conditions = new boolean[1];
     }
 
     private class Strip {
@@ -71,22 +77,31 @@ public class LEDSubsystem extends SubsystemBase {
     public void periodic() {
         checkConditions();
         priorityCheck();
+        switch(functionIndex){
+            case 0: seeingNote(); break;
+            default: displayVoltage(); break;
+        }
         ledStrip.setData(showingBuffer);
+        SmartDashboard.putNumber("LL#", limelight1.resultLength());
+        SmartDashboard.putNumber("Function Index", functionIndex);
     }
 
     public void checkConditions() {
+        for(int i = 0; i < conditions.length; i++){
+            conditions[i] = false;
+        }
         if (limelight1.resultLength() > 0) {
-            isSeeingNote = true;
-        } else{
-            isSeeingNote = false;
+            conditions[0] = true;
         }
     }
 
     public void priorityCheck() {
-        if (isSeeingNote) {
-            seeingNote();
-        } else {
-            displayVoltage();
+        functionIndex = -1;
+        for(int i = 0; i < conditions.length; i++){
+            if(conditions[i]){
+                functionIndex = i;
+                break;
+            }
         }
     }
 
@@ -108,7 +123,7 @@ public class LEDSubsystem extends SubsystemBase {
         double percentageVoltage = (voltage - minVoltage) / (maxVoltage - minVoltage);
         Color color1 = Color.kGreen;
         Color color2 = Color.kBlack;
-        twoColourProgressBar(leftStrip, showingBuffer, percentageVoltage, color1, color2);
+        twoColourProgressBar(fullStrip, showingBuffer, percentageVoltage, color1, color2);
     }
 
     // Given two colours, draws the first to a specific percentage of the buffer
