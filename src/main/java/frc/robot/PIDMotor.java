@@ -6,7 +6,12 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class PIDMotor {
+    String name;
+    boolean initialized = false;
+
     ControlType controlType;
     
     double p, i, d, f;
@@ -18,7 +23,7 @@ public class PIDMotor {
     CANSparkMax motor;
     SparkPIDController controller;
 
-    public PIDMotor(int deviceID, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
+    public PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
         this.controlType = type;
 
         this.p = p;
@@ -31,27 +36,37 @@ public class PIDMotor {
         motor = new CANSparkMax(deviceID, MotorType.kBrushless);
         controller = motor.getPIDController();
         encoder = motor.getEncoder();
-
-        updatePIDF();
     }
 
-    public PIDMotor init() {
-        motor.restoreFactoryDefaults();
-        resetAll();
-        return this;
+    public void catchUninit() {
+        if (!initialized) {
+            new Exception("PIDMotor `" + name + "` has not been initialized! Call `init()` before using the motor!").printStackTrace();
+        }
+    }
+
+    public void init() {
+        if (!initialized) {
+            motor.restoreFactoryDefaults();
+            resetAll();
+            putPIDF();
+            updatePIDF();
+            initialized = true;
+        }
     }
 
     public boolean pidfRequiresUpdate() {
+        catchUninit();
         return (
-            ExtraMath.changedByAtLeastFactor(controller.getP(), this.p, pidfEpsilon) ||
-            ExtraMath.changedByAtLeastFactor(controller.getI(), this.i, pidfEpsilon) ||
-            ExtraMath.changedByAtLeastFactor(controller.getD(), this.d, pidfEpsilon) ||
-            ExtraMath.changedByAtLeastFactor(controller.getFF(), this.f, pidfEpsilon)
+            ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilon) ||
+            ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilon) ||
+            ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilon) ||
+            ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilon)
         );
     }
 
     public void printPIDF() {
-        System.out.println("PIDF values for ID " + motor.getDeviceId());
+        catchUninit();
+        System.out.println("PIDF values for motor `" + name + "`");
         System.out.println("- P:" + controller.getP());
         System.out.println("- I:" + controller.getI());
         System.out.println("- D:" + controller.getD());
@@ -62,7 +77,34 @@ public class PIDMotor {
         System.out.println("- Software F:" + f);
     }
 
+    public void putPIDF() {
+        catchUninit();
+        SmartDashboard.putNumber("Motor `" + name + "` P", p);
+        SmartDashboard.putNumber("Motor `" + name + "` I", i);
+        SmartDashboard.putNumber("Motor `" + name + "` D", d);
+        SmartDashboard.putNumber("Motor `" + name + "` F", f);
+    }
+
+    public void setPIDF(double p, double i, double d, double f) {
+        catchUninit();
+        this.p = p;
+        this.i = i;
+        this.d = d;
+        this.f = f;
+    }
+
+    public void fetchPIDFFromDashboard() {
+        catchUninit();
+        setPIDF(
+            SmartDashboard.getNumber("Motor `" + name + "` P", p),
+            SmartDashboard.getNumber("Motor `" + name + "` I", i),
+            SmartDashboard.getNumber("Motor `" + name + "` D", d),
+            SmartDashboard.getNumber("Motor `" + name + "` F", f)
+        );
+    }
+
     public void updatePIDF() {
+        catchUninit();
         controller.setP(p);
         controller.setI(i);
         controller.setD(d);
@@ -70,13 +112,16 @@ public class PIDMotor {
     }
 
     public void resetEncoder() {
+        catchUninit();
         encoder.setPosition(0);
     }
     public void resetIAccum() {
+        catchUninit();
         controller.setIAccum(0);
     }
 
     public void resetAll() {
+        catchUninit();
         resetEncoder();
         resetIAccum();
     }
@@ -99,6 +144,7 @@ public class PIDMotor {
     }
 
     public void forceTargetRaw(double rawTarget) {
+        catchUninit();
         this.target = rawTarget;
         controller.setReference(target, controlType);
     }
@@ -108,10 +154,12 @@ public class PIDMotor {
     }
 
     public void set(double speed) {
+        catchUninit();
         motor.set(speed);
     }
 
     public void setControlType(ControlType ctype) {
+        catchUninit();
         this.controlType = ctype;
     }
 }
