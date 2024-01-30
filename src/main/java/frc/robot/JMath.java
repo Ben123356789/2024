@@ -13,4 +13,12 @@ public final class JMath {
     public static double map(double x, double low1, double high1, double low2, double high2) {
         return ((high2 - low2) / (high1 - low1)) * (x - low1) + low2;
     }
+
+    public static boolean within(double a, double b, double epsilon) {
+        return Math.abs(a - b) <= epsilon;
+    }
+
+    public static boolean changedByAtLeastFactor(double a, double b, double factor) {
+        return (a / b >= factor || b / a >= factor);
+    }
 }
