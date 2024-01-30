@@ -7,32 +7,59 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class PIDMotor {
-    ControlType ctype;
+    ControlType controlType;
     
     double p, i, d, f;
     double target = 0.0;
-    double ticksPerUnit;
+    double rotationsPerUnit;
+    double pidfEpsilon = 1.001;
 
     RelativeEncoder encoder;
     CANSparkMax motor;
     SparkPIDController controller;
 
     public PIDMotor(int deviceID, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
-        this.ctype = type;
+        this.controlType = type;
 
         this.p = p;
         this.i = i;
         this.d = d;
         this.f = f;
 
-        this.ticksPerUnit = rotationsPerUnit;
+        this.rotationsPerUnit = rotationsPerUnit;
 
         motor = new CANSparkMax(deviceID, MotorType.kBrushless);
         controller = motor.getPIDController();
         encoder = motor.getEncoder();
 
         updatePIDF();
-        reset();
+    }
+
+    public PIDMotor init() {
+        motor.restoreFactoryDefaults();
+        resetAll();
+        return this;
+    }
+
+    public boolean pidfRequiresUpdate() {
+        return (
+            ExtraMath.changedByAtLeastFactor(controller.getP(), this.p, pidfEpsilon) ||
+            ExtraMath.changedByAtLeastFactor(controller.getI(), this.i, pidfEpsilon) ||
+            ExtraMath.changedByAtLeastFactor(controller.getD(), this.d, pidfEpsilon) ||
+            ExtraMath.changedByAtLeastFactor(controller.getFF(), this.f, pidfEpsilon)
+        );
+    }
+
+    public void printPIDF() {
+        System.out.println("PIDF values for ID " + motor.getDeviceId());
+        System.out.println("- P:" + controller.getP());
+        System.out.println("- I:" + controller.getI());
+        System.out.println("- D:" + controller.getD());
+        System.out.println("- F:" + controller.getFF());
+        System.out.println("- Software P:" + p);
+        System.out.println("- Software I:" + i);
+        System.out.println("- Software D:" + d);
+        System.out.println("- Software F:" + f);
     }
 
     public void updatePIDF() {
@@ -42,21 +69,42 @@ public class PIDMotor {
         controller.setFF(f);
     }
 
-    public void reset() {
+    public void resetEncoder() {
+        encoder.setPosition(0);
+    }
+    public void resetIAccum() {
         controller.setIAccum(0);
     }
 
-    public double toTicks(double units) {
-        return units * ticksPerUnit;
+    public void resetAll() {
+        resetEncoder();
+        resetIAccum();
     }
 
-    public void targetRaw(double ticks) {
-        this.target = ticks;
-        controller.setReference(target, ctype);
+    public double unitsToRotations(double units) {
+        return units * rotationsPerUnit;
     }
 
-    public void target(double units) {
-        targetRaw(toTicks(units));
+    /**
+     * Sets the target rotations/RPM to reach.
+     * @param rawTarget The target. Rotations/RPM instead of defined units.
+     * @return Whether or not the target is different from the previous one.
+     */
+    public boolean targetRaw(double rawTarget) {
+        boolean changed = this.target != rawTarget;
+        if (changed) {
+            forceTargetRaw(rawTarget);
+        }
+        return changed;
+    }
+
+    public void forceTargetRaw(double rawTarget) {
+        this.target = rawTarget;
+        controller.setReference(target, controlType);
+    }
+
+    public boolean target(double units) {
+        return targetRaw(unitsToRotations(units));
     }
 
     public void set(double speed) {
@@ -64,10 +112,6 @@ public class PIDMotor {
     }
 
     public void setControlType(ControlType ctype) {
-        this.ctype = ctype;
-    }
-    
-    public void setInverted(boolean state){
-        motor.setInverted(state);
+        this.controlType = ctype;
     }
 }
