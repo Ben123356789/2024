@@ -30,6 +30,22 @@ public class LimelightSubsystem extends SubsystemBase {
     return closest;
   }
 
+  public int resultLargestAreaTarget(){
+    int largest = 0;
+    double size = 0;
+    for(int i = 0; i < resultLength(); i++){
+      if(llresults.targetingResults.targets_Detector[i].ta > size){
+        size = llresults.targetingResults.targets_Detector[i].ta;
+        largest = i;
+      }
+    }
+    return largest;
+  }
+
+  public LimelightHelpers.LimelightTarget_Detector[] getTargets(){
+    return llresults.targetingResults.targets_Detector;
+  }
+
   public void printDashboard() {
     SmartDashboard.putNumber("LL # of Results", resultLength());
     for (int i = 0; i < resultLength(); i++) {
