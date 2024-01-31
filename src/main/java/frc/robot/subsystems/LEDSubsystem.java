@@ -76,12 +76,10 @@ public class LEDSubsystem extends SubsystemBase {
         checkConditions();
         priorityCheck();
         switch(functionIndex){
-            case 0: seeingNote(); break;
+            case 0: followNote(); break;
             default: displayVoltage(); break;
         }
         ledStrip.setData(showingBuffer);
-        SmartDashboard.putNumber("LL#", limelight1.resultLength());
-        SmartDashboard.putNumber("Function Index", functionIndex);
     }
 
     public void checkConditions() {
@@ -113,6 +111,11 @@ public class LEDSubsystem extends SubsystemBase {
     public void seeingNote() {
         setColour(Color.kOrangeRed, showingBuffer, fullStrip);
     }
+    
+    public void followNote() {
+        setColour(Color.kBlack, showingBuffer, fullStrip);
+        drawCursor(limelight1.resultClosestXAxisTarget(), -29.8, 29.8, fullStrip, showingBuffer, Color.kOrangeRed);
+    }
 
     public void displayVoltage() {
         double voltage = pdp.getVoltage();
@@ -127,12 +130,26 @@ public class LEDSubsystem extends SubsystemBase {
     // Given two colours, draws the first to a specific percentage of the buffer
     // length, filled in with the 2nd colour
     public void twoColourProgressBar(Strip strip, AddressableLEDBuffer buffer,
-            double percentage, Color color1, Color color2) {
-        ExtraMath.clamp(percentage, 0, 1);
+        double percentage, Color color1, Color color2) {
+        percentage = ExtraMath.clamp(percentage, 0, 1);
         int numLEDs = (int) (strip.length * percentage);
         setColour(color2, buffer, strip);
         for (var i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {
+            i = ExtraMath.clamp(i, 0, 14);
             buffer.setLED(i, color1);
         }
     }
+
+    public void drawCursor(double val, double min, double max, Strip strip, AddressableLEDBuffer buffer, Color color){
+        int centerLED = (int) ExtraMath.rangeMap(val,min,max,strip.start,strip.end);
+        for(int i = centerLED-1; i <= centerLED+1; i++){
+            buffer.setLED(i,color);
+        }
+    }
+
+    public void safeSetLED(AddressableLEDBuffer buffer, int index, Color color){
+        index = ExtraMath.clamp(index, 0, buffer.getLength());
+        buffer.setLED(index, color);
+    }
+
 }
