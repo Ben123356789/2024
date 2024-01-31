@@ -103,7 +103,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     public AddressableLEDBuffer setColour(Color color, AddressableLEDBuffer buffer, Strip strip) {
         for (var i = strip.start; i != strip.end + strip.direction; i += strip.direction) {
-            buffer.setLED(i, color);
+            safeSetLED(buffer, i, color);
         }
         return buffer;
     }
@@ -114,7 +114,16 @@ public class LEDSubsystem extends SubsystemBase {
     
     public void followNote() {
         setColour(Color.kBlack, showingBuffer, fullStrip);
-        drawCursor(limelight1.resultClosestXAxisTarget(), -29.8, 29.8, fullStrip, showingBuffer, Color.kOrangeRed);
+        for(int i = 0; i < limelight1.resultLength(); i++){
+            int size = (int) ExtraMath.rangeMap(limelight1.getTargets()[i].ta,0,1,fullStrip.start,fullStrip.end);
+            Color color;
+            if(limelight1.resultLargestAreaTarget() == i){
+                color = Color.kOrangeRed;
+            } else{
+                color = Color.kRed;
+            }
+            drawCursor(limelight1.getTargets()[i].tx, -29.8, 29.8, fullStrip, showingBuffer, color, size);
+        }
     }
 
     public void displayVoltage() {
@@ -136,20 +145,24 @@ public class LEDSubsystem extends SubsystemBase {
         setColour(color2, buffer, strip);
         for (var i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {
             i = ExtraMath.clamp(i, 0, 14);
-            buffer.setLED(i, color1);
+            safeSetLED(buffer, i, color1);
         }
     }
 
-    public void drawCursor(double val, double min, double max, Strip strip, AddressableLEDBuffer buffer, Color color){
+    public void drawCursor(double val, double min, double max, Strip strip, AddressableLEDBuffer buffer, Color color, int size){
         int centerLED = (int) ExtraMath.rangeMap(val,min,max,strip.start,strip.end);
-        for(int i = centerLED-1; i <= centerLED+1; i++){
-            buffer.setLED(i,color);
+        int halfSize = (int) (size-1)/2;
+        for(int i = centerLED-halfSize; i <= centerLED+halfSize; i++){
+            safeSetLED(buffer,i,color);
         }
     }
 
     public void safeSetLED(AddressableLEDBuffer buffer, int index, Color color){
-        index = ExtraMath.clamp(index, 0, buffer.getLength());
-        buffer.setLED(index, color);
+        int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
+        if(index != clampedIndex){
+            System.out.println("!! LED index was out of bounds when trying to setLED !!");
+        }
+        buffer.setLED(clampedIndex, color);
     }
 
 }
