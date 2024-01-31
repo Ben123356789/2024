@@ -103,7 +103,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     public AddressableLEDBuffer setColour(Color color, AddressableLEDBuffer buffer, Strip strip) {
         for (var i = strip.start; i != strip.end + strip.direction; i += strip.direction) {
-            buffer.setLED(i, color);
+            safeSetLED(buffer, i, color);
         }
         return buffer;
     }
@@ -145,7 +145,7 @@ public class LEDSubsystem extends SubsystemBase {
         setColour(color2, buffer, strip);
         for (var i = strip.start; i != numLEDs * strip.direction + strip.start; i += strip.direction) {
             i = ExtraMath.clamp(i, 0, 14);
-            buffer.setLED(i, color1);
+            safeSetLED(buffer, i, color1);
         }
     }
 
@@ -153,13 +153,16 @@ public class LEDSubsystem extends SubsystemBase {
         int centerLED = (int) ExtraMath.rangeMap(val,min,max,strip.start,strip.end);
         int halfSize = (int) (size-1)/2;
         for(int i = centerLED-halfSize; i <= centerLED+halfSize; i++){
-            buffer.setLED(i,color);
+            safeSetLED(buffer,i,color);
         }
     }
 
     public void safeSetLED(AddressableLEDBuffer buffer, int index, Color color){
-        index = ExtraMath.clamp(index, 0, buffer.getLength());
-        buffer.setLED(index, color);
+        int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
+        if(index != clampedIndex){
+            System.out.println("!! LED index was out of bounds when trying to setLED !!");
+        }
+        buffer.setLED(clampedIndex, color);
     }
 
 }
