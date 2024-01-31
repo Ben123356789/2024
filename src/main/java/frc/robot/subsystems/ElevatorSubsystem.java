@@ -12,7 +12,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     static final double ENCODER_HIGHEST = 0.0;
     static final double HEIGHT = 9.0;
 
-    PIDMotor elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_ID,"Elevator", 0, 0, 0, 0, ControlType.kPosition, 0);
+    PIDMotor elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_ID, "Elevator", 0, 0, 0, 0, ControlType.kPosition, 0);
 
     public ElevatorSubsystem() {}
 
@@ -25,5 +25,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         elevatorMotor.targetRaw(pos);
     }
 
-    @Override public void periodic() { }
+    @Override
+    public void periodic() {}
 }

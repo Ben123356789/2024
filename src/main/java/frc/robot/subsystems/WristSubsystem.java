@@ -18,15 +18,14 @@ public class WristSubsystem extends SubsystemBase {
   static final double f = 0;
 
   public WristSubsystem() {
-    wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID,"Wrist",p,i,d,f,ControlType.kPosition,Constants.WRIST_ENCODER_TICK_PER_DEG);
+    wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", p, i, d, f, ControlType.kPosition, Constants.WRIST_ENCODER_TICK_PER_DEG);
   }
 
   @Override
-  public void periodic() {
-  }
+  public void periodic() {}
 
-  public void setPosition(double degrees){
-    degrees = ExtraMath.clamp(degrees,DEGREE_MIN,DEGREE_MAX);
+  public void setPosition(double degrees) {
+    degrees = ExtraMath.clamp(degrees, DEGREE_MIN, DEGREE_MAX);
     wristMotor.target(degrees);
   }
 

@@ -8,9 +8,9 @@ import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 public class PigeonSubsystem extends SubsystemBase {
   WPI_PigeonIMU pigeon;
-  public double[] angles = {0,0,0};
-  public short[] accelAngles = {0,0,0};
-  
+  public double[] angles = {0, 0, 0};
+  public short[] accelAngles = {0, 0, 0};
+
   public PigeonSubsystem() {
     pigeon = new WPI_PigeonIMU(Constants.PIGEON_ID);
   }
@@ -27,7 +27,7 @@ public class PigeonSubsystem extends SubsystemBase {
     }
   }
 
-  public void printDashboard(){
+  public void printDashboard() {
     SmartDashboard.putNumber("Pigeon X", angles[0]);
     SmartDashboard.putNumber("Pigeon Y", angles[1]);
     SmartDashboard.putNumber("Pigeon Z", angles[2]);

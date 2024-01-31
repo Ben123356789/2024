@@ -5,19 +5,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ExampleCommand extends Command {
   private final ExampleSubsystem m_subsystem;
-  
+
   public ExampleCommand(ExampleSubsystem subsystem) {
     m_subsystem = subsystem;
     addRequirements(subsystem);
   }
 
-  @Override public void initialize() {}
+  @Override
+  public void initialize() {}
 
-  @Override public void execute() {}
+  @Override
+  public void execute() {}
 
-  @Override public void end(boolean interrupted) {}
+  @Override
+  public void end(boolean interrupted) {}
 
-  @Override public boolean isFinished() {
+  @Override
+  public boolean isFinished() {
     return false;
   }
 }
