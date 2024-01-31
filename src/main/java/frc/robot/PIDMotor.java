@@ -36,6 +36,8 @@ public class PIDMotor {
         motor = new CANSparkMax(deviceID, MotorType.kBrushless);
         controller = motor.getPIDController();
         encoder = motor.getEncoder();
+
+        this.name = name;
     }
 
     public void catchUninit() {
