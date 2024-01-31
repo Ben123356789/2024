@@ -18,7 +18,7 @@ public final class ExtraMath {
         return Math.abs(a - b) <= epsilon;
     }
 
-    public static boolean changedByAtLeastFactor(double a, double b, double factor) {
+    public static boolean withinFactor(double a, double b, double factor) {
         return (a / b >= factor || b / a >= factor);
     }
 }
