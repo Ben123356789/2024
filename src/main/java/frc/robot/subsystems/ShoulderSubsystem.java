@@ -18,8 +18,8 @@ public class ShoulderSubsystem extends SubsystemBase {
   static final double f = 0;
 
   public ShoulderSubsystem() {
-    leftMotor = new PIDMotor(Constants.SHOULDER_LEFT_MOTOR_ID, p,i,d,f,ControlType.kPosition,Constants.SHOULDER_ENCODER_TICK_PER_DEG);
-    rightMotor = new PIDMotor(Constants.SHOULDER_RIGHT_MOTOR_ID, p,i,d,f,ControlType.kPosition,Constants.SHOULDER_ENCODER_TICK_PER_DEG);
+    leftMotor = PIDMotor.makeMotor(Constants.SHOULDER_LEFT_MOTOR_ID,"Shoulder Left", p,i,d,f,ControlType.kPosition,Constants.SHOULDER_ENCODER_TICK_PER_DEG);
+    rightMotor = PIDMotor.makeMotor(Constants.SHOULDER_RIGHT_MOTOR_ID,"Shoulder Right", p,i,d,f,ControlType.kPosition,Constants.SHOULDER_ENCODER_TICK_PER_DEG);
     rightMotor.setInverted(true);
   }
 
