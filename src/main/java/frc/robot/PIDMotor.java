@@ -23,7 +23,7 @@ public class PIDMotor {
     CANSparkMax motor;
     SparkPIDController controller;
 
-    public PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
+    private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
         this.controlType = type;
 
         this.p = p;
@@ -40,13 +40,19 @@ public class PIDMotor {
         this.name = name;
     }
 
-    public void catchUninit() {
+    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit){
+        PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit);
+        motor.init();
+        return motor;
+    }
+
+    private void catchUninit() {
         if (!initialized) {
             new Exception("PIDMotor `" + name + "` has not been initialized! Call `init()` before using the motor!").printStackTrace();
         }
     }
 
-    public void init() {
+    private void init() {
         if (!initialized) {
             motor.restoreFactoryDefaults();
             resetAll();
@@ -168,5 +174,9 @@ public class PIDMotor {
     public void setControlType(ControlType ctype) {
         catchUninit();
         this.controlType = ctype;
+    }
+
+    public void setInverted(boolean state){
+        motor.setInverted(state);
     }
 }

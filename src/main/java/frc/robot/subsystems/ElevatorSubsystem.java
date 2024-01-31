@@ -12,7 +12,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     static final double ENCODER_HIGHEST = 0.0;
     static final double HEIGHT = 9.0;
 
-    PIDMotor elevatorMotor = new PIDMotor(Constants.ELEVATOR_ID, 0, 0, 0, 0, ControlType.kPosition, 0);
+    PIDMotor elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_ID,"Elevator", 0, 0, 0, 0, ControlType.kPosition, 0);
 
     public ElevatorSubsystem() {}
 
