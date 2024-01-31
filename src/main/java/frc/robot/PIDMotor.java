@@ -79,12 +79,17 @@ public class PIDMotor {
         System.out.println("- Software F:" + f);
     }
 
+    String pKey() { return "Motor `" + name + "` P"; }
+    String iKey() { return "Motor `" + name + "` I"; }
+    String dKey() { return "Motor `" + name + "` D"; }
+    String fKey() { return "Motor `" + name + "` F"; }
+
     public void putPIDF() {
         catchUninit();
-        SmartDashboard.putNumber("Motor `" + name + "` P", p);
-        SmartDashboard.putNumber("Motor `" + name + "` I", i);
-        SmartDashboard.putNumber("Motor `" + name + "` D", d);
-        SmartDashboard.putNumber("Motor `" + name + "` F", f);
+        SmartDashboard.putNumber(pKey(), p);
+        SmartDashboard.putNumber(iKey(), i);
+        SmartDashboard.putNumber(dKey(), d);
+        SmartDashboard.putNumber(fKey(), f);
     }
 
     public void setPIDF(double p, double i, double d, double f) {
@@ -98,10 +103,10 @@ public class PIDMotor {
     public void fetchPIDFFromDashboard() {
         catchUninit();
         setPIDF(
-            SmartDashboard.getNumber("Motor `" + name + "` P", p),
-            SmartDashboard.getNumber("Motor `" + name + "` I", i),
-            SmartDashboard.getNumber("Motor `" + name + "` D", d),
-            SmartDashboard.getNumber("Motor `" + name + "` F", f)
+            SmartDashboard.getNumber(pKey(), p),
+            SmartDashboard.getNumber(iKey(), i),
+            SmartDashboard.getNumber(dKey(), d),
+            SmartDashboard.getNumber(fKey(), f)
         );
     }
 
