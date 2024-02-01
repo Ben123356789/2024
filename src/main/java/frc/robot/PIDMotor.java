@@ -13,7 +13,7 @@ public class PIDMotor {
     boolean initialized = false;
 
     ControlType controlType;
-    
+
     double p, i, d, f;
     double target = 0.0;
     double rotationsPerUnit;
@@ -40,7 +40,7 @@ public class PIDMotor {
         this.name = name;
     }
 
-    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit){
+    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
         PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit);
         motor.init();
         return motor;
@@ -64,12 +64,10 @@ public class PIDMotor {
 
     public boolean pidfRequiresUpdate() {
         catchUninit();
-        return (
-            ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilon) ||
-            ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilon) ||
-            ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilon) ||
-            ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilon)
-        );
+        return (ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilon) ||
+                ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilon) ||
+                ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilon) ||
+                ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilon));
     }
 
     public void printPIDF() {
@@ -85,10 +83,21 @@ public class PIDMotor {
         System.out.println("- Software F:" + f);
     }
 
-    String pKey() { return "Motor `" + name + "` P"; }
-    String iKey() { return "Motor `" + name + "` I"; }
-    String dKey() { return "Motor `" + name + "` D"; }
-    String fKey() { return "Motor `" + name + "` F"; }
+    String pKey() {
+        return "Motor `" + name + "` P";
+    }
+
+    String iKey() {
+        return "Motor `" + name + "` I";
+    }
+
+    String dKey() {
+        return "Motor `" + name + "` D";
+    }
+
+    String fKey() {
+        return "Motor `" + name + "` F";
+    }
 
     public void putPIDF() {
         catchUninit();
@@ -108,12 +117,10 @@ public class PIDMotor {
 
     public void fetchPIDFFromDashboard() {
         catchUninit();
-        setPIDF(
-            SmartDashboard.getNumber(pKey(), p),
-            SmartDashboard.getNumber(iKey(), i),
-            SmartDashboard.getNumber(dKey(), d),
-            SmartDashboard.getNumber(fKey(), f)
-        );
+        setPIDF(SmartDashboard.getNumber(pKey(), p),
+                SmartDashboard.getNumber(iKey(), i),
+                SmartDashboard.getNumber(dKey(), d),
+                SmartDashboard.getNumber(fKey(), f));
     }
 
     public void updatePIDF() {
@@ -128,6 +135,7 @@ public class PIDMotor {
         catchUninit();
         encoder.setPosition(0);
     }
+
     public void resetIAccum() {
         catchUninit();
         controller.setIAccum(0);
@@ -145,6 +153,7 @@ public class PIDMotor {
 
     /**
      * Sets the target rotations/RPM to reach.
+     * 
      * @param rawTarget The target. Rotations/RPM instead of defined units.
      * @return Whether or not the target is different from the previous one.
      */
@@ -176,7 +185,7 @@ public class PIDMotor {
         this.controlType = ctype;
     }
 
-    public void setInverted(boolean state){
+    public void setInverted(boolean state) {
         motor.setInverted(state);
     }
 }

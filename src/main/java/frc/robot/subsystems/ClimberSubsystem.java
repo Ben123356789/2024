@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
-
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,8 +16,8 @@ public class ClimberSubsystem extends SubsystemBase {
     static final double SERVO_DISENGAGE_POS = 0.0;
     static final double SERVO_ENGAGE_POS = 0.0;
 
-    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID,"Climber Left", 0, 0, 0, 0, ControlType.kPosition, 0);
-    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID,"Climber Right", 0, 0, 0, 0, ControlType.kPosition, 0);
+    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 0);
+    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 0);
     Servo ratchetServo = new Servo(SERVO_CHANNEL);
 
     public ClimberSubsystem() {}
@@ -41,5 +40,6 @@ public class ClimberSubsystem extends SubsystemBase {
         ratchetServo.setPosition(SERVO_DISENGAGE_POS);
     }
 
-    @Override public void periodic() {}
+    @Override
+    public void periodic() {}
 }

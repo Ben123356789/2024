@@ -40,8 +40,7 @@ public class RobotContainer {
     // wrist = new WristSubsystem();
   }
 
-  private void configureBindings() {
-  }
+  private void configureBindings() {}
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
