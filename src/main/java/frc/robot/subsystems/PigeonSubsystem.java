@@ -3,11 +3,13 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 public class PigeonSubsystem extends SubsystemBase {
   WPI_PigeonIMU pigeon;
-  public double[] angles = {0, 0, 0};
+  public double[] angles = {1, 2, 3};
   public short[] accelAngles = {0, 0, 0};
 
   public PigeonSubsystem() {
@@ -17,13 +19,17 @@ public class PigeonSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     try {
-      pigeon.getRawGyro(angles);
-      pigeon.getBiasedAccelerometer(accelAngles);
+      retrieveValues();
       printDashboard();
-
     } catch (Exception e) {
-      System.out.println(e);
+      SmartDashboard.putString("CTRE Last Error", e.getMessage());
     }
+  }
+
+  public void retrieveValues() throws Exception {
+    ErrorCode err = pigeon.getRawGyro(angles);
+    if (err != ErrorCode.OK) throw new Exception(err.toString());
+    err = pigeon.getBiasedAccelerometer(accelAngles);
   }
 
   public void printDashboard() {

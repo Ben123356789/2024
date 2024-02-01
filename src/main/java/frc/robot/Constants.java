@@ -28,23 +28,23 @@ public final class Constants {
     // Shoulder motor IDs & set positions. Positions are in degrees
     public static final int SHOULDER_LEFT_MOTOR_ID = 0;
     public static final int SHOULDER_RIGHT_MOTOR_ID = 0;
-    public static final int SHOULDER_STOWED_POSITION = 0;
-    public static final int SHOULDER_INTAKE_POSITION = 0;
-    public static final int SHOULDER_SOURCE_POSITION = 0;
-    public static final int SHOULDER_SPEAKER_HIGH_POSITION = 0;
-    public static final int SHOULDER_SPEAKER_LOW_POSITION = 0;
-    public static final int SHOULDER_AMP_POSITION = 0;
-    public static final int SHOULDER_TRAP_POSITION = 0;
+    public static final double SHOULDER_STOWED_POSITION = 0;
+    public static final double SHOULDER_INTAKE_POSITION = 0;
+    public static final double SHOULDER_SOURCE_POSITION = 0;
+    public static final double SHOULDER_SPEAKER_HIGH_POSITION = 0;
+    public static final double SHOULDER_SPEAKER_LOW_POSITION = 0;
+    public static final double SHOULDER_AMP_POSITION = 0;
+    public static final double SHOULDER_TRAP_POSITION = 0;
 
     // Wrist motor ID & set positions. Positions are in degrees
     public static final int WRIST_MOTOR_ID = 0;
-    public static final int WRIST_STOWED_POSITION = 0;
-    public static final int WRIST_INTAKE_POSITION = 0;
-    public static final int WRIST_SOURCE_POSITION = 0;
-    public static final int WRIST_SPEAKER_HIGH_POSITION = 0;
-    public static final int WRIST_SPEAKER_LOW_POSITION = 0;
-    public static final int WRIST_AMP_POSITION = 0;
-    public static final int WRIST_TRAP_POSITION = 0;
+    public static final double WRIST_STOWED_POSITION = 0;
+    public static final double WRIST_INTAKE_POSITION = 0;
+    public static final double WRIST_SOURCE_POSITION = 0;
+    public static final double WRIST_SPEAKER_HIGH_POSITION = 0;
+    public static final double WRIST_SPEAKER_LOW_POSITION = 0;
+    public static final double WRIST_AMP_POSITION = 0;
+    public static final double WRIST_TRAP_POSITION = 0;
 
     // Power Distribution Panel ID
     public static final int PDP_ID = 1;
