@@ -100,8 +100,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     inBottom.close();
     inTop.close();
-    outBottom.close();
-    outTop.close();
+    shootBottom.close();
+    shootTop.close();
   }
 
   public void intakeNote() {
