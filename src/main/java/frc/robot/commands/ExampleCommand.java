@@ -4,10 +4,10 @@ import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ExampleCommand extends Command {
-  private final ExampleSubsystem m_subsystem;
+  //private final ExampleSubsystem m_subsystem;
 
   public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+    //m_subsystem = subsystem;
     addRequirements(subsystem);
   }
 

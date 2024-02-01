@@ -7,7 +7,8 @@ import frc.robot.LimelightHelpers;
 public class LimelightSubsystem extends SubsystemBase {
   public LimelightHelpers.LimelightResults llresults;
 
-  public LimelightSubsystem() {}
+  public LimelightSubsystem() {
+  }
 
   @Override
   public void periodic() {
@@ -53,8 +54,10 @@ public class LimelightSubsystem extends SubsystemBase {
   public void printDashboard() {
     SmartDashboard.putNumber("LL # of Results", resultLength());
     for (int i = 0; i < resultLength(); i++) {
-      SmartDashboard.putString("LL #" + (i + 1) + " Object Type", llresults.targetingResults.targets_Detector[i].className);
-      SmartDashboard.putNumber("LL #" + (i + 1) + " Confidence", llresults.targetingResults.targets_Detector[i].confidence);
+      SmartDashboard.putString("LL #" + (i + 1) + " Object Type",
+          llresults.targetingResults.targets_Detector[i].className);
+      SmartDashboard.putNumber("LL #" + (i + 1) + " Confidence",
+          llresults.targetingResults.targets_Detector[i].confidence);
       SmartDashboard.putNumber("LL #" + (i + 1) + " X-Offset", llresults.targetingResults.targets_Detector[i].tx);
       SmartDashboard.putNumber("LL #" + (i + 1) + " Y-Offset", llresults.targetingResults.targets_Detector[i].ty);
       SmartDashboard.putNumber("LL #" + (i + 1) + " Area %", llresults.targetingResults.targets_Detector[i].ta);

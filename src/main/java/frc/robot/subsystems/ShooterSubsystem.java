@@ -45,6 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void manageShooterRollers(boolean shootFront, double shooterPowerPercent) {
     CANSparkMax inTop, inBottom, outTop, outBottom;
 
+    // Don't worry about the memory leaks
     inBottom = (shootFront ? intakeBottom : shooterBottom);
     inTop = (shootFront ? intakeTop : shooterTop);
     outBottom = (shootFront ? shooterBottom : intakeBottom);
@@ -90,10 +91,6 @@ public class ShooterSubsystem extends SubsystemBase {
       outTop.set(0);
       break;
     }
-    inBottom.close();
-    inTop.close();
-    outBottom.close();
-    outTop.close();
   }
 
   public void intakeNote() {
