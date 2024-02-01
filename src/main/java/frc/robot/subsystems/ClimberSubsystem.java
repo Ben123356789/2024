@@ -11,9 +11,11 @@ public class ClimberSubsystem extends SubsystemBase {
     static final double ENCODER_LOWEST = 0.0;
     static final double ENCODER_HIGHEST = 0.0;
     static final double HEIGHT = 0.0;
+
     static final int SERVO_CHANNEL = 0;
     static final double SERVO_DISENGAGE_POS = 0.0;
     static final double SERVO_ENGAGE_POS = 0.0;
+
     PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 0);
     PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 0);
     Servo ratchetServo = new Servo(SERVO_CHANNEL);

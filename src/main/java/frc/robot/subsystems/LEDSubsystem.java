@@ -49,7 +49,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     private class Strip {
-        // Both start and end are inclusive (we love inclusivity)
+        // Both start and end are inclusive
         public final int start;
         public final int end;
         public final int direction;
@@ -85,6 +85,7 @@ public class LEDSubsystem extends SubsystemBase {
         ledStrip.setData(showingBuffer);
     }
 
+    // Checks conditions for all functions
     public void checkConditions() {
         for (int i = 0; i < conditions.length; i++) {
             conditions[i] = false;
@@ -94,6 +95,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
+    // Based on the conditions, decides which module to use
     public void priorityCheck() {
         functionIndex = -1;
         for (int i = 0; i < conditions.length; i++) {
@@ -104,6 +106,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
+    // Sets the strip to one static colour
     public AddressableLEDBuffer setColour(Color color, AddressableLEDBuffer buffer, Strip strip) {
         for (var i = strip.start; i != strip.end + strip.direction; i += strip.direction) {
             safeSetLED(buffer, i, color);
@@ -111,10 +114,12 @@ public class LEDSubsystem extends SubsystemBase {
         return buffer;
     }
 
+    // Colours the entire strip orange when a note is visible
     public void seeingNote() {
         setColour(Color.kOrangeRed, showingBuffer, fullStrip);
     }
 
+    // Draws cursors that vary in position and size depending on the location of notes
     public void followNote() {
         setColour(Color.kBlack, showingBuffer, fullStrip);
         for (int i = 0; i < limelight1.resultLength(); i++) {
@@ -129,6 +134,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
+    // Gets voltage from the PDP and displays it as a percentage
     public void displayVoltage() {
         double voltage = pdp.getVoltage();
         final double minVoltage = 9;
@@ -151,6 +157,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
+    // API for drawing a cursor on the LED strip
     public void drawCursor(double val, double min, double max, Strip strip, AddressableLEDBuffer buffer, Color color, int size) {
         int centerLED = (int) ExtraMath.rangeMap(val, min, max, strip.start, strip.end);
         int halfSize = (int) (size - 1) / 2;
@@ -159,6 +166,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
     }
 
+    // Clamps the index of the LED to "safely" set the LED to a buffer
     public void safeSetLED(AddressableLEDBuffer buffer, int index, Color color) {
         int clampedIndex = ExtraMath.clamp(index, 0, buffer.getLength());
         if (index != clampedIndex) {

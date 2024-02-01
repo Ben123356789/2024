@@ -64,8 +64,10 @@ public class PIDMotor {
 
     public boolean pidfRequiresUpdate() {
         catchUninit();
-        return (ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilon) || ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilon)
-                || ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilon) || ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilon));
+        return (ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilon) ||
+                ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilon) ||
+                ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilon) ||
+                ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilon));
     }
 
     public void printPIDF() {
@@ -115,7 +117,9 @@ public class PIDMotor {
 
     public void fetchPIDFFromDashboard() {
         catchUninit();
-        setPIDF(SmartDashboard.getNumber(pKey(), p), SmartDashboard.getNumber(iKey(), i), SmartDashboard.getNumber(dKey(), d),
+        setPIDF(SmartDashboard.getNumber(pKey(), p),
+                SmartDashboard.getNumber(iKey(), i),
+                SmartDashboard.getNumber(dKey(), d),
                 SmartDashboard.getNumber(fKey(), f));
     }
 

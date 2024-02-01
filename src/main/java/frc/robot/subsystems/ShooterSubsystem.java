@@ -107,6 +107,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void printDashboard() {
-    // SmartDashboard.putNumber("Pigeon X", angles[0]);
+    // SmartDashboard.putNumber();
   }
 }
