@@ -1,11 +1,16 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.ExtraMath;
 
 public class ArmPositionSubsystem extends SubsystemBase {
   ShoulderSubsystem shoulder;
   WristSubsystem wrist;
+  double targetShoulderPosition;
+  double targetWristPosition;
+  ArmPosition target;
 
   public enum ArmPosition {
     Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Trap;
@@ -53,12 +58,36 @@ public class ArmPositionSubsystem extends SubsystemBase {
     }
   }
 
-  public ArmPositionSubsystem(ArmPosition position) {
-    shoulder.setPosition(position.shoulderPosition());
-    wrist.setPosition(position.wristPosition());
+  public ArmPositionSubsystem() {
   }
 
   @Override
   public void periodic() {
+    boolean checkAll = checkComponents();
+    printDashboard(checkAll);
+  }
+
+  public void setTarget(ArmPosition p){
+    target = p;
+    targetShoulderPosition = p.shoulderPosition();
+    targetWristPosition = p.wristPosition();
+    shoulder.setPosition(targetShoulderPosition);
+    wrist.setPosition(targetWristPosition);
+  }
+
+  public boolean checkComponents(){
+    boolean checkShoulderLeft = checkPosition(shoulder.leftMotor.getDegrees(), targetShoulderPosition);
+    boolean checkShoulderRight = checkPosition(shoulder.rightMotor.getDegrees(), targetShoulderPosition);
+    boolean checkWrist = checkPosition(wrist.wristMotor.getDegrees(), targetWristPosition);
+    return checkShoulderLeft && checkShoulderRight && checkWrist;
+  }
+
+  public boolean checkPosition(double current, double target) {
+    return ExtraMath.within(current, target, 1);
+  }
+
+  public void printDashboard(boolean checkAll) {
+    SmartDashboard.putString("Arm Target Position", target.toString());
+    SmartDashboard.putBoolean("Arm At Target?", checkAll);
   }
 }
