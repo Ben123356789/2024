@@ -10,7 +10,7 @@ public class ShooterSubsystem extends SubsystemBase {
   CANSparkMax shooterTop, shooterBottom, intakeTop, intakeBottom;
 
   Timer shooterTimer;
-  int state;
+  ShootState state;
   double intakeBottomStartPos;
   double intakeTopStartPos;
   public boolean shootWhenReady;
@@ -22,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
     intakeTop = new CANSparkMax(Constants.INTAKE_TOP_ID, MotorType.kBrushless);
     intakeBottom = new CANSparkMax(Constants.INTAKE_BOTTOM_ID, MotorType.kBrushless);
     shooterTimer = new Timer();
-    state = 0;
+    state = ShootState.Brake;
     intakeBottomStartPos = 0;
     intakeTopStartPos = 0;
 
@@ -31,8 +31,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (shootWhenReady && state == 0) {
-      state = 1;
+    if(shootWhenReady && state == ShootState.Brake){
+        state = ShootState.Reset;
     }
     manageShooterRollers(true, motorPower);
     printDashboard();
@@ -40,56 +40,64 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void intakeInit() {
     shooterTimer.restart();
+    state = ShootState.Reset;
   }
 
-  public void manageShooterRollers(boolean shootFront, double shooterPowerPercent) {
-    CANSparkMax inTop, inBottom, outTop, outBottom;
+  enum ShootState {
+    Brake,
+    Reset,
+    Pull,
+    WaitForMax,
+    Shoot,
+  }
+
+  public void manageShooterRollers(boolean shootFront, double shootPower) {
+    CANSparkMax inTop, inBottom, shootTop, shootBottom;
 
     // Don't worry about the memory leaks
     inBottom = (shootFront ? intakeBottom : shooterBottom);
     inTop = (shootFront ? intakeTop : shooterTop);
-    outBottom = (shootFront ? shooterBottom : intakeBottom);
-    outTop = (shootFront ? shooterTop : intakeTop);
+    shootBottom = (shootFront ? shooterBottom : intakeBottom);
+    shootTop = (shootFront ? shooterTop : intakeTop);
 
     switch (state) {
-    case 1: // Step 1: Get starting position of intakes
-      intakeBottomStartPos = inBottom.getEncoder().getPosition();
-      intakeTopStartPos = inTop.getEncoder().getPosition();
-      state = 2;
-      break;
-    case 2: // Step 2: Pull note back so it won't get caught on shooters
-      if (intakeBottomStartPos - inBottom.getEncoder().getPosition() >= 1.5 || intakeTopStartPos - inTop.getEncoder().getPosition() >= 1.5) {
-        state = 3;
-      } else {
+      case Brake: {
+        inTop.set(0);
+        inBottom.set(0);
+        shootTop.set(0);
+        shootBottom.set(0);
+      } break;
+      case Reset: {
+        inTop.getEncoder().setPosition(0);
+        inBottom.getEncoder().setPosition(0);
+        state = ShootState.Pull;
+      } break;
+      case Pull: {
         inBottom.set(-0.25);
         inTop.set(-0.25);
-      }
-      break;
-    case 3: // Step 3: Wait for rollers to reach maximum velocity
-      if (outTop.getEncoder().getVelocity() >= 10000 / shooterPowerPercent && outBottom.getEncoder().getVelocity() >= 10000 / shooterPowerPercent) {
-        shooterTimer.restart();
-        state = 4;
-      } else {
-        outBottom.set(shooterPowerPercent);
-        outTop.set(shooterPowerPercent);
-      }
-    case 4: // Step 4: Shoot note at full power for 1.5 seconds
-      if (shooterTimer.get() < 1.5) {
+        if (inBottom.getEncoder().getPosition() >= 1.5 || inTop.getEncoder().getPosition() >= 1.5) {
+          inBottom.set(0);
+          inTop.set(0);
+          state = ShootState.WaitForMax;
+        }
+      } break;
+      case WaitForMax: {
+        shootTop.set(shootPower);
+        shootBottom.set(shootPower);
+        if (shootTop.getEncoder().getVelocity() >= 10000 * shootPower && shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) {
+          shooterTimer.restart();
+          state = ShootState.Shoot;
+        }
+      } break;
+      case Shoot: {
         inBottom.set(1);
         inTop.set(1);
-        outBottom.set(shooterPowerPercent);
-        outTop.set(shooterPowerPercent);
-      } else {
-        state = 0;
-        shootWhenReady = false;
+        shootBottom.set(shootPower);
+        shootTop.set(shootPower);
+        if (shooterTimer.get() >= 1.5) {
+          state = ShootState.Brake;
+        }
       }
-      break;
-    default: // Motors shut off
-      inBottom.set(0);
-      inTop.set(0);
-      outBottom.set(0);
-      outTop.set(0);
-      break;
     }
   }
 
