@@ -63,11 +63,10 @@ public class ArmPositionSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    boolean checkAll = checkComponents();
-    printDashboard(checkAll);
+    printDashboard(checkBoth());
   }
 
-  public void setTarget(ArmPosition p){
+  public void setTarget(ArmPosition p) {
     target = p;
     targetShoulderPosition = p.shoulderPosition();
     targetWristPosition = p.wristPosition();
@@ -75,11 +74,31 @@ public class ArmPositionSubsystem extends SubsystemBase {
     wrist.setPosition(targetWristPosition);
   }
 
-  public boolean checkComponents(){
+  public void setTarget(ArmPosition p, double threshold) {
+    target = p;
+    targetShoulderPosition = p.shoulderPosition();
+    targetWristPosition = p.wristPosition();
+    shoulder.setPosition(targetShoulderPosition);
+    // Does NOT currently support both directions
+    if (shoulder.leftMotor.getDegrees() >= threshold &&
+        shoulder.rightMotor.getDegrees() >= threshold) {
+      wrist.setPosition(targetWristPosition);
+    }
+  }
+
+  public boolean checkShoulder() {
     boolean checkShoulderLeft = checkPosition(shoulder.leftMotor.getDegrees(), targetShoulderPosition);
     boolean checkShoulderRight = checkPosition(shoulder.rightMotor.getDegrees(), targetShoulderPosition);
+    return checkShoulderLeft && checkShoulderRight;
+  }
+
+  public boolean checkWrist() {
     boolean checkWrist = checkPosition(wrist.wristMotor.getDegrees(), targetWristPosition);
-    return checkShoulderLeft && checkShoulderRight && checkWrist;
+    return checkWrist;
+  }
+
+  public boolean checkBoth() {
+    return checkShoulder() && checkWrist();
   }
 
   public boolean checkPosition(double current, double target) {
