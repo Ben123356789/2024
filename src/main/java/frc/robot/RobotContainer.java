@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.ArmPositionSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FlumperSubsystem;
@@ -13,6 +14,7 @@ import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.ArmPositionSubsystem.ArmPosition;
 
 public class RobotContainer {
   public PigeonSubsystem pigeon;
@@ -25,6 +27,7 @@ public class RobotContainer {
   public ShooterSubsystem shooter;
   public ShoulderSubsystem shoulder;
   public WristSubsystem wrist;
+  public ArmPositionSubsystem armposition;
 
   public RobotContainer() {
     configureBindings();
@@ -32,6 +35,7 @@ public class RobotContainer {
     limelight1 = new LimelightSubsystem();
     pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
     led = new LEDSubsystem(limelight1, pdp);
+    // armposition = new ArmPositionSubsystem();
     // elevator = new ElevatorSubsystem();
     // flumper = new FlumperSubsystem();
     // shooter = new ShooterSubsystem();

@@ -115,6 +115,10 @@ public class PIDMotor {
         this.f = f;
     }
 
+    public double getDegrees() {
+        return encoder.getPosition() * 360;
+    }
+
     public void fetchPIDFFromDashboard() {
         catchUninit();
         setPIDF(SmartDashboard.getNumber(pKey(), p),
