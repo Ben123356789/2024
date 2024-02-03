@@ -10,7 +10,7 @@ public class ShooterSubsystem extends SubsystemBase {
   CANSparkMax shooterTop, shooterBottom, intakeTop, intakeBottom;
 
   Timer shooterTimer;
-  ShootState state;
+  public ShootState state;
   double intakeBottomStartPos;
   double intakeTopStartPos;
   public boolean shootWhenReady;
@@ -43,12 +43,13 @@ public class ShooterSubsystem extends SubsystemBase {
     state = ShootState.Reset;
   }
 
-  enum ShootState {
+  public enum ShootState {
     Brake,
     Reset,
     Pull,
     WaitForMax,
     Shoot,
+    Intake
   }
 
   public void manageShooterRollers(boolean shootFront, double shootPower) {
@@ -95,6 +96,13 @@ public class ShooterSubsystem extends SubsystemBase {
         shootBottom.set(shootPower);
         shootTop.set(shootPower);
         if (shooterTimer.get() >= 1.5) {
+          state = ShootState.Brake;
+        }
+      } break;
+      case Intake: {
+        inBottom.set(0.25);
+        inTop.set(0.25);
+        if(shooterTimer.get() >= 1.5){
           state = ShootState.Brake;
         }
       }

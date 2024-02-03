@@ -57,6 +57,9 @@ public final class Constants {
     public static final int SHOULDER_ENCODER_TICK_PER_DEG = 0;
     public static final int WRIST_ENCODER_TICK_PER_DEG = 0;
 
+    // LED Strip IDs
+    public static final int[] LED_STRIP_ID = {0};
+
     public double ticksToDegrees(double ticks, double tpd) {
         return ticks / tpd;
     }

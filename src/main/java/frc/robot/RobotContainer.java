@@ -19,6 +19,7 @@ import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public class RobotContainer {
+  public static ArmPositionSubsystem armPosition;
   public PigeonSubsystem pigeon;
   public LEDSubsystem led;
   public LimelightSubsystem limelight1;
@@ -38,7 +39,7 @@ public class RobotContainer {
     limelight1 = new LimelightSubsystem();
     pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
     led = new LEDSubsystem(limelight1, pdp);
-    // armposition = new ArmPositionSubsystem();
+    armposition = new ArmPositionSubsystem();
     // elevator = new ElevatorSubsystem();
     // flumper = new FlumperSubsystem();
     // shooter = new ShooterSubsystem();
@@ -48,6 +49,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // The following are examples of possible bindings
     controller.a().onTrue(new SetArmPositionCmd(armposition, ArmPosition.Stowed));
     controller.b().onTrue(new SetArmPositionCmd(armposition, ArmPosition.SpeakerHigh));
     controller.x().onTrue(new SetArmPositionCmd(armposition, ArmPosition.Trap));

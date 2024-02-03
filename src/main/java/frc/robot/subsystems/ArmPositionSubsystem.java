@@ -101,7 +101,7 @@ public class ArmPositionSubsystem extends SubsystemBase {
     return checkShoulder() && checkWrist();
   }
 
-  public boolean checkPosition(double current, double target) {
+  private boolean checkPosition(double current, double target) {
     return ExtraMath.within(current, target, 1);
   }
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.ExtraMath;
 
 public class LEDSubsystem extends SubsystemBase {
@@ -37,7 +38,7 @@ public class LEDSubsystem extends SubsystemBase {
         showingBuffer = new AddressableLEDBuffer(length);
         voltageBuffer = new AddressableLEDBuffer(length);
 
-        ledStrip = new AddressableLED(0);
+        ledStrip = new AddressableLED(Constants.LED_STRIP_ID[0]);
         ledStrip.setLength(length);
         ledStrip.start();
         timer = new Timer();
