@@ -49,6 +49,10 @@ public final class Constants {
     // Power Distribution Panel ID
     public static final int PDP_ID = 1;
 
+    // Xbox Controller Ports
+    public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int CODRIVER_CONTROLLER_PORT = 0;
+
     // Conversion rates between encoder ticks and degrees
     public static final int SHOULDER_ENCODER_TICK_PER_DEG = 0;
     public static final int WRIST_ENCODER_TICK_PER_DEG = 0;

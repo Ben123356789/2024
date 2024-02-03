@@ -108,5 +108,8 @@ public class ArmPositionSubsystem extends SubsystemBase {
   public void printDashboard(boolean checkAll) {
     SmartDashboard.putString("Arm Target Position", target.toString());
     SmartDashboard.putBoolean("Arm At Target?", checkAll);
+    SmartDashboard.putNumber("Left Shoulder Position", shoulder.leftMotor.getDegrees());
+    SmartDashboard.putNumber("Right Shoulder Position", shoulder.rightMotor.getDegrees());
+    SmartDashboard.putNumber("Wrist Position", wrist.wristMotor.getDegrees());
   }
 }

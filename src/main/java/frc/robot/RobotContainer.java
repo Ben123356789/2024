@@ -4,7 +4,10 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.subsystems.ArmPositionSubsystem;
+import frc.robot.subsystems.ArmPositionSubsystem.ArmPosition;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.FlumperSubsystem;
@@ -14,7 +17,6 @@ import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShoulderSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.ArmPositionSubsystem.ArmPosition;
 
 public class RobotContainer {
   public PigeonSubsystem pigeon;
@@ -28,6 +30,7 @@ public class RobotContainer {
   public ShoulderSubsystem shoulder;
   public WristSubsystem wrist;
   public ArmPositionSubsystem armposition;
+  private final CommandXboxController controller = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
 
   public RobotContainer() {
     configureBindings();
@@ -44,7 +47,11 @@ public class RobotContainer {
     // wrist = new WristSubsystem();
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    controller.a().onTrue(new SetArmPositionCmd(armposition, ArmPosition.Stowed));
+    controller.b().onTrue(new SetArmPositionCmd(armposition, ArmPosition.SpeakerHigh));
+    controller.x().onTrue(new SetArmPositionCmd(armposition, ArmPosition.Trap));
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
