@@ -125,10 +125,14 @@ public class LEDSubsystem extends SubsystemBase {
         for (int i = 0; i < limelight1.resultLength(); i++) {
             int size = (int) ExtraMath.rangeMap(limelight1.getTargets()[i].ta, 0, 1, fullStrip.start, fullStrip.end);
             Color color;
-            if (limelight1.resultLargestAreaTarget() == i) {
-                color = Color.kOrangeRed;
-            } else {
+            if(limelight1.getTargets()[i].className.equals("redbobot")){
                 color = Color.kRed;
+            } else if(limelight1.getTargets()[i].className.equals("bluebobot")){
+                color = Color.kBlue;
+            } else if (limelight1.resultLargestAreaTarget() == i) {
+                color = Color.kWhite; 
+            } else {
+                color = Color.kOrangeRed;
             }
             drawCursor(limelight1.getTargets()[i].tx, -29.8, 29.8, fullStrip, showingBuffer, color, size);
         }
