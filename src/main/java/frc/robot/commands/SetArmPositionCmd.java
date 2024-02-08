@@ -1,43 +1,40 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.ArmPositionSubsystem;
-import frc.robot.subsystems.ArmPositionSubsystem.ArmPosition;
+import frc.robot.Constants;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SetArmPositionCmd extends Command {
-  private final ArmPositionSubsystem subsystem;
-  private ArmPosition target;
-  private double threshold = 0;
+  ArmSubsystem arm;
+  double targetShoulderPosition;
+  double targetWristPosition;
+  ArmPosition target;
+  double shoulderThreshold = Constants.SHOULDER_SAFE_ANGLE;
+  double wristThreshold = Constants.WRIST_SAFE_ANGLE;
+  boolean shoulderSetCheck = false;
+  boolean wristSetCheck = false;
 
-  public SetArmPositionCmd(ArmPositionSubsystem s, ArmPosition t) {
-    subsystem = s;
-    target = t;
-    addRequirements(s);
-  }
-
-  public SetArmPositionCmd(ArmPositionSubsystem s, ArmPosition t, double th){
-    subsystem = s;
-    target = t;
-    threshold = th;
+  public SetArmPositionCmd(ArmSubsystem arm, ArmPosition p) {
+    target = p;
+    addRequirements(arm);
   }
 
   @Override
   public void initialize() {
-    if(threshold == 0){
-      subsystem.setTarget(target);
-    } else{
-      subsystem.setTarget(target, threshold);
-    }
+    arm.unsafeSetPosition(target);
   }
 
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return arm.checkShoulderPosition() && arm.checkWristPosition();
   }
 }
