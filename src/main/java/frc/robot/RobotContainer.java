@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.security.Key;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -8,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ChangeKeybindCmd;
 import frc.robot.commands.KeybindTestCmd;
 import frc.robot.commands.SetArmPositionCmd;
+import frc.robot.input.AnalogTrigger;
 import frc.robot.input.Keybind;
+import frc.robot.input.AnalogTrigger.Axis;
 import frc.robot.input.Keybind.Button;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -48,6 +52,8 @@ public class RobotContainer {
   Keybind armStowKeybind;
 
   Keybind ledKeybind;
+  AnalogTrigger leftKeybind;
+  AnalogTrigger rightKeybind;
 
   private void configureBindings() {
     // armStowKeybind = new Keybind(controller.m_hid, Button.A);
@@ -66,6 +72,14 @@ public class RobotContainer {
 
     controller.x().onTrue(new ChangeKeybindCmd(ledKeybind, Button.Y));
     controller.b().onTrue(new ChangeKeybindCmd(ledKeybind, Button.A));
+
+    leftKeybind = new AnalogTrigger(controller.getHID(), Axis.LT, 0.5);
+    rightKeybind = new AnalogTrigger(controller.getHID(), Axis.RT, 0.5);
+
+    leftKeybind.trigger().whileTrue(new KeybindTestCmd(led, 4));
+    rightKeybind.trigger().whileTrue(new KeybindTestCmd(led, 1));
+    leftKeybind.trigger().and(rightKeybind).whileTrue(new KeybindTestCmd(led, 3));
+    leftKeybind.trigger().and(rightKeybind).whileTrue(new KeybindTestCmd(led, 2));
   }
 
   public Command getAutonomousCommand() {

@@ -32,7 +32,8 @@ public class Keybind implements BooleanSupplier {
         hid = controller;
         this.button = button;
     }
-    @Override public boolean getAsBoolean() {
+    @Override 
+    public boolean getAsBoolean() {
         return button.getMethod(hid).get();
     }
 
