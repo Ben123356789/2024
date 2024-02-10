@@ -37,7 +37,7 @@ public class RobotContainer {
   private final CommandXboxController controller = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
 
   public RobotContainer() {
-    // pigeon = new PigeonSubsystem();
+    pigeon = new PigeonSubsystem();
     limelight1 = new LimelightSubsystem();
     pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
     led = new LEDSubsystem(limelight1, pdp);

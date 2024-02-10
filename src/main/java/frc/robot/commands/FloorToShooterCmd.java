@@ -22,7 +22,6 @@ public class FloorToShooterCmd extends Command {
 
   @Override
   public void initialize() {
-    // new SetArmPositionCmd(armSubsystem, ArmPosition.Intake);
   }
 
   @Override
