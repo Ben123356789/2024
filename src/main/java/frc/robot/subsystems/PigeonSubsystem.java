@@ -3,42 +3,45 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class PigeonSubsystem extends SubsystemBase {
-  WPI_PigeonIMU pigeon;
-  public double[] angles = {1, 2, 3};
-  public short[] accelAngles = {0, 0, 0};
+  Pigeon2 pigeon;
+  public double X, Y, Z;
+  public double accelX, accelY, accelZ;
+  public double temp;
 
   public PigeonSubsystem() {
-    pigeon = new WPI_PigeonIMU(Constants.PIGEON_ID);
+    pigeon = new Pigeon2(Constants.PIGEON_ID,"CANthisWork");
   }
 
   @Override
   public void periodic() {
     try {
-      retrieveValues();
+      updateValues();
       printDashboard();
     } catch (Exception e) {
       SmartDashboard.putString("CTRE Last Error", e.getMessage());
     }
   }
 
-  public void retrieveValues() throws Exception {
-    ErrorCode err = pigeon.getRawGyro(angles);
-    if (err != ErrorCode.OK) throw new Exception(err.toString());
-    err = pigeon.getBiasedAccelerometer(accelAngles);
+  public void updateValues() {
+    X = pigeon.getPitch().getValueAsDouble();
+    Y = pigeon.getYaw().getValueAsDouble();
+    Z = pigeon.getRoll().getValueAsDouble();
+    accelX = pigeon.getAccelerationX().getValueAsDouble();
+    accelY = pigeon.getAccelerationY().getValueAsDouble();
+    accelZ = pigeon.getAccelerationZ().getValueAsDouble();
+    temp = pigeon.getTemperature().getValueAsDouble();
   }
 
   public void printDashboard() {
-    SmartDashboard.putNumber("Pigeon X", angles[0]);
-    SmartDashboard.putNumber("Pigeon Y", angles[1]);
-    SmartDashboard.putNumber("Pigeon Z", angles[2]);
-    SmartDashboard.putNumber("Pigeon Acc X", accelAngles[0]);
-    SmartDashboard.putNumber("Pigeon Acc Y", accelAngles[1]);
-    SmartDashboard.putNumber("Pigeon Acc Z", accelAngles[2]);
-    SmartDashboard.putNumber("Pigeon Current Temp [C]", pigeon.getTemp());
+    SmartDashboard.putNumber("Pigeon X", X);
+    SmartDashboard.putNumber("Pigeon Y", Y);
+    SmartDashboard.putNumber("Pigeon Z", Z);
+    SmartDashboard.putNumber("Pigeon Acc X", accelX);
+    SmartDashboard.putNumber("Pigeon Acc Y", accelY);
+    SmartDashboard.putNumber("Pigeon Acc Z", accelZ);
+    SmartDashboard.putNumber("Pigeon Current Temp [C]", temp);
   }
 }

@@ -1,39 +1,43 @@
 package frc.robot.commands;
 
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.ArmPositionSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FlumperSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.ArmPositionSubsystem.ArmPosition;
+import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.ShooterSubsystem.ShootState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FloorToShooterCmd extends Command {
   private final FlumperSubsystem flumperSubsystem;
   private final ShooterSubsystem shooterSubsystem;
-  private final ArmPositionSubsystem armPosition = RobotContainer.armPosition;
+  private final ArmSubsystem armSubsystem;
 
-  public FloorToShooterCmd(FlumperSubsystem flumper, ShooterSubsystem shooter) {
+  public FloorToShooterCmd(FlumperSubsystem flumper, ShooterSubsystem shooter, ArmSubsystem arm) {
     flumperSubsystem = flumper;
     shooterSubsystem = shooter;
-    addRequirements(flumper, shooter);
+    armSubsystem = arm;
+    addRequirements(flumper, shooter, arm);
   }
 
   @Override
   public void initialize() {
-    new SetArmPositionCmd(armPosition, ArmPosition.Intake);
-    if(armPosition.checkBoth()){
+  }
+
+  @Override
+  public void execute() {
+    armSubsystem.unsafeSetPosition(ArmPosition.Intake);
+    if(armSubsystem.checkShoulderPosition() && armSubsystem.checkWristPosition()){
       flumperSubsystem.eat();
       shooterSubsystem.state = ShootState.Intake;
     }
   }
 
   @Override
-  public void execute() {}
-
-  @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    flumperSubsystem.stop();
+    shooterSubsystem.state = ShootState.Reset;
+  }
 
   @Override
   public boolean isFinished() {

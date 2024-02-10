@@ -14,16 +14,16 @@ public final class Constants {
     public static final double ELEVATOR_HEIGHT = 9.0;
 
     // Floor intake motor ID
-    public static final int FLUMPER_ID = 0;
+    public static final int FLUMPER_ID = 35;
 
     // Pigeon ID
     public static final int PIGEON_ID = 18;
 
     // Shooter motor IDs
-    public static final int SHOOTER_TOP_ID = 14;
-    public static final int SHOOTER_BOTTOM_ID = 15;
-    public static final int INTAKE_TOP_ID = 16;
-    public static final int INTAKE_BOTTOM_ID = 17;
+    public static final int SHOOTER_TOP_ID = 32;
+    public static final int SHOOTER_BOTTOM_ID = 33;
+    public static final int INTAKE_TOP_ID = 31;
+    public static final int INTAKE_BOTTOM_ID = 30;
 
     // Shoulder motor IDs & set positions. Positions are in degrees
     public static final int SHOULDER_LEFT_MOTOR_ID = 0;
@@ -35,9 +35,10 @@ public final class Constants {
     public static final double SHOULDER_SPEAKER_LOW_POSITION = 0;
     public static final double SHOULDER_AMP_POSITION = 0;
     public static final double SHOULDER_TRAP_POSITION = 0;
+    public static final double SHOULDER_SAFE_ANGLE = 0;
 
     // Wrist motor ID & set positions. Positions are in degrees
-    public static final int WRIST_MOTOR_ID = 0;
+    public static final int WRIST_MOTOR_ID = 34;
     public static final double WRIST_STOWED_POSITION = 0;
     public static final double WRIST_INTAKE_POSITION = 0;
     public static final double WRIST_SOURCE_POSITION = 0;
@@ -45,6 +46,7 @@ public final class Constants {
     public static final double WRIST_SPEAKER_LOW_POSITION = 0;
     public static final double WRIST_AMP_POSITION = 0;
     public static final double WRIST_TRAP_POSITION = 0;
+    public static final double WRIST_SAFE_ANGLE = 0;
 
     // Power Distribution Panel ID
     public static final int PDP_ID = 1;

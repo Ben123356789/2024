@@ -15,9 +15,15 @@ public class LEDSubsystem extends SubsystemBase {
 
     final Strip leftStrip;
     final Strip rightStrip;
-    final Strip fullStrip;
+    public final Strip fullStrip;
 
-    AddressableLEDBuffer showingBuffer;
+    public final Strip quadStrip1;
+    public final Strip quadStrip2;
+    public final Strip quadStrip3;
+    public final Strip quadStrip4;
+
+
+    public AddressableLEDBuffer showingBuffer;
     final AddressableLEDBuffer onBuffer;
     final AddressableLEDBuffer offBuffer;
     final AddressableLEDBuffer voltageBuffer;
@@ -31,6 +37,12 @@ public class LEDSubsystem extends SubsystemBase {
         leftStrip = new Strip(6, 0);
         rightStrip = new Strip(7, 13);
         fullStrip = new Strip(0, 13);
+
+        quadStrip1 = new Strip(0, 2);
+        quadStrip2 = new Strip(3, 5);
+        quadStrip3 = new Strip(6, 8);
+        quadStrip4 = new Strip(9, 11);
+
         int length = fullStrip.length;
 
         onBuffer = new AddressableLEDBuffer(length);
@@ -75,14 +87,14 @@ public class LEDSubsystem extends SubsystemBase {
     public void periodic() {
         checkConditions();
         priorityCheck();
-        switch (functionIndex) {
-        case 0:
-            followNote();
-            break;
-        default:
-            displayVoltage();
-            break;
-        }
+        // switch (functionIndex) {
+        // case 0:
+        //     followNote();
+        //     break;
+        // default:
+        //     displayVoltage();
+        //     break;
+        // }
         ledStrip.setData(showingBuffer);
     }
 
@@ -180,4 +192,19 @@ public class LEDSubsystem extends SubsystemBase {
         buffer.setLED(clampedIndex, color);
     }
 
+    public void setRed(){
+        setColour(Color.kRed, showingBuffer, quadStrip1);
+    }
+
+    public void setBlue(){
+        setColour(Color.kBlue, showingBuffer, quadStrip2);
+    }
+
+    public void setYellow(){
+        setColour(Color.kYellow, showingBuffer, quadStrip3);
+    }
+
+    public void setGreen(){
+        setColour(Color.kGreen, showingBuffer, quadStrip4);
+    }
 }
