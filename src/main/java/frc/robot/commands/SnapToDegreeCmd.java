@@ -1,12 +1,15 @@
 package frc.robot.commands;
 
+import frc.robot.ExtraMath;
 import frc.robot.subsystems.PigeonSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SnapToDegreeCmd extends Command {
   private final PigeonSubsystem pigeonSubsystem;
   double yaw;
   int target;
+  double rotate;
 
   public SnapToDegreeCmd(PigeonSubsystem pigeon, int target) {
     pigeonSubsystem = pigeon;
@@ -19,7 +22,10 @@ public class SnapToDegreeCmd extends Command {
   @Override
   public void execute() {
     yaw = pigeonSubsystem.Y;
-
+    rotate = ExtraMath.degreeDistance(yaw, target);
+    SmartDashboard.putNumber("Snap Rotation Value", rotate);
+    // Have robot rotate "rotate" degrees
+    SmartDashboard.putBoolean("Is at Target Rotation?", rotate <=1 && rotate >= -1);
 
   }
 
@@ -28,10 +34,6 @@ public class SnapToDegreeCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
-  }
-
-  public double angleFinder(double c, double t){
-  
+    return rotate <=1 && rotate >= -1;
   }
 }

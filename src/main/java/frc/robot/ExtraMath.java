@@ -44,12 +44,12 @@ public final class ExtraMath {
         return (a / b >= factor || b / a >= factor);
     }
 
-    public double remEuclid(double l, double r) {
+    public static double remEuclid(double l, double r) {
         double m = l % r;
         return m + (m < 0 ? Math.abs(r) : 0);
     }
 
-    public double degreeDistance(double current, double target) {
+    public static double degreeDistance(double current, double target) {
         current = remEuclid(current, 360);
         target = remEuclid(target, 360);
         double dist = target - current;

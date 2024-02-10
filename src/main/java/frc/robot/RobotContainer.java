@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ChangeKeybindCmd;
 import frc.robot.commands.KeybindTestCmd;
 import frc.robot.commands.SetArmPositionCmd;
+import frc.robot.commands.SnapToDegreeCmd;
 import frc.robot.input.AnalogTrigger;
 import frc.robot.input.Keybind;
 import frc.robot.input.AnalogTrigger.Axis;
@@ -54,6 +55,7 @@ public class RobotContainer {
   Keybind ledKeybind;
   AnalogTrigger leftKeybind;
   AnalogTrigger rightKeybind;
+  Keybind snapKeybind;
 
   private void configureBindings() {
     // armStowKeybind = new Keybind(controller.m_hid, Button.A);
@@ -75,11 +77,14 @@ public class RobotContainer {
 
     leftKeybind = new AnalogTrigger(controller.getHID(), Axis.LT, 0.5);
     rightKeybind = new AnalogTrigger(controller.getHID(), Axis.RT, 0.5);
+    snapKeybind = new Keybind(controller.getHID(), Button.Y);
 
+    snapKeybind.trigger().onTrue(new SnapToDegreeCmd(pigeon, 100));
     leftKeybind.trigger().whileTrue(new KeybindTestCmd(led, 4));
     rightKeybind.trigger().whileTrue(new KeybindTestCmd(led, 1));
     leftKeybind.trigger().and(rightKeybind).whileTrue(new KeybindTestCmd(led, 3));
     leftKeybind.trigger().and(rightKeybind).whileTrue(new KeybindTestCmd(led, 2));
+
   }
 
   public Command getAutonomousCommand() {
