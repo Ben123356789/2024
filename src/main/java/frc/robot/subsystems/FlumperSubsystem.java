@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,6 +29,7 @@ public class FlumperSubsystem extends SubsystemBase {
   // TODO: Revise once design gives us the rundown.
   boolean reverse = false;
   double speed;
+  FlumperState state;
 
   public FlumperSubsystem() {
     intakeMotor = new CANSparkMax(Constants.FLUMPER_ID, MotorType.kBrushless);
@@ -34,6 +37,7 @@ public class FlumperSubsystem extends SubsystemBase {
   }
 
   public void set(FlumperState state) {
+    this.state = state;
     set(state.speed());
   }
 
@@ -56,5 +60,9 @@ public class FlumperSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     intakeMotor.set(speed);
+  }
+
+  public void printDashboard(){
+    SmartDashboard.putString("Shooter State:", state.toString());
   }
 }

@@ -87,14 +87,14 @@ public class LEDSubsystem extends SubsystemBase {
     public void periodic() {
         checkConditions();
         priorityCheck();
-        // switch (functionIndex) {
-        // case 0:
-        //     followNote();
-        //     break;
-        // default:
-        //     displayVoltage();
-        //     break;
-        // }
+        switch (functionIndex) {
+        case 0:
+            followNote();
+            break;
+        default:
+            displayVoltage();
+            break;
+        }
         ledStrip.setData(showingBuffer);
     }
 
