@@ -43,4 +43,18 @@ public final class ExtraMath {
     public static boolean withinFactor(double a, double b, double factor) {
         return (a / b >= factor || b / a >= factor);
     }
+
+    public double remEuclid(double l, double r) {
+        double m = l % r;
+        return m + (m < 0 ? Math.abs(r) : 0);
+    }
+
+    public double degreeDistance(double current, double target) {
+        current = remEuclid(current, 360);
+        target = remEuclid(target, 360);
+        double dist = target - current;
+        if (dist < -180) return dist + 360;
+        if (dist > 180) return dist - 360;
+        return dist;
+    }
 }
