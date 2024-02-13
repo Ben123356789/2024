@@ -48,6 +48,17 @@ public final class Constants {
     public static final double WRIST_TRAP_POSITION = 0;
     public static final double WRIST_SAFE_ANGLE = 0;
 
+    // Elevator motor ID & set positions. Positions are in CM
+    public static final int ELEVATOR_MOTOR_ID = 34;
+    public static final double ELEVATOR_STOWED_POSITION = 0;
+    public static final double ELEVATOR_INTAKE_POSITION = 0;
+    public static final double ELEVATOR_SOURCE_POSITION = 0;
+    public static final double ELEVATOR_SPEAKER_HIGH_POSITION = 0;
+    public static final double ELEVATOR_SPEAKER_LOW_POSITION = 0;
+    public static final double ELEVATOR_AMP_POSITION = 0;
+    public static final double ELEVATOR_TRAP_POSITION = 0;
+    public static final double ELEVATOR_SAFE_ANGLE = 0;
+
     // Power Distribution Panel ID
     public static final int PDP_ID = 1;
 
