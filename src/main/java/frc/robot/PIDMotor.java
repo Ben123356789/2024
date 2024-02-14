@@ -155,28 +155,13 @@ public class PIDMotor {
         return units * rotationsPerUnit;
     }
 
-    /**
-     * Sets the target rotations/RPM to reach.
-     * 
-     * @param rawTarget The target. Rotations/RPM instead of defined units.
-     * @return Whether or not the target is different from the previous one.
-     */
-    public boolean targetRaw(double rawTarget) {
-        boolean changed = this.target != rawTarget;
-        if (changed) {
-            forceTargetRaw(rawTarget);
-        }
-        return changed;
+    public double rotationsToUnits(double rotations) {
+        return rotations / rotationsPerUnit;
     }
 
-    public void forceTargetRaw(double rawTarget) {
-        catchUninit();
-        this.target = rawTarget;
-        controller.setReference(target, controlType);
-    }
-
-    public boolean target(double units) {
-        return targetRaw(unitsToRotations(units));
+    public void setTarget(double units) {
+        double targetTicks = unitsToRotations(units);
+        controller.setReference(targetTicks, controlType);
     }
 
     public void set(double speed) {
@@ -191,5 +176,9 @@ public class PIDMotor {
 
     public void setInverted(boolean state) {
         motor.setInverted(state);
+    }
+
+    public double getPosition(){
+        return rotationsToUnits(encoder.getPosition());
     }
 }

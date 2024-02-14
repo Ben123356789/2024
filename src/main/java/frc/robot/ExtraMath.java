@@ -57,4 +57,12 @@ public final class ExtraMath {
         if (dist > 180) return dist - 360;
         return dist;
     }
+
+    public static double average(double... values) {
+        double sum = 0;
+        for(int i = 0; i < values.length; i++){
+            sum += values[i];
+        }
+        return sum/values.length;
+    }
 }

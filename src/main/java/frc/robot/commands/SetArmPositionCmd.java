@@ -9,11 +9,14 @@ public class SetArmPositionCmd extends Command {
   ArmSubsystem arm;
   double targetShoulderPosition;
   double targetWristPosition;
+  double elevatorPosition;
   ArmPosition target;
   double shoulderThreshold = Constants.SHOULDER_SAFE_ANGLE;
   double wristThreshold = Constants.WRIST_SAFE_ANGLE;
+
   boolean shoulderSetCheck = false;
   boolean wristSetCheck = false;
+  boolean elevatorSetCheck;
 
   public SetArmPositionCmd(ArmSubsystem arm, ArmPosition p) {
     target = p;

@@ -16,20 +16,16 @@ public class ClimberSubsystem extends SubsystemBase {
     static final double SERVO_DISENGAGE_POS = 0.0;
     static final double SERVO_ENGAGE_POS = 0.0;
 
-    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 0);
-    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 0);
+    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 1);
+    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 1);
     Servo ratchetServo = new Servo(SERVO_CHANNEL);
 
     public ClimberSubsystem() {}
 
     public void setHeight(double height) {
-        setUnchecked(ExtraMath.clamp(height, 0.0, HEIGHT));
-    }
-
-    void setUnchecked(double height) {
-        double pos = ExtraMath.rangeMap(height, 0.0, HEIGHT, ENCODER_LOWEST, ENCODER_HIGHEST);
-        leftMotor.targetRaw(pos);
-        rightMotor.targetRaw(pos);
+        height = ExtraMath.clamp(height, 0.0, HEIGHT);
+        leftMotor.setTarget(height);
+        rightMotor.setTarget(height);
     }
 
     public void engageRatchet() {

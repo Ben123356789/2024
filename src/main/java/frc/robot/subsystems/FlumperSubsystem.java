@@ -26,7 +26,6 @@ public class FlumperSubsystem extends SubsystemBase {
   }
 
   CANSparkMax intakeMotor;
-  // TODO: Revise once design gives us the rundown.
   boolean reverse = false;
   double speed;
   FlumperState state;
