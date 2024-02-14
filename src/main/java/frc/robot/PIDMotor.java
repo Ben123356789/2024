@@ -17,7 +17,7 @@ public class PIDMotor {
     double p, i, d, f;
     double target = 0.0;
     double rotationsPerUnit;
-    double pidfEpsilon = 1.001;
+    double pidfEpsilonFactor = 1.001;
 
     RelativeEncoder encoder;
     CANSparkMax motor;
@@ -40,6 +40,18 @@ public class PIDMotor {
         this.name = name;
     }
 
+    /**
+     * Constructs and initializes a new PIDMotor.
+     * @param deviceID The CAN ID for this motor.
+     * @param name This motor's name.
+     * @param p The initial proportional coefficient for this motor.
+     * @param i The initial integral coefficient for this motor.
+     * @param d The initial derivative coefficient for this motor.
+     * @param f The initial feed-forward coefficient for this motor.
+     * @param type The control type of this motor.
+     * @param rotationsPerUnit The number of encoder rotations per user-defined unit. For example, one rotation could correspond to moving half an inch. If the units are inches, then `rotationsPerUnit` would be 2.
+     * @return The constructed PIDMotor.
+     */
     public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
         PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit);
         motor.init();
@@ -62,14 +74,21 @@ public class PIDMotor {
         }
     }
 
+    /**
+     * Gets whether or not any of the PIDF values require updating.
+     * @return Whether or not any of the PIDF values differ from the values in the motor controller.
+     */
     public boolean pidfRequiresUpdate() {
         catchUninit();
-        return (ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilon) ||
-                ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilon) ||
-                ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilon) ||
-                ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilon));
+        return (ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilonFactor) ||
+                ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilonFactor) ||
+                ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilonFactor) ||
+                ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilonFactor));
     }
 
+    /**
+     * Prints the software PIDF values to the RioLog.
+     */
     public void printPIDF() {
         catchUninit();
         System.out.println("PIDF values for motor `" + name + "`");
@@ -94,11 +113,13 @@ public class PIDMotor {
     String dKey() {
         return "Motor `" + name + "` D";
     }
-
     String fKey() {
         return "Motor `" + name + "` F";
     }
 
+    /**
+     * Puts this motor's PIDF values to the SmartDashboard.
+     */
     public void putPIDF() {
         catchUninit();
         SmartDashboard.putNumber(pKey(), p);
@@ -107,6 +128,13 @@ public class PIDMotor {
         SmartDashboard.putNumber(fKey(), f);
     }
 
+    /**
+     * Sets the PIDF values for this motor. Call `updatePIDF` to send the values to the motor controller.
+     * @param p The new proportional coefficient.
+     * @param i The new integral coefficient.
+     * @param d The new derivative coefficient.
+     * @param f The new feed-forward coefficient.
+     */
     public void setPIDF(double p, double i, double d, double f) {
         catchUninit();
         this.p = p;
@@ -115,10 +143,17 @@ public class PIDMotor {
         this.f = f;
     }
 
+    /**
+     * Gets the position of the encoder in degrees.
+     * @return The position of the encoder in degrees.
+     */
     public double getDegrees() {
         return encoder.getPosition() * 360;
     }
 
+    /**
+     * Fetches the PIDF values from the SmartDashboard. Call `updatePIDF` to send the values to the motor controller.
+     */
     public void fetchPIDFFromDashboard() {
         catchUninit();
         setPIDF(SmartDashboard.getNumber(pKey(), p),
@@ -127,6 +162,9 @@ public class PIDMotor {
                 SmartDashboard.getNumber(fKey(), f));
     }
 
+    /**
+     * Sends the PIDF values to the motor controller. Call when PIDF values are changed.
+     */
     public void updatePIDF() {
         catchUninit();
         controller.setP(p);
@@ -135,49 +173,88 @@ public class PIDMotor {
         controller.setFF(f);
     }
 
+    /**
+     * Resets the encoder, making its current position 0.
+     */
     public void resetEncoder() {
         catchUninit();
         encoder.setPosition(0);
     }
 
+    /**
+     * Resets the controller's integral accumulation. Call this every time this motor is enabled.
+     */
     public void resetIAccum() {
         catchUninit();
         controller.setIAccum(0);
     }
 
+    /**
+     * Resets the state of the motor. Call this every time this motor is enabled.
+     */
     public void resetAll() {
         catchUninit();
         resetEncoder();
         resetIAccum();
     }
 
+    /**
+     * Converts the units for this motor into encoder rotations.
+     * @param units The units specified by this motor to convert.
+     * @return The number of rotations that correspond to the given units.
+     */
     public double unitsToRotations(double units) {
         return units * rotationsPerUnit;
     }
 
+    /**
+     * Converts encoder rotations into units for this motor.
+     * @param units The number of rotations to convert.
+     * @return The units specified by this motor that correspond to the given rotations.
+     */
     public double rotationsToUnits(double rotations) {
         return rotations / rotationsPerUnit;
     }
 
+    /**
+     * Sets the motor's target to a given unit value.
+     * @param units The units specified by this motor to target to.
+     */
     public void setTarget(double units) {
         double targetTicks = unitsToRotations(units);
         controller.setReference(targetTicks, controlType);
     }
 
+    /**
+     * Sets the motor to a given speed as a fraction of the maximum output, overriding the PID controller.
+     * @param speed A fraction from -1 to 1 specifying the power to set this motor to.
+     */
     public void set(double speed) {
         catchUninit();
         motor.set(speed);
     }
 
+    /**
+     * Sets the control type for this motor.
+     * @param ctype The control type to target.
+     */
     public void setControlType(ControlType ctype) {
         catchUninit();
         this.controlType = ctype;
     }
 
+    /**
+     * Sets this motor to have inverse rotation.
+     * @param state Whether or not to make this motor inverted.
+     */
     public void setInverted(boolean state) {
         motor.setInverted(state);
     }
 
+    /**
+     * Gets the encoder's current position.
+     * @return The position of the encoder.
+     */
     public double getPosition(){
         return rotationsToUnits(encoder.getPosition());
     }
