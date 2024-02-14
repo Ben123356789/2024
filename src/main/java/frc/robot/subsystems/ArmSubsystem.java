@@ -132,62 +132,26 @@ public class ArmSubsystem extends SubsystemBase {
         ControlType.kPosition, Constants.WRIST_ENCODER_TICK_PER_DEG);
     elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_ID, "Elevator", elevatorP, elevatorI, elevatorD, elevatorF, ControlType.kPosition, 0);
 
-    shoulderConstraints = new Constraints(150, 500);
-    shoulderCurrentState = new TrapezoidProfile.State(shoulderMotor.getPosition(), 0);
-    shoulderTargetState = new TrapezoidProfile.State(shoulderMotor.getPosition(), 0);
-    shoulderProfile = new TrapezoidProfile(shoulderConstraints, shoulderTargetState, shoulderCurrentState);
-    shoulderTimer = new Timer();
-    shoulderTimer.start();
-    shoulderTimer.reset();
-
-    elevatorConstraints = new Constraints(150, 500);
-    elevatorCurrentState = new TrapezoidProfile.State(elevatorMotor.getPosition(), 0);
-    elevatorTargetState = new TrapezoidProfile.State(elevatorMotor.getPosition(), 0);
-    elevatorProfile = new TrapezoidProfile(elevatorConstraints, elevatorTargetState, elevatorCurrentState);
-    elevatorTimer = new Timer();
-    elevatorTimer.start();
-    elevatorTimer.reset();
-
-    elevatorConstraints = new Constraints(150, 500);
-    elevatorCurrentState = new TrapezoidProfile.State(elevatorMotor.getPosition(), 0);
-    elevatorTargetState = new TrapezoidProfile.State(elevatorMotor.getPosition(), 0);
-    elevatorProfile = new TrapezoidProfile(elevatorConstraints, elevatorTargetState, elevatorCurrentState);
-    elevatorTimer = new Timer();
-    elevatorTimer.start();
-    elevatorTimer.reset();
+    elevatorMotor.generateTrapezoidPath(0,0,0,0);
+    leftShoulderMotor.generateTrapezoidPath(0,0,0,0);
+    rightShoulderMotor.generateTrapezoidPath(0,0,0,0);
+    wristMotor.generateTrapezoidPath(0,0,0,0);
   }
 
- // #define target = ◎;
   @Override
   public void periodic() {
-    TrapezoidProfile.State elevatorState = elevatorProfile.calculate(elevatorTimer.get());
-    elevatorMotor.setTarget(elevatorState.position);
-  }
-
-  public void setElevatorPosition(double cm){
-    elevatorCurrentState = new TrapezoidProfile.State(elevatorMotor.getPosition(), 0);
-    elevatorTargetState = new TrapezoidProfile.State(cm, 0);
-    elevatorProfile = new TrapezoidProfile(elevatorConstraints, elevatorTargetState, elevatorCurrentState);
-    elevatorTimer.reset();
-    elevatorTimer.start();
+    elevatorMotor.runTrapezoidPath();
+    leftShoulderMotor.runTrapezoidPath();
+    rightShoulderMotor.runTrapezoidPath();
+    wristMotor.runTrapezoidPath();
   }
 
   public void unsafeSetPosition(ArmPosition p){
     target = p;
-    setShoulderPosition(target.shoulderPosition());
-    setWristPosition(target.wristPosition());
-    setElevatorPosition(target.elevatorPosition());
-  }
-
-  public void setShoulderPosition(double degrees) {
-    degrees = ExtraMath.clamp(degrees, SHOULDER_DEGREE_MIN, SHOULDER_DEGREE_MAX);
-    leftShoulderMotor.setTarget(degrees);
-    rightShoulderMotor.setTarget(degrees);
-  }
-  
-  public void setWristPosition(double degrees) {
-    degrees = ExtraMath.clamp(degrees, WRIST_DEGREE_MIN, WRIST_DEGREE_MAX);
-    wristMotor.setTarget(degrees);
+    elevatorMotor.generateTrapezoidPath(0,0,target.elevatorPosition(),0);
+    leftShoulderMotor.generateTrapezoidPath(0,0,target.shoulderPosition(),0);
+    rightShoulderMotor.generateTrapezoidPath(0,0,target.shoulderPosition(),0);
+    wristMotor.generateTrapezoidPath(0,0,target.wristPosition(),0);
   }
 
   public double getShoulderPosition() {

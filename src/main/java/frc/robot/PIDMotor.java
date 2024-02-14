@@ -6,6 +6,9 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PIDMotor {
@@ -257,5 +260,36 @@ public class PIDMotor {
      */
     public double getPosition(){
         return rotationsToUnits(encoder.getPosition());
+    }
+
+    TrapezoidProfile motorProfile;
+    TrapezoidProfile.Constraints motorConstraints;
+    TrapezoidProfile.State motorCurrentState;
+    TrapezoidProfile.State motorTargetState;
+    Timer motorTimer;
+
+    /**
+     * Generates a trapezoidal path, like so:
+     * 
+     * V
+     * |      -------
+     * |     /       \
+     * |    /         \
+     * |----           -----
+     *           T
+     */
+    public void generateTrapezoidPath(double maxV, double maxA, double targetP, double targetV){
+        motorConstraints = new Constraints(maxV, maxA);
+        motorCurrentState = new TrapezoidProfile.State(getPosition(), 0);
+        motorTargetState = new TrapezoidProfile.State(targetP, targetV);
+        motorProfile = new TrapezoidProfile(motorConstraints, motorTargetState, motorCurrentState);
+        motorTimer.reset();
+        motorTimer.start();
+    }
+
+    /** After generating a trapezoidal path, run this function periodically to update the target of the PIDMotor */
+    public void runTrapezoidPath(){
+        TrapezoidProfile.State state = motorProfile.calculate(motorTimer.get());
+        setTarget(state.position);
     }
 }

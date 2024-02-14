@@ -1,6 +1,10 @@
 package frc.robot;
 
+import com.revrobotics.CANSparkBase.ControlType;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -58,13 +62,44 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopExit() {}
 
+  PIDMotor[] motorArray;
+
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
+    
+    motorArray = new PIDMotor[]{
+      PIDMotor.makeMotor(10, "climber left", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(11, "climber right", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(12, "elevator", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(13, "flumper", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(14, "shoulder left", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(15, "shoulder right", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(16, "wrist", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(30, "intake bottom", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(31, "intake top", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(32, "shooter bottom", 0 , 0, 0, 0, ControlType.kPosition, 1),
+      PIDMotor.makeMotor(33, "shooter top", 0 , 0, 0, 0, ControlType.kPosition, 1)
+    };
   }
 
+  int currIndex = 0;
+  XboxController testController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
+  
+
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    if(testController.getRightBumperPressed() && currIndex < motorArray.length-1){
+      motorArray[currIndex].set(0);
+      ++currIndex;
+    } else if (testController.getLeftBumperPressed() && currIndex > 0){
+      motorArray[currIndex].set(0);
+      --currIndex;
+    }
+    motorArray[currIndex].set(testController.getLeftY());
+    SmartDashboard.putNumber("Motor Index", currIndex);
+    SmartDashboard.putString("Motor Name", motorArray[currIndex].name);
+  }
 
   @Override
   public void testExit() {}
