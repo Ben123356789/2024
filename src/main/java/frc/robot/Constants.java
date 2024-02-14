@@ -4,24 +4,24 @@ public final class Constants {
     private Constants() {}
 
     // Climber motor IDs
-    public static final int CLIMBER_LEFT_ID = 10;
-    public static final int CLIMBER_RIGHT_ID = 11;
+    public static final int CLIMBER_LEFT_ID = 30;
+    public static final int CLIMBER_RIGHT_ID = 31;
 
     // Floor intake motor ID
-    public static final int FLUMPER_ID = 13;
+    public static final int FLUMPER_ID = 32;
 
     // Pigeon ID
-    public static final int PIGEON_ID = 20;
+    public static final int PIGEON_ID = 18;
 
     // Shooter motor IDs
-    public static final int SHOOTER_TOP_ID = 32;
-    public static final int SHOOTER_BOTTOM_ID = 33;
-    public static final int INTAKE_TOP_ID = 31;
-    public static final int INTAKE_BOTTOM_ID = 30;
+    public static final int SHOOTER_TOP_ID = 46;
+    public static final int SHOOTER_BOTTOM_ID = 47;
+    public static final int INTAKE_TOP_ID = 44;
+    public static final int INTAKE_BOTTOM_ID = 45;
 
     // Shoulder motor IDs & set positions. Positions are in degrees
-    public static final int SHOULDER_LEFT_MOTOR_ID = 14;
-    public static final int SHOULDER_RIGHT_MOTOR_ID = 15;
+    public static final int SHOULDER_LEFT_MOTOR_ID = 40;
+    public static final int SHOULDER_RIGHT_MOTOR_ID = 41;
     public static final double SHOULDER_STOWED_POSITION = 0;
     public static final double SHOULDER_INTAKE_POSITION = 0;
     public static final double SHOULDER_SOURCE_POSITION = 0;
@@ -32,7 +32,7 @@ public final class Constants {
     public static final double SHOULDER_SAFE_ANGLE = 0;
 
     // Wrist motor ID & set positions. Positions are in degrees
-    public static final int WRIST_MOTOR_ID = 16;
+    public static final int WRIST_MOTOR_ID = 43;
     public static final double WRIST_STOWED_POSITION = 0;
     public static final double WRIST_INTAKE_POSITION = 0;
     public static final double WRIST_SOURCE_POSITION = 0;
@@ -43,7 +43,7 @@ public final class Constants {
     public static final double WRIST_SAFE_ANGLE = 0;
 
     // Elevator motor ID & set positions. Positions are in CM
-    public static final int ELEVATOR_MOTOR_ID = 12;
+    public static final int ELEVATOR_MOTOR_ID = 42;
     public static final double ELEVATOR_STOWED_POSITION = 0;
     public static final double ELEVATOR_INTAKE_POSITION = 0;
     public static final double ELEVATOR_SOURCE_POSITION = 0;
