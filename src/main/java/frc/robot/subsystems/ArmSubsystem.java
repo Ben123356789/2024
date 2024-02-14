@@ -95,7 +95,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double elevatorPosition() {
-      // TODO: Write good values for elevator. It is using wrist current... 
       switch (this) {
         case Stowed:
           return Constants.ELEVATOR_STOWED_POSITION;
@@ -154,6 +153,7 @@ public class ArmSubsystem extends SubsystemBase {
     elevatorTargetState = new TrapezoidProfile.State(cm, 0);
     elevatorProfile = new TrapezoidProfile(elevatorConstraints, elevatorTargetState, elevatorCurrentState);
     elevatorTimer.reset();
+    elevatorTimer.start();
   }
 
   public void unsafeSetPosition(ArmPosition p){
@@ -182,22 +182,6 @@ public class ArmSubsystem extends SubsystemBase {
     return (wristMotor.getDegrees());
   }
 
-  public boolean checkShoulderPosition() {
-    return ExtraMath.within(target.shoulderPosition(), getShoulderPosition(), 1);
-  }
-
-  public boolean checkWristPosition() {
-    return ExtraMath.within(target.wristPosition(), getWristPosition(), 1);
-  }
-
-  public boolean isShoulderSafe() {
-    return ExtraMath.within(Constants.SHOULDER_SAFE_ANGLE, getShoulderPosition(), 1);
-  }
-
-  public boolean isWristSafe() {
-    return ExtraMath.within(Constants.WRIST_SAFE_ANGLE, getWristPosition(), 1);
-  }
-
   public void setElevatorHeightCm(double height) {
     double clampedHeight = ExtraMath.clamp(height, ELEVATOR_HEIGHT_CM_MIN, ELEVATOR_HEIGHT_CM_MAX);
     elevatorMotor.setTarget(clampedHeight);
@@ -205,7 +189,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void printDashboard() {
     SmartDashboard.putString("Arm Target Position", target.toString());
-    SmartDashboard.putBoolean("Arm At Target?", checkShoulderPosition() && checkWristPosition());
     SmartDashboard.putNumber("Shoulder Position", getShoulderPosition());
     SmartDashboard.putNumber("Wrist Position", getWristPosition());
   }
