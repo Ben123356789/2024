@@ -124,7 +124,6 @@ public class PIDMotor {
      * Puts this motor's PIDF values to the SmartDashboard.
      */
     public void putPIDF() {
-        catchUninit();
         SmartDashboard.putNumber(pKey(), p);
         SmartDashboard.putNumber(iKey(), i);
         SmartDashboard.putNumber(dKey(), d);
@@ -169,7 +168,6 @@ public class PIDMotor {
      * Sends the PIDF values to the motor controller. Call when PIDF values are changed.
      */
     public void updatePIDF() {
-        catchUninit();
         controller.setP(p);
         controller.setI(i);
         controller.setD(d);
@@ -180,7 +178,6 @@ public class PIDMotor {
      * Resets the encoder, making its current position 0.
      */
     public void resetEncoder() {
-        catchUninit();
         encoder.setPosition(0);
     }
 
@@ -188,7 +185,6 @@ public class PIDMotor {
      * Resets the controller's integral accumulation. Call this every time this motor is enabled.
      */
     public void resetIAccum() {
-        catchUninit();
         controller.setIAccum(0);
     }
 
@@ -196,7 +192,6 @@ public class PIDMotor {
      * Resets the state of the motor. Call this every time this motor is enabled.
      */
     public void resetAll() {
-        catchUninit();
         resetEncoder();
         resetIAccum();
     }
@@ -291,5 +286,9 @@ public class PIDMotor {
     public void runTrapezoidPath(){
         TrapezoidProfile.State state = motorProfile.calculate(motorTimer.get());
         setTarget(state.position);
+    }
+    
+    public double getVelocity(){
+        return encoder.getVelocity();
     }
 }

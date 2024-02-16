@@ -48,7 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
   ArmPosition target;
 
   public enum ArmPosition {
-    Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Trap;
+    Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Trap, SubWoofer, PodiumHigh, PodiumLow;
 
     public double shoulderPosition() {
       switch (this) {
@@ -66,6 +66,12 @@ public class ArmSubsystem extends SubsystemBase {
           return Constants.SHOULDER_AMP_POSITION;
         case Trap:
           return Constants.SHOULDER_TRAP_POSITION;
+        case SubWoofer:
+          return Constants.SHOULDER_SUBWOOFER_POSITION;
+        case PodiumHigh:
+          return Constants.SHOULDER_PODIUM_HIGH_POSITION;
+        case PodiumLow:
+          return Constants.SHOULDER_PODIUM_LOW_POSITION;
         default:
           return Constants.SHOULDER_STOWED_POSITION;
       }
@@ -87,6 +93,12 @@ public class ArmSubsystem extends SubsystemBase {
           return Constants.WRIST_AMP_POSITION;
         case Trap:
           return Constants.WRIST_TRAP_POSITION;
+        case SubWoofer:
+          return Constants.WRIST_SUBWOOFER_POSITION;
+        case PodiumHigh:
+          return Constants.WRIST_PODIUM_HIGH_POSITION;
+        case PodiumLow:
+          return Constants.WRIST_PODIUM_LOW_POSITION;
         default:
           return Constants.WRIST_STOWED_POSITION;
       }
@@ -109,6 +121,12 @@ public class ArmSubsystem extends SubsystemBase {
           return Constants.ELEVATOR_AMP_POSITION;
         case Trap:
           return Constants.ELEVATOR_TRAP_POSITION;
+        case SubWoofer:
+          return Constants.ELEVATOR_SUBWOOFER_POSITION;
+        case PodiumHigh:
+          return Constants.ELEVATOR_PODIUM_HIGH_POSITION;
+        case PodiumLow:
+          return Constants.ELEVATOR_PODIUM_LOW_POSITION;
         default:
           return Constants.ELEVATOR_STOWED_POSITION;
       }
@@ -130,7 +148,7 @@ public class ArmSubsystem extends SubsystemBase {
     rightShoulderMotor.setInverted(true);
     wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", wristP, wristI, wristD, wristF,
         ControlType.kPosition, Constants.WRIST_ENCODER_TICK_PER_DEG);
-    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_ID, "Elevator", elevatorP, elevatorI, elevatorD, elevatorF, ControlType.kPosition, 0);
+    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", elevatorP, elevatorI, elevatorD, elevatorF, ControlType.kPosition, 0);
 
     elevatorMotor.generateTrapezoidPath(0,0,0,0);
     leftShoulderMotor.generateTrapezoidPath(0,0,0,0);
@@ -162,12 +180,20 @@ public class ArmSubsystem extends SubsystemBase {
     return (wristMotor.getDegrees());
   }
 
+  public double getElevatorPosition() {
+    return (elevatorMotor.getDegrees());
+  }
+
   public boolean checkShoulderPosition() {
     return ExtraMath.within(target.shoulderPosition(), getShoulderPosition(), 1);
   }
 
   public boolean checkWristPosition() {
     return ExtraMath.within(target.wristPosition(), getWristPosition(), 1);
+  }
+
+  public boolean checkElevatorPosition() {
+    return ExtraMath.within(target.elevatorPosition(), getElevatorPosition(), 1);
   }
 
   public void setElevatorHeightCm(double height) {
@@ -177,8 +203,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void printDashboard() {
     SmartDashboard.putString("Arm Target Position", target.toString());
-    SmartDashboard.putBoolean("Arm At Target?", checkShoulderPosition() && checkWristPosition());
+    SmartDashboard.putBoolean("Arm At Target?", checkShoulderPosition() && checkWristPosition() && checkElevatorPosition());
     SmartDashboard.putNumber("Shoulder Position", getShoulderPosition());
     SmartDashboard.putNumber("Wrist Position", getWristPosition());
+    SmartDashboard.putNumber("Elevator Position", getElevatorPosition());
   }
 }

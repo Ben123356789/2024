@@ -29,6 +29,9 @@ public final class Constants {
     public static final double SHOULDER_SPEAKER_LOW_POSITION = 0;
     public static final double SHOULDER_AMP_POSITION = 0;
     public static final double SHOULDER_TRAP_POSITION = 0;
+    public static final double SHOULDER_SUBWOOFER_POSITION = 0;
+    public static final double SHOULDER_PODIUM_HIGH_POSITION = 0;
+    public static final double SHOULDER_PODIUM_LOW_POSITION = 0;
     public static final double SHOULDER_SAFE_ANGLE = 0;
 
     // Wrist motor ID & set positions. Positions are in degrees
@@ -40,6 +43,9 @@ public final class Constants {
     public static final double WRIST_SPEAKER_LOW_POSITION = 0;
     public static final double WRIST_AMP_POSITION = 0;
     public static final double WRIST_TRAP_POSITION = 0;
+    public static final double WRIST_SUBWOOFER_POSITION = 0;
+    public static final double WRIST_PODIUM_HIGH_POSITION = 0;
+    public static final double WRIST_PODIUM_LOW_POSITION = 0;
     public static final double WRIST_SAFE_ANGLE = 0;
 
     // Elevator motor ID & set positions. Positions are in CM
@@ -51,6 +57,9 @@ public final class Constants {
     public static final double ELEVATOR_SPEAKER_LOW_POSITION = 0;
     public static final double ELEVATOR_AMP_POSITION = 0;
     public static final double ELEVATOR_TRAP_POSITION = 0;
+    public static final double ELEVATOR_SUBWOOFER_POSITION = 0;
+    public static final double ELEVATOR_PODIUM_HIGH_POSITION = 0;
+    public static final double ELEVATOR_PODIUM_LOW_POSITION = 0;
     public static final double ELEVATOR_SAFE_ANGLE = 0;
 
     // Power Distribution Panel ID

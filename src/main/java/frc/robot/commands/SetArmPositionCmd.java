@@ -34,10 +34,11 @@ public class SetArmPositionCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    arm.unsafeSetPosition(ArmPosition.Stowed);
   }
 
   @Override
   public boolean isFinished() {
-    return arm.checkShoulderPosition() && arm.checkWristPosition();
+    return arm.checkShoulderPosition() && arm.checkWristPosition() && arm.checkElevatorPosition();
   }
 }

@@ -23,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     intakeTop = new CANSparkMax(Constants.INTAKE_TOP_ID, MotorType.kBrushless);
     intakeBottom = new CANSparkMax(Constants.INTAKE_BOTTOM_ID, MotorType.kBrushless);
     shooterTimer = new Timer();
-    state = ShootState.Brake;
+    state = ShootState.Idle;
     intakeBottomStartPos = 0;
     intakeTopStartPos = 0;
 
@@ -32,8 +32,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(shootWhenReady && state == ShootState.Brake){
-        state = ShootState.Reset;
+    if(shootWhenReady && state == ShootState.Idle){
+        state = ShootState.Start;
     }
     manageShooterRollers(true, motorPower);
     printDashboard();
@@ -41,16 +41,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void intakeInit() {
     shooterTimer.restart();
-    state = ShootState.Reset;
+    state = ShootState.Start;
   }
 
   public enum ShootState {
-    Brake,
-    Reset,
+    Idle,
+    Start,
     Pull,
     WaitForMax,
     Shoot,
-    Intake
+    Intake,
+    Reverse
   }
 
   public void manageShooterRollers(boolean shootFront, double shootPower) {
@@ -63,13 +64,13 @@ public class ShooterSubsystem extends SubsystemBase {
     shootTop = (shootFront ? shooterTop : intakeTop);
 
     switch (state) {
-      case Brake: {
+      case Idle: {
         inTop.set(0);
         inBottom.set(0);
         shootTop.set(0);
         shootBottom.set(0);
       } break;
-      case Reset: {
+      case Start: {
         inTop.getEncoder().setPosition(0);
         inBottom.getEncoder().setPosition(0);
         state = ShootState.Pull;
@@ -80,13 +81,18 @@ public class ShooterSubsystem extends SubsystemBase {
         if (inBottom.getEncoder().getPosition() >= 1.5 || inTop.getEncoder().getPosition() >= 1.5) {
           inBottom.set(0);
           inTop.set(0);
+          shooterTimer.restart();
           state = ShootState.WaitForMax;
         }
       } break;
       case WaitForMax: {
         shootTop.set(shootPower);
         shootBottom.set(shootPower);
-        if (shootTop.getEncoder().getVelocity() >= 10000 * shootPower && shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) {
+        if (
+          (shootTop.getEncoder().getVelocity() >= 10000 * shootPower &&
+          shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) ||
+          shooterTimer.get() >= 2.0
+        ) {
           shooterTimer.restart();
           state = ShootState.Shoot;
         }
@@ -97,17 +103,27 @@ public class ShooterSubsystem extends SubsystemBase {
         shootBottom.set(shootPower);
         shootTop.set(shootPower);
         if (shooterTimer.get() >= 1.5) {
-          state = ShootState.Brake;
+          state = ShootState.Idle;
         }
       } break;
       case Intake: {
         inBottom.set(0.25);
         inTop.set(0.25);
         if(shooterTimer.get() >= 1.5){
-          state = ShootState.Brake;
+          state = ShootState.Idle;
         }
-      }
+      } break;
+      case Reverse: {
+        inBottom.set(-0.5);
+        inTop.set(-0.5);
+        shootBottom.set(-0.5);
+        shootTop.set(-0.5);
+      } break;
     }
+  }
+
+  public void startShooting() {
+    state = ShootState.Start;
   }
 
   public void intakeNote() {
