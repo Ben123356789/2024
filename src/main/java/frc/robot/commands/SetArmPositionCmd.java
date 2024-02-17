@@ -19,6 +19,7 @@ public class SetArmPositionCmd extends Command {
   boolean elevatorSetCheck;
 
   public SetArmPositionCmd(ArmSubsystem arm, ArmPosition p) {
+    this.arm = arm;
     target = p;
     addRequirements(arm);
   }
@@ -34,10 +35,11 @@ public class SetArmPositionCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    arm.unsafeSetPosition(ArmPosition.Stowed);
   }
 
   @Override
   public boolean isFinished() {
-    return arm.checkShoulderPosition() && arm.checkWristPosition();
+    return false;//arm.checkShoulderPosition() && arm.checkWristPosition() && arm.checkElevatorPosition();
   }
 }

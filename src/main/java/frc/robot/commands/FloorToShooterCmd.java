@@ -11,31 +11,39 @@ public class FloorToShooterCmd extends Command {
   private final FlumperSubsystem flumperSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final ArmSubsystem armSubsystem;
+  boolean isForwards;
 
-  public FloorToShooterCmd(FlumperSubsystem flumper, ShooterSubsystem shooter, ArmSubsystem arm) {
+  public FloorToShooterCmd(FlumperSubsystem flumper, ShooterSubsystem shooter, ArmSubsystem arm, boolean isForwards) {
     flumperSubsystem = flumper;
     shooterSubsystem = shooter;
     armSubsystem = arm;
+    this.isForwards = isForwards;
     addRequirements(flumper, shooter, arm);
   }
 
   @Override
   public void initialize() {
+    armSubsystem.unsafeSetPosition(ArmPosition.Intake);
   }
 
   @Override
   public void execute() {
-    armSubsystem.unsafeSetPosition(ArmPosition.Intake);
-    if(armSubsystem.checkShoulderPosition() && armSubsystem.checkWristPosition()){
-      flumperSubsystem.eat();
-      shooterSubsystem.state = ShootState.Intake;
+    if (armSubsystem.checkShoulderPosition() && armSubsystem.checkWristPosition()) {
+      if (isForwards) {
+        flumperSubsystem.eat();
+        shooterSubsystem.state = ShootState.Intake;
+      } else {
+        flumperSubsystem.spit();
+        shooterSubsystem.state = ShootState.ReverseIntake;
+      }
     }
   }
 
   @Override
   public void end(boolean interrupted) {
     flumperSubsystem.stop();
-    shooterSubsystem.state = ShootState.Reset;
+    shooterSubsystem.state = ShootState.Preload;
+    armSubsystem.unsafeSetPosition(ArmPosition.Stowed);
   }
 
   @Override

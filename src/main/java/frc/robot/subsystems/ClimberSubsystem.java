@@ -11,31 +11,54 @@ public class ClimberSubsystem extends SubsystemBase {
     static final double ENCODER_LOWEST = 0.0;
     static final double ENCODER_HIGHEST = 0.0;
     static final double HEIGHT = 0.0;
-
+    
     static final int SERVO_CHANNEL = 0;
     static final double SERVO_DISENGAGE_POS = 0.0;
     static final double SERVO_ENGAGE_POS = 0.0;
+    static final double ENGAGE_BACKING_DISTANCE = 1.0;
+    
+    double target = 0.0;
 
-    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 1);
-    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 1);
+    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 1, 0, 0);
+    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 1, 0, 0);
     Servo ratchetServo = new Servo(SERVO_CHANNEL);
 
     public ClimberSubsystem() {}
 
-    public void setHeight(double height) {
-        height = ExtraMath.clamp(height, 0.0, HEIGHT);
-        leftMotor.setTarget(height);
-        rightMotor.setTarget(height);
+    public double position() {
+        return ExtraMath.average(leftMotor.getPosition(), rightMotor.getPosition());
     }
 
-    public void engageRatchet() {
-        ratchetServo.setPosition(SERVO_ENGAGE_POS);
+    public void setHeight(double newHeight) {
+        newHeight = ExtraMath.clamp(newHeight, ENGAGE_BACKING_DISTANCE, HEIGHT);
+        if (newHeight > position()) {
+            engageBackingTarget = target - ENGAGE_BACKING_DISTANCE;
+            engageBacking = true;
+        }
+        target = newHeight;
+        leftMotor.setTarget(newHeight);
+        rightMotor.setTarget(newHeight);
     }
 
-    public void disengageRatchet() {
-        ratchetServo.setPosition(SERVO_DISENGAGE_POS);
+    boolean ratchetEngaged = false;
+    double engageBackingTarget = 0.0;
+    boolean engageBacking = false;
+
+    void engageRatchet() {
+        ratchetEngaged = true;
+    }
+
+    void disengageRatchet() {
+        ratchetEngaged = false;
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+        if (engageBacking) {
+            // setReference*()
+        } else {
+            
+        }
+        ratchetServo.setPosition(ratchetEngaged ? SERVO_ENGAGE_POS : SERVO_DISENGAGE_POS);
+    }
 }

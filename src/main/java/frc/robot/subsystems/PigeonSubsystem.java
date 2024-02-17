@@ -12,7 +12,7 @@ public class PigeonSubsystem extends SubsystemBase {
   public double temp;
 
   public PigeonSubsystem() {
-    pigeon = new Pigeon2(Constants.PIGEON_ID,"CANthisWork");
+    pigeon = new Pigeon2(Constants.PIGEON_ID,"DriveTrain");
   }
 
   @Override

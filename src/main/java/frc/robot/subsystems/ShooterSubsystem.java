@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.PIDMotor;
 
 public class ShooterSubsystem extends SubsystemBase {
   CANSparkMax shooterTop, shooterBottom, intakeTop, intakeBottom;
@@ -23,17 +26,22 @@ public class ShooterSubsystem extends SubsystemBase {
     intakeTop = new CANSparkMax(Constants.INTAKE_TOP_ID, MotorType.kBrushless);
     intakeBottom = new CANSparkMax(Constants.INTAKE_BOTTOM_ID, MotorType.kBrushless);
     shooterTimer = new Timer();
-    state = ShootState.Brake;
+    state = ShootState.Idle;
     intakeBottomStartPos = 0;
     intakeTopStartPos = 0;
+
+    shooterTop.setIdleMode(IdleMode.kBrake);
+    shooterBottom.setIdleMode(IdleMode.kBrake);
+    intakeTop.setIdleMode(IdleMode.kBrake);
+    intakeBottom.setIdleMode(IdleMode.kBrake);
 
     // room for inverse
   }
 
   @Override
   public void periodic() {
-    if(shootWhenReady && state == ShootState.Brake){
-        state = ShootState.Reset;
+    if (shootWhenReady && state == ShootState.Idle) {
+      state = ShootState.Start;
     }
     manageShooterRollers(true, motorPower);
     printDashboard();
@@ -41,16 +49,18 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void intakeInit() {
     shooterTimer.restart();
-    state = ShootState.Reset;
+    state = ShootState.Start;
   }
 
   public enum ShootState {
-    Brake,
-    Reset,
+    Idle,
+    Start,
     Pull,
     WaitForMax,
     Shoot,
-    Intake
+    Intake,
+    ReverseIntake,
+    Preload
   }
 
   public void manageShooterRollers(boolean shootFront, double shootPower) {
@@ -63,51 +73,92 @@ public class ShooterSubsystem extends SubsystemBase {
     shootTop = (shootFront ? shooterTop : intakeTop);
 
     switch (state) {
-      case Brake: {
+      case Idle: {
         inTop.set(0);
         inBottom.set(0);
         shootTop.set(0);
         shootBottom.set(0);
-      } break;
-      case Reset: {
+      }
+        break;
+      case Start: {
         inTop.getEncoder().setPosition(0);
         inBottom.getEncoder().setPosition(0);
         state = ShootState.Pull;
-      } break;
+      }
+        break;
       case Pull: {
         inBottom.set(-0.25);
         inTop.set(-0.25);
         if (inBottom.getEncoder().getPosition() >= 1.5 || inTop.getEncoder().getPosition() >= 1.5) {
           inBottom.set(0);
           inTop.set(0);
+          shooterTimer.restart();
           state = ShootState.WaitForMax;
         }
-      } break;
+      }
+        break;
       case WaitForMax: {
         shootTop.set(shootPower);
         shootBottom.set(shootPower);
-        if (shootTop.getEncoder().getVelocity() >= 10000 * shootPower && shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) {
+        if ((shootTop.getEncoder().getVelocity() >= 10000 * shootPower &&
+            shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) ||
+            shooterTimer.get() >= 2.0) {
           shooterTimer.restart();
           state = ShootState.Shoot;
         }
-      } break;
+      }
+        break;
       case Shoot: {
         inBottom.set(1);
         inTop.set(1);
         shootBottom.set(shootPower);
         shootTop.set(shootPower);
         if (shooterTimer.get() >= 1.5) {
-          state = ShootState.Brake;
-        }
-      } break;
-      case Intake: {
-        inBottom.set(0.25);
-        inTop.set(0.25);
-        if(shooterTimer.get() >= 1.5){
-          state = ShootState.Brake;
+          state = ShootState.Idle;
         }
       }
+        break;
+      case Intake: {
+        inBottom.set(-0.25);
+        inTop.set(0.25);
+        if (shooterTimer.get() >= 1.5) {
+          state = ShootState.Idle;
+        }
+        shooterTimer.restart();
+        inTop.getEncoder().setPosition(0);
+        inBottom.getEncoder().setPosition(0);
+      }
+        break;
+      case Preload: {
+        if (shooterTimer.get() < 0.2) {
+          inBottom.set(0);
+          inTop.set(0);
+          inTop.getEncoder().setPosition(0);
+          inBottom.getEncoder().setPosition(0);
+        } else if (shooterTimer.get() > 0.5) {
+          inBottom.set(0.15);
+          inTop.set(-0.15);
+          if (Math.abs(inBottom.getEncoder().getPosition()) >= 1.375
+              || Math.abs(inTop.getEncoder().getPosition()) >= 1.375) {
+            inBottom.set(0);
+            inTop.set(0);
+            state = ShootState.Idle;
+          }
+        }
+      }
+        break;
+      case ReverseIntake: {
+        inBottom.set(-0.5);
+        inTop.set(-0.5);
+        shootBottom.set(-0.5);
+        shootTop.set(-0.5);
+      }
+        break;
     }
+  }
+
+  public void startShooting() {
+    state = ShootState.Start;
   }
 
   public void intakeNote() {
