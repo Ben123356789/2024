@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -26,7 +27,14 @@ public class PIDMotor {
     CANSparkMax motor;
     SparkPIDController controller;
 
-    private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
+    
+    TrapezoidProfile motorProfile;
+    TrapezoidProfile.Constraints motorConstraints;
+    TrapezoidProfile.State motorCurrentState;
+    TrapezoidProfile.State motorTargetState;
+    Timer motorTimer;
+
+    private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit, double maxV, double maxA) {
         this.controlType = type;
 
         this.p = p;
@@ -40,7 +48,14 @@ public class PIDMotor {
         controller = motor.getPIDController();
         encoder = motor.getEncoder();
 
+
         this.name = name;
+
+        motorConstraints = new Constraints(maxV, maxA);
+        motorCurrentState = new TrapezoidProfile.State(0, 0);
+        motorTargetState = new TrapezoidProfile.State(0, 0);
+        motorProfile = new TrapezoidProfile(motorConstraints, motorTargetState, motorCurrentState);
+        motorTimer = new Timer();
     }
 
     /**
@@ -55,8 +70,8 @@ public class PIDMotor {
      * @param rotationsPerUnit The number of encoder rotations per user-defined unit. For example, one rotation could correspond to moving half an inch. If the units are inches, then `rotationsPerUnit` would be 2.
      * @return The constructed PIDMotor.
      */
-    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
-        PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit);
+    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit, double maxV, double maxA) {
+        PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit, maxV, maxA);
         motor.init();
         return motor;
     }
@@ -71,10 +86,11 @@ public class PIDMotor {
         if (!initialized) {
             motor.restoreFactoryDefaults();
             resetAll();
-            putPIDF();
+            //putPIDF();
             updatePIDF();
             initialized = true;
         }
+        motor.setIdleMode(IdleMode.kBrake);
     }
 
     /**
@@ -130,6 +146,11 @@ public class PIDMotor {
         SmartDashboard.putNumber(fKey(), f);
     }
 
+    public void putPV(){
+        SmartDashboard.putNumber(name+" Position", getPosition());
+        SmartDashboard.putNumber(name+" Velocity", getVelocity());   
+    }
+
     /**
      * Sets the PIDF values for this motor. Call `updatePIDF` to send the values to the motor controller.
      * @param p The new proportional coefficient.
@@ -143,6 +164,7 @@ public class PIDMotor {
         this.i = i;
         this.d = d;
         this.f = f;
+        updatePIDF();
     }
 
     /**
@@ -158,10 +180,12 @@ public class PIDMotor {
      */
     public void fetchPIDFFromDashboard() {
         catchUninit();
-        setPIDF(SmartDashboard.getNumber(pKey(), p),
-                SmartDashboard.getNumber(iKey(), i),
-                SmartDashboard.getNumber(dKey(), d),
-                SmartDashboard.getNumber(fKey(), f));
+        setPIDF(
+            SmartDashboard.getNumber(pKey(), p),
+            SmartDashboard.getNumber(iKey(), i),
+            SmartDashboard.getNumber(dKey(), d),
+            SmartDashboard.getNumber(fKey(), f)
+        );
     }
 
     /**
@@ -179,6 +203,10 @@ public class PIDMotor {
      */
     public void resetEncoder() {
         encoder.setPosition(0);
+    }
+
+    public void follow(PIDMotor other, boolean inverted) {
+        motor.follow(other.motor, inverted);
     }
 
     /**
@@ -257,11 +285,6 @@ public class PIDMotor {
         return rotationsToUnits(encoder.getPosition());
     }
 
-    TrapezoidProfile motorProfile;
-    TrapezoidProfile.Constraints motorConstraints;
-    TrapezoidProfile.State motorCurrentState;
-    TrapezoidProfile.State motorTargetState;
-    Timer motorTimer;
 
     /**
      * Generates a trapezoidal path, like so:
@@ -273,9 +296,8 @@ public class PIDMotor {
      * |----           -----
      *           T
      */
-    public void generateTrapezoidPath(double maxV, double maxA, double targetP, double targetV){
-        motorConstraints = new Constraints(maxV, maxA);
-        motorCurrentState = new TrapezoidProfile.State(getPosition(), 0);
+    public void generateTrapezoidPath(double targetP, double targetV){
+        motorCurrentState = new TrapezoidProfile.State(getPosition(), getVelocity());
         motorTargetState = new TrapezoidProfile.State(targetP, targetV);
         motorProfile = new TrapezoidProfile(motorConstraints, motorTargetState, motorCurrentState);
         motorTimer.reset();
@@ -286,9 +308,11 @@ public class PIDMotor {
     public void runTrapezoidPath(){
         TrapezoidProfile.State state = motorProfile.calculate(motorTimer.get());
         setTarget(state.position);
+        // SmartDashboard.putNumber(name+" Trapezoid Output", state.position);
+        SmartDashboard.putNumber(name+" Position Error", getPosition()-state.position);
     }
     
     public double getVelocity(){
-        return encoder.getVelocity();
+        return encoder.getVelocity()/60;
     }
 }

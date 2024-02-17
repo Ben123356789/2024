@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.PIDMotor;
 
 public class ShooterSubsystem extends SubsystemBase {
   CANSparkMax shooterTop, shooterBottom, intakeTop, intakeBottom;
@@ -27,13 +30,18 @@ public class ShooterSubsystem extends SubsystemBase {
     intakeBottomStartPos = 0;
     intakeTopStartPos = 0;
 
+    shooterTop.setIdleMode(IdleMode.kBrake);
+    shooterBottom.setIdleMode(IdleMode.kBrake);
+    intakeTop.setIdleMode(IdleMode.kBrake);
+    intakeBottom.setIdleMode(IdleMode.kBrake);
+
     // room for inverse
   }
 
   @Override
   public void periodic() {
-    if(shootWhenReady && state == ShootState.Idle){
-        state = ShootState.Start;
+    if (shootWhenReady && state == ShootState.Idle) {
+      state = ShootState.Start;
     }
     manageShooterRollers(true, motorPower);
     printDashboard();
@@ -51,7 +59,8 @@ public class ShooterSubsystem extends SubsystemBase {
     WaitForMax,
     Shoot,
     Intake,
-    Reverse
+    ReverseIntake,
+    Preload
   }
 
   public void manageShooterRollers(boolean shootFront, double shootPower) {
@@ -69,12 +78,14 @@ public class ShooterSubsystem extends SubsystemBase {
         inBottom.set(0);
         shootTop.set(0);
         shootBottom.set(0);
-      } break;
+      }
+        break;
       case Start: {
         inTop.getEncoder().setPosition(0);
         inBottom.getEncoder().setPosition(0);
         state = ShootState.Pull;
-      } break;
+      }
+        break;
       case Pull: {
         inBottom.set(-0.25);
         inTop.set(-0.25);
@@ -84,19 +95,19 @@ public class ShooterSubsystem extends SubsystemBase {
           shooterTimer.restart();
           state = ShootState.WaitForMax;
         }
-      } break;
+      }
+        break;
       case WaitForMax: {
         shootTop.set(shootPower);
         shootBottom.set(shootPower);
-        if (
-          (shootTop.getEncoder().getVelocity() >= 10000 * shootPower &&
-          shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) ||
-          shooterTimer.get() >= 2.0
-        ) {
+        if ((shootTop.getEncoder().getVelocity() >= 10000 * shootPower &&
+            shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) ||
+            shooterTimer.get() >= 2.0) {
           shooterTimer.restart();
           state = ShootState.Shoot;
         }
-      } break;
+      }
+        break;
       case Shoot: {
         inBottom.set(1);
         inTop.set(1);
@@ -105,20 +116,44 @@ public class ShooterSubsystem extends SubsystemBase {
         if (shooterTimer.get() >= 1.5) {
           state = ShootState.Idle;
         }
-      } break;
+      }
+        break;
       case Intake: {
-        inBottom.set(0.25);
+        inBottom.set(-0.25);
         inTop.set(0.25);
-        if(shooterTimer.get() >= 1.5){
+        if (shooterTimer.get() >= 1.5) {
           state = ShootState.Idle;
         }
-      } break;
-      case Reverse: {
+        shooterTimer.restart();
+        inTop.getEncoder().setPosition(0);
+        inBottom.getEncoder().setPosition(0);
+      }
+        break;
+      case Preload: {
+        if (shooterTimer.get() < 0.2) {
+          inBottom.set(0);
+          inTop.set(0);
+          inTop.getEncoder().setPosition(0);
+          inBottom.getEncoder().setPosition(0);
+        } else if (shooterTimer.get() > 0.5) {
+          inBottom.set(0.15);
+          inTop.set(-0.15);
+          if (Math.abs(inBottom.getEncoder().getPosition()) >= 1.375
+              || Math.abs(inTop.getEncoder().getPosition()) >= 1.375) {
+            inBottom.set(0);
+            inTop.set(0);
+            state = ShootState.Idle;
+          }
+        }
+      }
+        break;
+      case ReverseIntake: {
         inBottom.set(-0.5);
         inTop.set(-0.5);
         shootBottom.set(-0.5);
         shootTop.set(-0.5);
-      } break;
+      }
+        break;
     }
   }
 

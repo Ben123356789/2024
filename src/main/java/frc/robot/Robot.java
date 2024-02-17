@@ -18,19 +18,19 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
 
-    motorArray = new PIDMotor[]{
-      PIDMotor.makeMotor(30, "climber left", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(31, "climber right", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(42, "elevator", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(32, "flumper", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(40, "shoulder left", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(41, "shoulder right", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(43, "wrist", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(45, "intake bottom", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(44, "intake top", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(47, "shooter bottom", 0 , 0, 0, 0, ControlType.kPosition, 1),
-      PIDMotor.makeMotor(46, "shooter top", 0 , 0, 0, 0, ControlType.kPosition, 1)
-    };
+    // motorArray = new PIDMotor[]{
+    //   PIDMotor.makeMotor(30, "climber left", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(31, "climber right", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(42, "elevator", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(32, "flumper", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(40, "shoulder left", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(41, "shoulder right", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(43, "wrist", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(45, "intake bottom", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(44, "intake top", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(47, "shooter bottom", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(46, "shooter top", 0 , 0, 0, 0, ControlType.kPosition, 1)
+    // };
   }
 
   @Override
@@ -133,13 +133,13 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Bottom Shooter Velocity", motorArray[9].getVelocity());
     // SmartDashboard.putNumber("Top Shooter Velocity", motorArray[10].getVelocity());
 
-    double stickRightY = testController.getRightY();
+    // double stickRightY = testController.getRightY();
 
-    if(stickRightY > -0.1 && stickRightY < 0.1){
-      stickRightY = 0;
-    }
-    motorArray[4].set(stickRightY);
-    motorArray[5].set(-1*stickRightY);
+    // if(stickRightY > -0.1 && stickRightY < 0.1){
+    //   stickRightY = 0;
+    // }
+    // motorArray[4].set(stickRightY);
+    // motorArray[5].set(-1*stickRightY);
 
   }
 

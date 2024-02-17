@@ -140,4 +140,31 @@ public final class ExtraMath {
         }
         return sum/values.length;
     }
+
+    /**
+     * Naive deadzone.
+     * @param val The axis value.
+     * @param deadzone The deadzone threshold.
+     * @return 0 if val is within -deadzone..deadzone, otherwise val.
+     */
+    public static double naiveDeadzone(double val, double deadzone) {
+        if (Math.abs(val) < Math.abs(deadzone)) {
+            return 0.0;
+        } else {
+            return val;
+        }
+    }
+    /**
+     * Smarter deadzone.
+     * @param val
+     * @param deadzone
+     * @return 1 when val is 1, -1 when val is -1, 0 if deadzone
+     */
+    public static double deadzone(double val, double deadzone) {
+        if (Math.abs(val) < Math.abs(deadzone)) {
+            return 0.0;
+        } else {
+            return rangeMap(Math.abs(val), Math.abs(deadzone), 1, 0, 1) * Math.signum(val);//(val - Math.signum(val) * deadzone) / (1.0 - deadzone);
+        }
+    }
 }
