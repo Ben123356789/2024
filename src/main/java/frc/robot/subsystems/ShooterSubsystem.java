@@ -60,44 +60,45 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void manageShooterRollers(boolean shootFront, double shootPower) {
-    CANSparkMax inTop, inBottom, shootTop, shootBottom;
 
-    // Don't worry about the memory leaks.
-    inBottom = (shootFront ? intakeBottom : shooterBottom);
-    inTop = (shootFront ? intakeTop : shooterTop);
-    shootBottom = (shootFront ? shooterBottom : intakeBottom);
-    shootTop = (shootFront ? shooterTop : intakeTop);
+    // Don't worry about the memory leaks
+    // inBottom = (shootFront ? intakeBottom : shooterBottom);
+    // inTop = (shootFront ? intakeTop : shooterTop);
+    // shootBottom = (shootFront ? shooterBottom : intakeBottom);
+    // shootTop = (shootFront ? shooterTop : intakeTop);
 
     switch (state) {
+      // Stops all the motors.
       case Idle: {
-        inTop.set(0);
-        inBottom.set(0);
-        shootTop.set(0);
-        shootBottom.set(0);
+        intakeTop.set(0);
+        intakeBottom.set(0);
+        shooterTop.set(0);
+        shooterBottom.set(0);
       }
         break;
+      
       case Start: {
-        inTop.getEncoder().setPosition(0);
-        inBottom.getEncoder().setPosition(0);
+        intakeTop.getEncoder().setPosition(0);
+        intakeBottom.getEncoder().setPosition(0);
         state = ShootState.Pull;
       }
         break;
       case Pull: {
-        inBottom.set(-0.25);
-        inTop.set(-0.25);
-        if (inBottom.getEncoder().getPosition() >= 1.5 || inTop.getEncoder().getPosition() >= 1.5) {
-          inBottom.set(0);
-          inTop.set(0);
+        intakeBottom.set(-0.25);
+        intakeTop.set(-0.25);
+        if (intakeBottom.getEncoder().getPosition() >= 1.5 || intakeTop.getEncoder().getPosition() >= 1.5) {
+          intakeBottom.set(0);
+          intakeTop.set(0);
           shooterTimer.restart();
           state = ShootState.WaitForMax;
         }
       }
         break;
       case WaitForMax: {
-        shootTop.set(shootPower);
-        shootBottom.set(shootPower);
-        if ((shootTop.getEncoder().getVelocity() >= 10000 * shootPower &&
-            shootBottom.getEncoder().getVelocity() >= 10000 * shootPower) ||
+        shooterTop.set(shootPower);
+        shooterBottom.set(shootPower);
+        if ((shooterTop.getEncoder().getVelocity() >= 10000 * shootPower &&
+            shooterBottom.getEncoder().getVelocity() >= 10000 * shootPower) ||
             shooterTimer.get() >= 2.0) {
           shooterTimer.restart();
           state = ShootState.Shoot;
@@ -105,49 +106,49 @@ public class ShooterSubsystem extends SubsystemBase {
       }
         break;
       case Shoot: {
-        inBottom.set(1);
-        inTop.set(1);
-        shootBottom.set(shootPower);
-        shootTop.set(shootPower);
+        intakeBottom.set(1);
+        intakeTop.set(1);
+        shooterBottom.set(shootPower);
+        shooterTop.set(shootPower);
         if (shooterTimer.get() >= 1.5) {
           state = ShootState.Idle;
         }
       }
         break;
       case Intake: {
-        inBottom.set(-0.25);
-        inTop.set(0.25);
+        intakeBottom.set(-0.25);
+        intakeTop.set(0.25);
         if (shooterTimer.get() >= 1.5) {
           state = ShootState.Idle;
         }
         shooterTimer.restart();
-        inTop.getEncoder().setPosition(0);
-        inBottom.getEncoder().setPosition(0);
+        intakeTop.getEncoder().setPosition(0);
+        intakeBottom.getEncoder().setPosition(0);
       }
         break;
       case Preload: {
         if (shooterTimer.get() < 0.2) {
-          inBottom.set(0);
-          inTop.set(0);
-          inTop.getEncoder().setPosition(0);
-          inBottom.getEncoder().setPosition(0);
+          intakeBottom.set(0);
+          intakeTop.set(0);
+          intakeTop.getEncoder().setPosition(0);
+          intakeBottom.getEncoder().setPosition(0);
         } else if (shooterTimer.get() > 0.5) {
-          inBottom.set(0.15);
-          inTop.set(-0.15);
-          if (Math.abs(inBottom.getEncoder().getPosition()) >= 1.375
-              || Math.abs(inTop.getEncoder().getPosition()) >= 1.375) {
-            inBottom.set(0);
-            inTop.set(0);
+          intakeBottom.set(0.15);
+          intakeTop.set(-0.15);
+          if (Math.abs(intakeBottom.getEncoder().getPosition()) >= 1.375
+              || Math.abs(intakeTop.getEncoder().getPosition()) >= 1.375) {
+            intakeBottom.set(0);
+            intakeTop.set(0);
             state = ShootState.Idle;
           }
         }
       }
         break;
       case ReverseIntake: {
-        inBottom.set(-0.5);
-        inTop.set(-0.5);
-        shootBottom.set(-0.5);
-        shootTop.set(-0.5);
+        intakeBottom.set(-0.5);
+        intakeTop.set(-0.5);
+        shooterBottom.set(-0.5);
+        shooterTop.set(-0.5);
       }
         break;
     }
