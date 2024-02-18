@@ -118,17 +118,6 @@ public class PIDMotor {
         motor.setIdleMode(IdleMode.kBrake);
     }
 
-    // idkkkk
-    public enum ExtraIdleMode{
-        kBrake,
-        kCoast,
-        kOther
-    }
-
-    public IdleMode getIdleMode(){
-        return motor.getIdleMode();
-    }
-
     /**
      * Gets whether or not any of the PIDF values require updating.
      * 

@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import frc.robot.Constants;
 import frc.robot.PIDMotor;
-import frc.robot.PIDMotor.ExtraIdleMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -143,28 +140,5 @@ public class ArmSubsystem extends SubsystemBase {
     rightShoulderMotor.resetEncoder();
     wristMotor.resetEncoder();
     elevatorMotor.resetEncoder();
-  }
-
-  // feels super inefficient, come back to
-  public ExtraIdleMode getIdleMode(){
-    IdleMode iB = leftShoulderMotor.getIdleMode();
-    IdleMode iT = rightShoulderMotor.getIdleMode();
-    IdleMode sB = wristMotor.getIdleMode();
-    IdleMode sT = elevatorMotor.getIdleMode();
-
-    // if they are all the same
-    if(iB == IdleMode.kBrake &&
-       iT == IdleMode.kBrake &&
-       sB == IdleMode.kBrake &&
-       sT == IdleMode.kBrake ||
-       iB == IdleMode.kCoast &&
-       iT == IdleMode.kCoast &&
-       sB == IdleMode.kCoast &&
-       sT == IdleMode.kCoast){
-      return (iB == IdleMode.kBrake) ? ExtraIdleMode.kBrake : ExtraIdleMode.kCoast;
-    } else{
-      // always need to be switched
-      return ExtraIdleMode.kOther;
-    }
   }
 }

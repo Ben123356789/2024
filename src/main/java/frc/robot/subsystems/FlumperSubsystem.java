@@ -1,13 +1,10 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.PIDMotor;
-import frc.robot.PIDMotor.ExtraIdleMode;
 
 public class FlumperSubsystem extends SubsystemBase {
   public enum FlumperState {
@@ -65,11 +62,5 @@ public class FlumperSubsystem extends SubsystemBase {
 
   public void zeroEncoders(){
     flumperMotor.resetEncoder();
-  }
-
-  // feels super inefficient, come back to
-  public ExtraIdleMode getIdleMode(){
-    IdleMode fM = flumperMotor.getIdleMode();
-    return (fM == IdleMode.kBrake) ? ExtraIdleMode.kBrake : ExtraIdleMode.kCoast;
   }
 }

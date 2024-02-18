@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.PIDMotor;
-import frc.robot.PIDMotor.ExtraIdleMode;
 
 public class ShooterSubsystem extends SubsystemBase {
   PIDMotor shooterTop, shooterBottom, intakeTop, intakeBottom;
@@ -173,28 +172,5 @@ public class ShooterSubsystem extends SubsystemBase {
     intakeTop.resetEncoder();
     shooterBottom.resetEncoder();
     shooterTop.resetEncoder();
-  }
-
-  // feels super inefficient, come back to
-  public ExtraIdleMode getIdleMode(){
-    IdleMode iB = intakeBottom.getIdleMode();
-    IdleMode iT = intakeTop.getIdleMode();
-    IdleMode sB = shooterBottom.getIdleMode();
-    IdleMode sT = shooterTop.getIdleMode();
-
-    // if they are all the same
-    if(iB == IdleMode.kBrake &&
-       iT == IdleMode.kBrake &&
-       sB == IdleMode.kBrake &&
-       sT == IdleMode.kBrake ||
-       iB == IdleMode.kCoast &&
-       iT == IdleMode.kCoast &&
-       sB == IdleMode.kCoast &&
-       sT == IdleMode.kCoast){
-      return (iB == IdleMode.kBrake) ? ExtraIdleMode.kBrake : ExtraIdleMode.kCoast;
-    } else{
-      // always need to be switched
-      return ExtraIdleMode.kOther;
-    }
   }
 }
