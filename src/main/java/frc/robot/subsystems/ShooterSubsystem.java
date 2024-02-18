@@ -64,10 +64,10 @@ public class ShooterSubsystem extends SubsystemBase {
     switch (state) {
       // Stops all the motors.
       case Idle: {
-        intakeTop.setPercentOuput(0);
-        intakeBottom.setPercentOuput(0);
-        shooterTop.setPercentOuput(0);
-        shooterBottom.setPercentOuput(0);
+        intakeTop.setPercentOutput(0);
+        intakeBottom.setPercentOutput(0);
+        shooterTop.setPercentOutput(0);
+        shooterBottom.setPercentOutput(0);
       }
         break;
       // Resets encoder counts.
@@ -88,8 +88,8 @@ public class ShooterSubsystem extends SubsystemBase {
       }
         break;
       case Shoot: {
-        intakeBottom.setPercentOuput(1);
-        intakeTop.setPercentOuput(1);
+        intakeBottom.setPercentOutput(1);
+        intakeTop.setPercentOutput(1);
         shooterBottom.setTarget(shooterV);
         shooterTop.setTarget(shooterV);
         if (shooterTimer.get() >= 1.5) {
@@ -98,8 +98,8 @@ public class ShooterSubsystem extends SubsystemBase {
       }
         break;
       case Intake: {
-        intakeBottom.setPercentOuput(-0.25);
-        intakeTop.setPercentOuput(0.25);
+        intakeBottom.setPercentOutput(-0.25);
+        intakeTop.setPercentOutput(0.25);
         if (shooterTimer.get() >= 1.5) {
           state = ShootState.Idle;
         }
@@ -110,26 +110,26 @@ public class ShooterSubsystem extends SubsystemBase {
         break;
       case Preload: {
         if (shooterTimer.get() < 0.2) {
-          intakeBottom.setPercentOuput(0);
-          intakeTop.setPercentOuput(0);
+          intakeBottom.setPercentOutput(0);
+          intakeTop.setPercentOutput(0);
           intakeTop.resetEncoder();
           intakeBottom.resetEncoder();
         } else if (shooterTimer.get() > 0.5) {
-          intakeBottom.setPercentOuput(0.15);
-          intakeTop.setPercentOuput(-0.15);
+          intakeBottom.setPercentOutput(0.15);
+          intakeTop.setPercentOutput(-0.15);
           if (Math.abs(intakeBottom.getPosition()) >= 1.375 || Math.abs(intakeTop.getPosition()) >= 1.375) {
-            intakeBottom.setPercentOuput(0);
-            intakeTop.setPercentOuput(0);
+            intakeBottom.setPercentOutput(0);
+            intakeTop.setPercentOutput(0);
             state = ShootState.Idle;
           }
         }
       }
         break;
       case ReverseIntake: {
-        intakeBottom.setPercentOuput(-0.5);
-        intakeTop.setPercentOuput(-0.5);
-        shooterBottom.setPercentOuput(-0.5);
-        shooterTop.setPercentOuput(-0.5);
+        intakeBottom.setPercentOutput(-0.5);
+        intakeTop.setPercentOutput(-0.5);
+        shooterBottom.setPercentOutput(-0.5);
+        shooterTop.setPercentOutput(-0.5);
       }
         break;
     }
@@ -141,11 +141,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void intakeNote() {
     if (shooterTimer.get() < 0.5) {
-      intakeBottom.setPercentOuput(0.25);
-      intakeTop.setPercentOuput(0.25);
+      intakeBottom.setPercentOutput(0.25);
+      intakeTop.setPercentOutput(0.25);
     } else {
-      intakeBottom.setPercentOuput(0);
-      intakeTop.setPercentOuput(0);
+      intakeBottom.setPercentOutput(0);
+      intakeTop.setPercentOutput(0);
     }
   }
 

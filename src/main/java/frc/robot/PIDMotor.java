@@ -246,7 +246,7 @@ public class PIDMotor {
      * 
      * @param speed A fraction from -1 to 1 specifying the power to set this motor to.
      */
-    public void setPercentOuput(double speed) {
+    public void setPercentOutput(double speed) {
         catchUninit();
         motor.set(speed);
     }

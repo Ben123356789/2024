@@ -43,7 +43,7 @@ public class FlumperSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    flumperMotor.setPercentOuput(speed);
+    flumperMotor.setPercentOutput(speed);
     printDashboard();
   }
 
