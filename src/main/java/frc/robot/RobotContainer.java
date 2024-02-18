@@ -154,7 +154,7 @@ public class RobotContainer {
     // snapTo0Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 0));
     // snapTo180Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 180));
     // snapToAmpKeybind.trigger().whileTrue(
-    //     new SnapToDegreeCmd(pigeon, () -> DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red ? 90 : -90));
+    // new SnapToDegreeCmd(pigeon, () -> DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red ? 90 : -90));
     // snapToSLKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, -45));
     // snapToSRKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 45));
     // //snapToNoteKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, limelight1));

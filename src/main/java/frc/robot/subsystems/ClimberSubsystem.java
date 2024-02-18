@@ -22,8 +22,8 @@ public class ClimberSubsystem extends SubsystemBase {
     boolean engageBacking = false;
     double engageBackingTarget = 0.0;
 
-    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 1);
-    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 1);
+    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition);
+    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition);
     Servo ratchetServo = new Servo(SERVO_CHANNEL);
 
     public ClimberSubsystem() {}

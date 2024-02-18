@@ -29,7 +29,7 @@ public class FlumperSubsystem extends SubsystemBase {
   FlumperState state = FlumperState.Stop;
   
   public FlumperSubsystem() {
-    flumperMotor = PIDMotor.makeMotor(Constants.FLUMPER_ID,"Flumper",0,0,0,0,ControlType.kPosition,1);
+    flumperMotor = PIDMotor.makeMotor(Constants.FLUMPER_ID,"Flumper",0,0,0,0,ControlType.kPosition);
   }
 
   public void set(FlumperState state) {
@@ -43,7 +43,7 @@ public class FlumperSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    flumperMotor.set(speed);
+    flumperMotor.setPercentOutput(speed);
     printDashboard();
   }
 

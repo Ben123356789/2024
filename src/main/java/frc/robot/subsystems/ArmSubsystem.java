@@ -73,12 +73,12 @@ public class ArmSubsystem extends SubsystemBase {
   
   public ArmSubsystem() {
     leftShoulderMotor = PIDMotor.makeMotor(Constants.SHOULDER_LEFT_MOTOR_ID, "Shoulder Left", 0.05, 0, 0, 0,
-        ControlType.kPosition, 1, 70, 250);
+        ControlType.kPosition, 70, 250);
     rightShoulderMotor = PIDMotor.makeMotor(Constants.SHOULDER_RIGHT_MOTOR_ID, "Shoulder Right", 0.05, 0, 0, 0,
-        ControlType.kPosition, 1, 70, 250);
+        ControlType.kPosition, 70, 250);
     rightShoulderMotor.follow(leftShoulderMotor, true);
-    wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", 0.05, 0, 0, 0, ControlType.kPosition, 1, 140, 500);
-    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, 1, 100, 300);
+    wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", 0.05, 0, 0, 0, ControlType.kPosition, 140, 500);
+    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, 100, 300);
 
     leftShoulderMotor.generateTrapezoidPath(0, 0);
     wristMotor.generateTrapezoidPath(0, 0);
@@ -109,6 +109,7 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor.generateTrapezoidPath(target.wristPosition(), 0);
     elevatorMotor.generateTrapezoidPath(target.elevatorPosition(), 0);
   }
+
  /**
   * Prints the positions and velocities of all the arm motors to the SmartDashboard.
   */

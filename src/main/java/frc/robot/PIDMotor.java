@@ -19,7 +19,6 @@ public class PIDMotor {
 
     double p, i, d, f;
     double target = 0.0;
-    double rotationsPerUnit;
     double pidfEpsilonFactor = 1.001;
 
     RelativeEncoder encoder;
@@ -32,14 +31,13 @@ public class PIDMotor {
     TrapezoidProfile.State motorTargetState;
     Timer motorTimer;
 
-    private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit, double maxV, double maxA) {
+    private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double maxV, double maxA) {
         this.name = name;
         this.p = p;
         this.i = i;
         this.d = d;
         this.f = f;
         this.controlType = type;
-        this.rotationsPerUnit = rotationsPerUnit;
 
         motor = new CANSparkMax(deviceID, MotorType.kBrushless);
         controller = motor.getPIDController();
@@ -62,13 +60,10 @@ public class PIDMotor {
      * @param d                The initial derivative coefficient for this motor.
      * @param f                The initial feed-forward coefficient for this motor.
      * @param type             The control type of this motor.
-     * @param rotationsPerUnit The number of encoder rotations per user-defined unit. For example, one rotation could correspond to moving half an inch. If the units are inches, then `rotationsPerUnit` would be 2.
      * @return The constructed PIDMotor.
      */
-    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
-        PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit, 10000, 10000);
-        motor.init();
-        return motor;
+    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type) {
+        return makeMotor(deviceID, name, p, i, d, f, type,10000,10000);
     }
 
     /**
@@ -81,14 +76,13 @@ public class PIDMotor {
      * @param d                The initial derivative coefficient for this motor.
      * @param f                The initial feed-forward coefficient for this motor.
      * @param type             The control type of this motor.
-     * @param rotationsPerUnit The number of encoder rotations per user-defined unit. For example, one rotation could correspond to moving half an inch. If the units are inches, then `rotationsPerUnit` would be 2.
      * @param maxV             The maximum velocity of the motor.
      * @param maxA             The maximum acceleration of the motor.
      * @return The constructed PIDMotor.
      */
-    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit,
+    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type,
             double maxV, double maxA) {
-        PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit, maxV, maxA);
+        PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, maxV, maxA);
         motor.init();
         return motor;
     }
@@ -227,34 +221,32 @@ public class PIDMotor {
         resetIAccum();
     }
 
-    /**
-     * Converts the units for this motor into encoder rotations.
-     * 
-     * @param units The units specified by this motor to convert.
-     * @return The number of rotations that correspond to the given units.
-     */
-    public double unitsToRotations(double units) {
-        return units * rotationsPerUnit;
-    }
+    // /**
+    //  * Converts the units for this motor into encoder rotations.
+    //  * 
+    //  * @param units The units specified by this motor to convert.
+    //  * @return The number of rotations that correspond to the given units.
+    //  */
+    // public double unitsToRotations(double units) {
+    //     return units * rotationsPerUnit;
+    // }
 
-    /**
-     * Converts encoder rotations into units for this motor.
-     * 
-     * @param units The number of rotations to convert.
-     * @return The units specified by this motor that correspond to the given rotations.
-     */
-    public double rotationsToUnits(double rotations) {
-        return rotations / rotationsPerUnit;
-    }
+    // /**
+    //  * Converts encoder rotations into units for this motor.
+    //  * 
+    //  * @param units The number of rotations to convert.
+    //  * @return The units specified by this motor that correspond to the given rotations.
+    //  */
+    // public double rotationsToUnits(double rotations) {
+    //     return rotations / rotationsPerUnit;
+    // }
 
     /**
      * Sets the motor's target to a given unit value.
-     * 
-     * @param units The units specified by this motor to target to.
      */
-    public void setTarget(double units) {
-        double targetTicks = unitsToRotations(units);
-        controller.setReference(targetTicks, controlType);
+    public void setTarget(double target) {
+        this.target = target;
+        controller.setReference(target, controlType);
     }
 
     /**
@@ -262,7 +254,7 @@ public class PIDMotor {
      * 
      * @param speed A fraction from -1 to 1 specifying the power to set this motor to.
      */
-    public void set(double speed) {
+    public void setPercentOutput(double speed) {
         catchUninit();
         motor.set(speed);
     }
@@ -292,16 +284,15 @@ public class PIDMotor {
      * @return Position in number of rotations.
      */
     public double getPosition() {
-        return rotationsToUnits(encoder.getPosition());
+        return encoder.getPosition();
     }
 
     /**
      * Gets whether the current position of the motor is within 10 revolutions of the target position.
      * 
-     * @param targetP Target position of the motor.
      * @return Whether position at target.
      */
-    public boolean atPosition(double targetP) {
+    public boolean atPosition() {
         return ExtraMath.within(target, getPosition(), 10);
     }
 
@@ -315,12 +306,23 @@ public class PIDMotor {
     }
 
     /**
+     * Gets whether the current velocity of the motor is within the desired threshold RPM of the target velocity.
+     * 
+     * @param threshold The threshold of acceptable desired velocity.
+     * @return Whether velocity is at desired target.
+     */
+    public boolean atVelocity(double threshold) {
+        return ExtraMath.within(target, getVelocity(), threshold);
+    }
+
+    /**
      * Generates a trapezoidal path for the motor to follow.
      * 
      * @param targetP The intended target position of the motor.
      * @param targetV The intended target velocity of the motor.
      */
     public void generateTrapezoidPath(double targetP, double targetV) {
+        this.target = targetP;
         motorCurrentState = new TrapezoidProfile.State(getPosition(), getVelocity());
         motorTargetState = new TrapezoidProfile.State(targetP, targetV);
         motorProfile = new TrapezoidProfile(motorConstraints, motorTargetState, motorCurrentState);

@@ -36,7 +36,7 @@ public class FloorToShooterCmd extends Command {
    */
   @Override
   public void execute() {
-    if (arm.leftShoulderMotor.atPosition(target.shoulderPosition()) && arm.wristMotor.atPosition(target.wristPosition())) {
+    if (arm.leftShoulderMotor.atPosition() && arm.wristMotor.atPosition()) {
       if (isForwards) {
         flumper.set(FlumperState.Eat);
         shooter.state = ShootState.Intake;
