@@ -1,20 +1,23 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.ShooterSubsystem.IntakeState;
+import frc.robot.subsystems.ShooterSubsystem.ShooterState;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ShootCmd extends Command {
+public class SpinUpShooterCmd extends Command {
   private final ShooterSubsystem shooter;
+  public double speed;
 
-  public ShootCmd(ShooterSubsystem shooter) {
+  public SpinUpShooterCmd(ShooterSubsystem shooter, double speed) {
     this.shooter = shooter;
-    //addRequirements(shooter);
+    this.speed = speed;
+    addRequirements(shooter);
   }
 
   @Override
   public void initialize() {
-    shooter.intakeState = IntakeState.ShootNow;
+    shooter.shooterState = ShooterState.SpinFixed;
+    shooter.shooterV = speed;
   }
 
   @Override
@@ -22,7 +25,9 @@ public class ShootCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    shooter.intakeState = IntakeState.Idle;
+    
+    shooter.shooterState = ShooterState.Idle;
+    shooter.shooterV = 0;
   }
 
   @Override

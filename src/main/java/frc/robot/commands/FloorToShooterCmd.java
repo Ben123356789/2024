@@ -5,7 +5,7 @@ import frc.robot.subsystems.FlumperSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.FlumperSubsystem.FlumperState;
-import frc.robot.subsystems.ShooterSubsystem.ShootState;
+import frc.robot.subsystems.ShooterSubsystem.IntakeState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FloorToShooterCmd extends Command {
@@ -39,10 +39,10 @@ public class FloorToShooterCmd extends Command {
     if (arm.leftShoulderMotor.atPosition() && arm.wristMotor.atPosition()) {
       if (isForwards) {
         flumper.set(FlumperState.Eat);
-        shooter.state = ShootState.Intake;
+        shooter.intakeState = IntakeState.Intake;
       } else {
         flumper.set(FlumperState.Spit);
-        shooter.state = ShootState.ReverseIntake;
+        shooter.intakeState = IntakeState.ReverseIntake;
       }
     }
   }
@@ -53,7 +53,7 @@ public class FloorToShooterCmd extends Command {
   @Override
   public void end(boolean interrupted) {
     flumper.set(FlumperState.Stop);
-    shooter.state = ShootState.Preload;
+    shooter.intakeState = IntakeState.Preload;
     arm.unsafeSetPosition(ArmPosition.Stowed);
   }
 

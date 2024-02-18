@@ -19,6 +19,7 @@ import frc.robot.commands.FlumperCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.SnapToDegreeCmd;
+import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.drive.TunerConstants;
@@ -78,7 +79,7 @@ public class RobotContainer {
     flumper = new FlumperSubsystem();
     shooter = new ShooterSubsystem();
     climber = new ClimberSubsystem();
-    // digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
+    digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
     configureBindings();
   }
 
@@ -152,8 +153,8 @@ public class RobotContainer {
     altScoringKeybind = new Keybind(codriverController.getHID(), Button.X);
     recievingKeybind = new Keybind(codriverController.getHID(), Button.A);
     // shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
-    // subwooferKeybind = new Keybind(codriverController.getHID(), Button.B);
-    // shootTrigger = new AnalogTrigger(codriverController.getHID(), Axis.RT, 0.5);
+    subwooferKeybind = new Keybind(codriverController.getHID(), Button.B);
+    shootTrigger = new AnalogTrigger(codriverController.getHID(), Axis.RT, 0.5);
     spitTrigger = new AnalogTrigger(codriverController.getHID(), Axis.LT, 0.5);
 
     // // bind driver controls to commands
@@ -167,7 +168,8 @@ public class RobotContainer {
     // intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
 
     // // bind codriver controls to commands
-    // subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
+    subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
+    subwooferKeybind.trigger().whileTrue(new SpinUpShooterCmd(shooter, 6000));
     // // you can ignore fixed position as it doesn't modify these
     altScoringKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Trap));
     altScoringKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
@@ -185,8 +187,8 @@ public class RobotContainer {
     //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumHigh));
 
     // non positional
-    // shootTrigger.trigger().whileTrue(new ShootCmd(shooter));
-     spitTrigger.trigger()./**and(modifyArm.negate()).*/whileTrue(new FlumperCmd(flumper, FlumperState.Spit));
+    shootTrigger.trigger().whileTrue(new ShootCmd(shooter));
+    spitTrigger.trigger()./**and(modifyArm.negate()).*/whileTrue(new FlumperCmd(flumper, FlumperState.Spit));
     // spitTrigger.trigger().and(modifyArm).whileTrue(new FloorToShooterCmd(flumper, shooter, arm, false));
 
     climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Max));

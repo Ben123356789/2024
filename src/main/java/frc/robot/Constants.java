@@ -44,7 +44,7 @@ public final class Constants {
     public static final double WRIST_SPEAKER_LOW_POSITION = 0;
     public static final double WRIST_AMP_POSITION = 150;
     public static final double WRIST_TRAP_POSITION = 50.0;
-    public static final double WRIST_SUBWOOFER_POSITION = 0;
+    public static final double WRIST_SUBWOOFER_POSITION = 41.5;
     public static final double WRIST_PODIUM_HIGH_POSITION = 0;
     public static final double WRIST_PODIUM_LOW_POSITION = 0;
 
