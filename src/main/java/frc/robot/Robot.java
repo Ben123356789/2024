@@ -1,7 +1,5 @@
 package frc.robot;
 
-import com.revrobotics.CANSparkBase.ControlType;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

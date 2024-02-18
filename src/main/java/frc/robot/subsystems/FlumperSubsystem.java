@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,14 +24,12 @@ public class FlumperSubsystem extends SubsystemBase {
     }
   }
 
-  PIDMotor intakeMotor;
-  boolean reverse = false;
+  PIDMotor flumperMotor;
   double speed;
   FlumperState state = FlumperState.Stop;
   
   public FlumperSubsystem() {
-    intakeMotor=PIDMotor.makeMotor(Constants.FLUMPER_ID,"Flumper",0,0,0,0,ControlType.kPosition,1, 0, 0);
-    intakeMotor.setInverted(reverse);
+    flumperMotor = PIDMotor.makeMotor(Constants.FLUMPER_ID,"Flumper",0,0,0,0,ControlType.kPosition,1);
   }
 
   public void set(FlumperState state) {
@@ -46,26 +41,14 @@ public class FlumperSubsystem extends SubsystemBase {
     this.speed = speed;
   }
 
-  public void eat() {
-    set(FlumperState.Eat);
-  }
-
-  public void stop() {
-    set(FlumperState.Stop);
-  }
-
-  public void spit() {
-    set(FlumperState.Spit);
-  }
-
   @Override
   public void periodic() {
-    intakeMotor.set(speed);
+    flumperMotor.set(speed);
     printDashboard();
   }
 
   public void printDashboard() {
     SmartDashboard.putString("Shooter State:", state.toString());
-    intakeMotor.putPV();
+    flumperMotor.putPV();
   }
 }
