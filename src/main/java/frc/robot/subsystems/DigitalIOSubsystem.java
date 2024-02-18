@@ -6,15 +6,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DigitalIOSubsystem extends SubsystemBase{
+public class DigitalIOSubsystem extends SubsystemBase {
     DigitalInput zeroEncodersButton;
     DigitalInput brakeModeButton;
     // Timer buttonCooldown;
     ArmSubsystem arm;
     ShooterSubsystem shooter;
     FlumperSubsystem flumper;
-    
-    public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FlumperSubsystem flumper){
+    boolean lastIterationBrakeButtonState, lastIterationZeroEncButtonState = false;
+
+    public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FlumperSubsystem flumper) {
         zeroEncodersButton = new DigitalInput(1);
         brakeModeButton = new DigitalInput(2);
         this.arm = arm;
@@ -25,34 +26,33 @@ public class DigitalIOSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        if(DriverStation.isDisabled()){
-            // System.out.println("disable");
-            boolean brake, encoder;
-            brake = brakeModeButton.get();
-            encoder = zeroEncodersButton.get();
+        boolean brake, encoder;
+        brake = !brakeModeButton.get();
+        encoder = !zeroEncodersButton.get();
+
+        if (DriverStation.isDisabled()) {
             SmartDashboard.putString("button values:", brake + " & " + encoder);
-            if(!brakeModeButton.get()/*&& buttonCooldown.get() > 1.00*/){
-                // System.out.println("button!!!");
+            if (brake && !lastIterationBrakeButtonState) {
                 arm.disableBrakeMode();
                 shooter.disableBrakeMode();
                 flumper.disableBrakeMode();
-                // buttonCooldown.restart();
-            } else{
+            } else if (!brake && lastIterationBrakeButtonState) {
                 arm.enableBrakeMode();
                 shooter.enableBrakeMode();
                 flumper.enableBrakeMode();
             }
 
-            if(!zeroEncodersButton.get()/*&& buttonCooldown.get() > 1.00*/){
+            if (encoder && !lastIterationZeroEncButtonState) {
                 arm.zeroEncoders();
                 shooter.zeroEncoders();
                 flumper.zeroEncoders();
-                // buttonCooldown.restart();
             }
-        } else {
+        }/* else {
             arm.enableBrakeMode();
             shooter.enableBrakeMode();
             flumper.enableBrakeMode();
-        }
+        }*/
+        lastIterationBrakeButtonState = brake;
+        lastIterationZeroEncButtonState = encoder;
     }
 }
