@@ -25,9 +25,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem() {
     shooterTop = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Shooter Top", 0, 0, 0, 0, ControlType.kVelocity);
-    shooterBottom = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Shooter Bottom", 0, 0, 0, 0, ControlType.kVelocity);
-    intakeTop = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Intake Top", 0, 0, 0, 0, ControlType.kPosition);
-    intakeBottom = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Intake Bottom", 0, 0, 0, 0, ControlType.kPosition);
+    shooterBottom = PIDMotor.makeMotor(Constants.SHOOTER_BOTTOM_ID, "Shooter Bottom", 0, 0, 0, 0, ControlType.kVelocity);
+    intakeTop = PIDMotor.makeMotor(Constants.INTAKE_TOP_ID, "Intake Top", 0, 0, 0, 0, ControlType.kPosition);
+    intakeBottom = PIDMotor.makeMotor(Constants.INTAKE_BOTTOM_ID, "Intake Bottom", 0, 0, 0, 0, ControlType.kPosition);
 
     shooterTimer = new Timer();
     state = ShootState.Idle;
@@ -153,25 +153,24 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putString("Shooter State:", state.toString());
   }
 
-  // will work once updated to use PIDMotors
   public void disableBrakeMode(){
-    // intakeBottom.setIdleCoastMode();
-    // intakeTop.setIdleCoastMode();
-    // shooterBottom.setIdleCoastMode();
-    // shooterTop.setIdleCoastMode();
+    intakeBottom.setIdleCoastMode();
+    intakeTop.setIdleCoastMode();
+    shooterBottom.setIdleCoastMode();
+    shooterTop.setIdleCoastMode();
   }
 
   public void enableBrakeMode(){
-    // intakeBottom.setIdleBrakeMode();
-    // intakeTop.setIdleBrakeMode();
-    // shooterBottom.setIdleBrakeMode();
-    // shooterTop.setIdleBrakeMode();
+    intakeBottom.setIdleBrakeMode();
+    intakeTop.setIdleBrakeMode();
+    shooterBottom.setIdleBrakeMode();
+    shooterTop.setIdleBrakeMode();
   }
 
   public void zeroEncoders(){
-    // intakeBottom.resetEncoder();
-    // intakeTop.resetEncoder();
-    // shooterBottom.resetEncoder();
-    // shooterTop.resetEncoder();
+    intakeBottom.resetEncoder();
+    intakeTop.resetEncoder();
+    shooterBottom.resetEncoder();
+    shooterTop.resetEncoder();
   }
 }

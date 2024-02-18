@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DigitalIOSubsystem extends SubsystemBase{
@@ -25,9 +26,13 @@ public class DigitalIOSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         if(DriverStation.isDisabled()){
-            System.out.println("disable");
-            if(brakeModeButton.get()/*&& buttonCooldown.get() > 1.00*/){
-                System.out.println("button!!!");
+            // System.out.println("disable");
+            boolean brake, encoder;
+            brake = brakeModeButton.get();
+            encoder = zeroEncodersButton.get();
+            SmartDashboard.putString("button values:", brake + " & " + encoder);
+            if(!brakeModeButton.get()/*&& buttonCooldown.get() > 1.00*/){
+                // System.out.println("button!!!");
                 arm.disableBrakeMode();
                 shooter.disableBrakeMode();
                 flumper.disableBrakeMode();
@@ -38,7 +43,7 @@ public class DigitalIOSubsystem extends SubsystemBase{
                 flumper.enableBrakeMode();
             }
 
-            if(zeroEncodersButton.get()/*&& buttonCooldown.get() > 1.00*/){
+            if(!zeroEncodersButton.get()/*&& buttonCooldown.get() > 1.00*/){
                 arm.zeroEncoders();
                 shooter.zeroEncoders();
                 flumper.zeroEncoders();
