@@ -133,4 +133,11 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor.setIdleBrakeMode();
     elevatorMotor.setIdleBrakeMode();
   }
+
+  public void zeroEncoders(){
+    leftShoulderMotor.resetEncoder();
+    rightShoulderMotor.resetEncoder();
+    wristMotor.resetEncoder();
+    elevatorMotor.resetEncoder();
+  }
 }

@@ -59,4 +59,8 @@ public class FlumperSubsystem extends SubsystemBase {
   public void enableBrakeMode(){
     flumperMotor.setIdleBrakeMode();
   }
+
+  public void zeroEncoders(){
+    flumperMotor.resetEncoder();
+  }
 }

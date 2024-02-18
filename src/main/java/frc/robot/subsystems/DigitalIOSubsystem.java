@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DigitalIOSubsystem extends SubsystemBase{
-    DigitalInput resetEncodersButton;
+    DigitalInput zeroEncodersButton;
     DigitalInput brakeModeButton;
     Timer buttonCooldown;
     ArmSubsystem arm;
@@ -14,7 +14,7 @@ public class DigitalIOSubsystem extends SubsystemBase{
     FlumperSubsystem flumper;
     
     public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FlumperSubsystem flumper){
-        resetEncodersButton = new DigitalInput(1);
+        zeroEncodersButton = new DigitalInput(1);
         brakeModeButton = new DigitalInput(2);
         this.arm = arm;
         this.shooter = shooter;
@@ -34,6 +34,13 @@ public class DigitalIOSubsystem extends SubsystemBase{
                 arm.enableBrakeMode();
                 shooter.enableBrakeMode();
                 flumper.enableBrakeMode();
+            }
+
+            if(zeroEncodersButton.get()/*&& buttonCooldown.get() > 1.00*/){
+                arm.zeroEncoders();
+                shooter.zeroEncoders();
+                flumper.zeroEncoders();
+                // buttonCooldown.restart();
             }
         } else {
             arm.enableBrakeMode();

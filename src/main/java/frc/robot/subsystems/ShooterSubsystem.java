@@ -185,4 +185,11 @@ public class ShooterSubsystem extends SubsystemBase {
     // shooterBottom.setIdleBrakeMode();
     // shooterTop.setIdleBrakeMode();
   }
+
+  public void zeroEncoders(){
+    // intakeBottom.resetEncoder();
+    // intakeTop.resetEncoder();
+    // shooterBottom.resetEncoder();
+    // shooterTop.resetEncoder();
+  }
 }
