@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DigitalIOSubsystem extends SubsystemBase{
     DigitalInput zeroEncodersButton;
     DigitalInput brakeModeButton;
-    Timer buttonCooldown;
+    // Timer buttonCooldown;
     ArmSubsystem arm;
     ShooterSubsystem shooter;
     FlumperSubsystem flumper;
@@ -19,7 +19,7 @@ public class DigitalIOSubsystem extends SubsystemBase{
         this.arm = arm;
         this.shooter = shooter;
         this.flumper = flumper;
-        buttonCooldown.start();
+        // buttonCooldown.start();
     }
 
     @Override
