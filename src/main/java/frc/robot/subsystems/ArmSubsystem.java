@@ -121,6 +121,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void disableBrakeMode(){
+    System.out.println("disablemode!");
     leftShoulderMotor.setIdleCoastMode();
     rightShoulderMotor.setIdleCoastMode();
     wristMotor.setIdleCoastMode();
@@ -128,6 +129,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void enableBrakeMode(){
+    System.out.println("enablemode!");
     leftShoulderMotor.setIdleBrakeMode();
     rightShoulderMotor.setIdleBrakeMode();
     wristMotor.setIdleBrakeMode();

@@ -25,7 +25,9 @@ public class DigitalIOSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         if(DriverStation.isDisabled()){
+            System.out.println("disable");
             if(brakeModeButton.get()/*&& buttonCooldown.get() > 1.00*/){
+                System.out.println("button!!!");
                 arm.disableBrakeMode();
                 shooter.disableBrakeMode();
                 flumper.disableBrakeMode();
