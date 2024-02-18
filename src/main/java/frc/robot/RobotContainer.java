@@ -27,6 +27,7 @@ import frc.robot.input.AnalogTrigger.Axis;
 import frc.robot.input.DPadButton.DPad;
 import frc.robot.input.Keybind.Button;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.DigitalIOSubsystem;
 import frc.robot.subsystems.FlumperSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -60,6 +61,7 @@ public class RobotContainer {
   public FlumperSubsystem flumper;
   public ShooterSubsystem shooter;
   public ArmSubsystem arm;
+  public DigitalIOSubsystem digitalio;
   private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   private final CommandXboxController codriverController = new CommandXboxController(
       Constants.CODRIVER_CONTROLLER_PORT);
@@ -73,6 +75,7 @@ public class RobotContainer {
     flumper = new FlumperSubsystem();
     shooter = new ShooterSubsystem();
     // climber = new ClimberSubsystem();
+    digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
     configureBindings();
   }
 

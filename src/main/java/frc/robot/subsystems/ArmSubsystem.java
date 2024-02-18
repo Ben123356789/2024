@@ -119,4 +119,18 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor.putPV();
     elevatorMotor.putPV();
   }
+
+  public void disableBrakeMode(){
+    leftShoulderMotor.setIdleCoastMode();
+    rightShoulderMotor.setIdleCoastMode();
+    wristMotor.setIdleCoastMode();
+    elevatorMotor.setIdleCoastMode();
+  }
+
+  public void enableBrakeMode(){
+    leftShoulderMotor.setIdleBrakeMode();
+    rightShoulderMotor.setIdleBrakeMode();
+    wristMotor.setIdleBrakeMode();
+    elevatorMotor.setIdleBrakeMode();
+  }
 }

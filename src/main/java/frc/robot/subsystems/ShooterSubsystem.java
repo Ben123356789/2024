@@ -170,4 +170,19 @@ public class ShooterSubsystem extends SubsystemBase {
   public void printDashboard() {
     SmartDashboard.putString("Shooter State:", state.toString());
   }
+
+  // will work once updated to use PIDMotors
+  public void disableBrakeMode(){
+    // intakeBottom.setIdleCoastMode();
+    // intakeTop.setIdleCoastMode();
+    // shooterBottom.setIdleCoastMode();
+    // shooterTop.setIdleCoastMode();
+  }
+
+  public void enableBrakeMode(){
+    // intakeBottom.setIdleBrakeMode();
+    // intakeTop.setIdleBrakeMode();
+    // shooterBottom.setIdleBrakeMode();
+    // shooterTop.setIdleBrakeMode();
+  }
 }

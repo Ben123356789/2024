@@ -116,6 +116,14 @@ public class PIDMotor {
         motor.setIdleMode(IdleMode.kBrake);
     }
 
+    public void setIdleCoastMode(){
+        motor.setIdleMode(IdleMode.kCoast);
+    }
+
+    public void setIdleBrakeMode(){
+        motor.setIdleMode(IdleMode.kBrake);
+    }
+
     /**
      * Gets whether or not any of the PIDF values require updating.
      * 

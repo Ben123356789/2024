@@ -51,4 +51,12 @@ public class FlumperSubsystem extends SubsystemBase {
     SmartDashboard.putString("Shooter State:", state.toString());
     flumperMotor.putPV();
   }
+
+  public void disableBrakeMode(){
+    flumperMotor.setIdleCoastMode();
+  }
+
+  public void enableBrakeMode(){
+    flumperMotor.setIdleBrakeMode();
+  }
 }
