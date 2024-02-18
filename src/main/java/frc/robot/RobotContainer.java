@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ClimberLockCmd;
+import frc.robot.commands.ClimberPositionCmd;
 import frc.robot.commands.FloorToShooterCmd;
 import frc.robot.commands.FlumperCmd;
 import frc.robot.commands.SetArmPositionCmd;
@@ -34,6 +36,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
+import frc.robot.subsystems.ClimberSubsystem.ClimbState;
 import frc.robot.subsystems.FlumperSubsystem.FlumperState;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -74,8 +77,8 @@ public class RobotContainer {
     arm = new ArmSubsystem();
     flumper = new FlumperSubsystem();
     shooter = new ShooterSubsystem();
-    // climber = new ClimberSubsystem();
-    digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
+    climber = new ClimberSubsystem();
+    // digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
     configureBindings();
   }
 
@@ -97,8 +100,9 @@ public class RobotContainer {
   Keybind shootTestKeybind;
 
   // codriver keybinds
-  DPadButton climberUpKeybind;
-  DPadButton climberDownKeybind;
+  DPadButton climberMaxKeybind;
+  DPadButton climberMinKeybind;
+  DPadButton climberToggleLockKeybind;
   /** Amp & Trap */
   Keybind altScoringKeybind;
   /** Intake & Source */
@@ -142,7 +146,9 @@ public class RobotContainer {
     // snapToNoteKeybind = new Keybind(driverController.getHID(), Button.B);
 
     // initialize keybinds - codriver controller
-    // climberUpKeybind = new DPadButton(codriverController.getHID(), DPad.Up);
+    climberMaxKeybind = new DPadButton(codriverController.getHID(), DPad.Up);
+    climberMinKeybind = new DPadButton(codriverController.getHID(), DPad.Down);
+    climberToggleLockKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
     altScoringKeybind = new Keybind(codriverController.getHID(), Button.X);
     recievingKeybind = new Keybind(codriverController.getHID(), Button.A);
     // shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
@@ -183,10 +189,9 @@ public class RobotContainer {
      spitTrigger.trigger()./**and(modifyArm.negate()).*/whileTrue(new FlumperCmd(flumper, FlumperState.Spit));
     // spitTrigger.trigger().and(modifyArm).whileTrue(new FloorToShooterCmd(flumper, shooter, arm, false));
 
-    // climberUpKeybind.trigger().whileTrue(new ClimberCommand(climber,
-    // Climber.Up));
-    // climberDownKeybind.trigger().whileTrue(new ClimberCommand(climber,
-    // Climber.Down));
+    climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Max));
+    climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Min));
+    climberToggleLockKeybind.trigger().onTrue(new ClimberLockCmd(climber));
 
     // we dont have podium positions
   }
