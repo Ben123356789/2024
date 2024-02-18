@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 
 public class LimelightSubsystem extends SubsystemBase {
   public LimelightHelpers.LimelightResults llresults;
@@ -50,6 +53,19 @@ public class LimelightSubsystem extends SubsystemBase {
     return llresults.targetingResults.targets_Detector;
   }
 
+  // check for null later
+  public LimelightTarget_Fiducial getDataForId(int idToFind) {
+    for (int i = 0; i < llresults.targetingResults.targets_Fiducials.length; i++) {
+      LimelightTarget_Fiducial r = llresults.targetingResults.targets_Fiducials[i];
+      if (r.fiducialID == idToFind) {
+        return r;
+      }
+    }
+    return null;
+  }
+
+  LimelightTarget_Fiducial tag;
+
   // Prints various values of every target
   public void printDashboard() {
     SmartDashboard.putNumber("LL # of Results", resultLength());
@@ -62,5 +78,21 @@ public class LimelightSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("LL #" + (i + 1) + " Y-Offset", llresults.targetingResults.targets_Detector[i].ty);
       SmartDashboard.putNumber("LL #" + (i + 1) + " Area %", llresults.targetingResults.targets_Detector[i].ta);
     }
+
+    tag = getDataForId(7);
+    if(tag == null){
+      tag = getDataForId(4);
+    }
+    
+    if (tag != null) {
+      SmartDashboard.putNumber("speaker tag x position", tag.tx);
+      SmartDashboard.putNumber("speaker tag y position", tag.ty);
+    } else {
+      SmartDashboard.putNumber("speaker tag x position", 999);
+      SmartDashboard.putNumber("speaker tag y position", 999);
+    }
+
+    
+
   }
 }

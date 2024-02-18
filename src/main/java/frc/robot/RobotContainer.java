@@ -16,6 +16,7 @@ import frc.robot.commands.ClimberLockCmd;
 import frc.robot.commands.ClimberPositionCmd;
 import frc.robot.commands.FloorToShooterCmd;
 import frc.robot.commands.FlumperCmd;
+import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.SnapToDegreeCmd;
@@ -72,7 +73,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     // pigeon = new PigeonSubsystem();
-    // limelight1 = new LimelightSubsystem();
+    limelight1 = new LimelightSubsystem();
     // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
     // led = new LEDSubsystem(limelight1, pdp);
     arm = new ArmSubsystem();
@@ -152,7 +153,7 @@ public class RobotContainer {
     climberToggleLockKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
     altScoringKeybind = new Keybind(codriverController.getHID(), Button.X);
     recievingKeybind = new Keybind(codriverController.getHID(), Button.A);
-    // shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
+    shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
     subwooferKeybind = new Keybind(codriverController.getHID(), Button.B);
     shootTrigger = new AnalogTrigger(codriverController.getHID(), Axis.RT, 0.5);
     spitTrigger = new AnalogTrigger(codriverController.getHID(), Axis.LT, 0.5);
@@ -177,8 +178,8 @@ public class RobotContainer {
     recievingKeybind.trigger()./*and(modifyArm.negate()).*/whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
 
     // // y button!
-    // shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
-    //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerLow));
+    shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
+        .whileTrue(new LowLimelightShotCmd(arm, limelight1));
     // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm.negate())
     //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
     // shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
