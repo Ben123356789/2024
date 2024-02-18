@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,16 +10,14 @@ public class SetArmPositionCmd extends Command {
   double targetWristPosition;
   double elevatorPosition;
   ArmPosition target;
-  double shoulderThreshold = Constants.SHOULDER_SAFE_ANGLE;
-  double wristThreshold = Constants.WRIST_SAFE_ANGLE;
 
   boolean shoulderSetCheck = false;
   boolean wristSetCheck = false;
   boolean elevatorSetCheck;
 
-  public SetArmPositionCmd(ArmSubsystem arm, ArmPosition p) {
+  public SetArmPositionCmd(ArmSubsystem arm, ArmPosition target) {
     this.arm = arm;
-    target = p;
+    this.target = target;
     addRequirements(arm);
   }
 
@@ -40,6 +37,6 @@ public class SetArmPositionCmd extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;//arm.checkShoulderPosition() && arm.checkWristPosition() && arm.checkElevatorPosition();
+    return false;
   }
 }

@@ -18,13 +18,20 @@ public class ClimberSubsystem extends SubsystemBase {
     static final double ENGAGE_BACKING_DISTANCE = 1.0;
     
     double target = 0.0;
+    boolean ratchetEngaged = false;
+    boolean engageBacking = false;
+    double engageBackingTarget = 0.0;
 
-    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 1, 0, 0);
-    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 1, 0, 0);
+    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0, 0, 0, 0, ControlType.kPosition, 1);
+    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0, 0, 0, 0, ControlType.kPosition, 1);
     Servo ratchetServo = new Servo(SERVO_CHANNEL);
 
     public ClimberSubsystem() {}
 
+    /**
+     * Position of the climbers.
+     * @return The average encoder position of the two climber motors.
+     */
     public double position() {
         return ExtraMath.average(leftMotor.getPosition(), rightMotor.getPosition());
     }
@@ -39,10 +46,6 @@ public class ClimberSubsystem extends SubsystemBase {
         leftMotor.setTarget(newHeight);
         rightMotor.setTarget(newHeight);
     }
-
-    boolean ratchetEngaged = false;
-    double engageBackingTarget = 0.0;
-    boolean engageBacking = false;
 
     void engageRatchet() {
         ratchetEngaged = true;

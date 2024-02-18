@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.PIDMotor;
 
 public class ShooterSubsystem extends SubsystemBase {
   CANSparkMax shooterTop, shooterBottom, intakeTop, intakeBottom;
@@ -34,8 +32,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterBottom.setIdleMode(IdleMode.kBrake);
     intakeTop.setIdleMode(IdleMode.kBrake);
     intakeBottom.setIdleMode(IdleMode.kBrake);
-
-    // room for inverse
   }
 
   @Override
@@ -66,7 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void manageShooterRollers(boolean shootFront, double shootPower) {
     CANSparkMax inTop, inBottom, shootTop, shootBottom;
 
-    // Don't worry about the memory leaks
+    // Don't worry about the memory leaks.
     inBottom = (shootFront ? intakeBottom : shooterBottom);
     inTop = (shootFront ? intakeTop : shooterTop);
     shootBottom = (shootFront ? shooterBottom : intakeBottom);

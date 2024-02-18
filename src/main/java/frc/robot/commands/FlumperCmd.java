@@ -8,10 +8,10 @@ public class FlumperCmd extends Command {
   private final FlumperSubsystem flumper;
   FlumperState state;
 
-  public FlumperCmd(FlumperSubsystem subsystem, FlumperState state) {
-    flumper = subsystem;
+  public FlumperCmd(FlumperSubsystem flumper, FlumperState state) {
+    this.flumper = flumper;
     this.state = state;
-    addRequirements(subsystem);
+    addRequirements(flumper);
   }
 
   @Override
@@ -24,7 +24,7 @@ public class FlumperCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    flumper.stop();
+    flumper.set(FlumperState.Stop);
   }
 
   @Override

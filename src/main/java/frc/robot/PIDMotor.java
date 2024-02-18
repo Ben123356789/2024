@@ -6,7 +6,6 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.Timer;
@@ -27,7 +26,6 @@ public class PIDMotor {
     CANSparkMax motor;
     SparkPIDController controller;
 
-    
     TrapezoidProfile motorProfile;
     TrapezoidProfile.Constraints motorConstraints;
     TrapezoidProfile.State motorCurrentState;
@@ -35,21 +33,17 @@ public class PIDMotor {
     Timer motorTimer;
 
     private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit, double maxV, double maxA) {
-        this.controlType = type;
-
+        this.name = name;
         this.p = p;
         this.i = i;
         this.d = d;
         this.f = f;
-
+        this.controlType = type;
         this.rotationsPerUnit = rotationsPerUnit;
 
         motor = new CANSparkMax(deviceID, MotorType.kBrushless);
         controller = motor.getPIDController();
         encoder = motor.getEncoder();
-
-
-        this.name = name;
 
         motorConstraints = new Constraints(maxV, maxA);
         motorCurrentState = new TrapezoidProfile.State(0, 0);
@@ -60,33 +54,62 @@ public class PIDMotor {
 
     /**
      * Constructs and initializes a new PIDMotor.
-     * @param deviceID The CAN ID for this motor.
-     * @param name This motor's name.
-     * @param p The initial proportional coefficient for this motor.
-     * @param i The initial integral coefficient for this motor.
-     * @param d The initial derivative coefficient for this motor.
-     * @param f The initial feed-forward coefficient for this motor.
-     * @param type The control type of this motor.
+     * 
+     * @param deviceID         The CAN ID for this motor.
+     * @param name             This motor's name.
+     * @param p                The initial proportional coefficient for this motor.
+     * @param i                The initial integral coefficient for this motor.
+     * @param d                The initial derivative coefficient for this motor.
+     * @param f                The initial feed-forward coefficient for this motor.
+     * @param type             The control type of this motor.
      * @param rotationsPerUnit The number of encoder rotations per user-defined unit. For example, one rotation could correspond to moving half an inch. If the units are inches, then `rotationsPerUnit` would be 2.
      * @return The constructed PIDMotor.
      */
-    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit, double maxV, double maxA) {
+    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit) {
+        PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit, 10000, 10000);
+        motor.init();
+        return motor;
+    }
+
+    /**
+     * Constructs and initializes a new PIDMotor.
+     * 
+     * @param deviceID         The CAN ID for this motor.
+     * @param name             This motor's name.
+     * @param p                The initial proportional coefficient for this motor.
+     * @param i                The initial integral coefficient for this motor.
+     * @param d                The initial derivative coefficient for this motor.
+     * @param f                The initial feed-forward coefficient for this motor.
+     * @param type             The control type of this motor.
+     * @param rotationsPerUnit The number of encoder rotations per user-defined unit. For example, one rotation could correspond to moving half an inch. If the units are inches, then `rotationsPerUnit` would be 2.
+     * @param maxV             The maximum velocity of the motor.
+     * @param maxA             The maximum acceleration of the motor.
+     * @return The constructed PIDMotor.
+     */
+    public static PIDMotor makeMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double rotationsPerUnit,
+            double maxV, double maxA) {
         PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, rotationsPerUnit, maxV, maxA);
         motor.init();
         return motor;
     }
 
+    /**
+     * Throws an exception if motor failed to initialize.
+     */
     private void catchUninit() {
         if (!initialized) {
             new Exception("PIDMotor `" + name + "` has not been initialized! Call `init()` before using the motor!").printStackTrace();
         }
     }
 
+    /**
+     * The initialization of the motor, only ever called through the makeMotor function.
+     */
     private void init() {
         if (!initialized) {
             motor.restoreFactoryDefaults();
             resetAll();
-            //putPIDF();
+            // putPIDF();
             updatePIDF();
             initialized = true;
         }
@@ -95,64 +118,39 @@ public class PIDMotor {
 
     /**
      * Gets whether or not any of the PIDF values require updating.
+     * 
      * @return Whether or not any of the PIDF values differ from the values in the motor controller.
      */
     public boolean pidfRequiresUpdate() {
         catchUninit();
-        return (ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilonFactor) ||
-                ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilonFactor) ||
-                ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilonFactor) ||
-                ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilonFactor));
-    }
-
-    /**
-     * Prints the software PIDF values to the RioLog.
-     */
-    public void printPIDF() {
-        catchUninit();
-        System.out.println("PIDF values for motor `" + name + "`");
-        System.out.println("- P:" + controller.getP());
-        System.out.println("- I:" + controller.getI());
-        System.out.println("- D:" + controller.getD());
-        System.out.println("- F:" + controller.getFF());
-        System.out.println("- Software P:" + p);
-        System.out.println("- Software I:" + i);
-        System.out.println("- Software D:" + d);
-        System.out.println("- Software F:" + f);
-    }
-
-    String pKey() {
-        return "Motor `" + name + "` P";
-    }
-
-    String iKey() {
-        return "Motor `" + name + "` I";
-    }
-
-    String dKey() {
-        return "Motor `" + name + "` D";
-    }
-    String fKey() {
-        return "Motor `" + name + "` F";
+        return (ExtraMath.withinFactor(controller.getP(), this.p, pidfEpsilonFactor)
+                || ExtraMath.withinFactor(controller.getI(), this.i, pidfEpsilonFactor)
+                || ExtraMath.withinFactor(controller.getD(), this.d, pidfEpsilonFactor)
+                || ExtraMath.withinFactor(controller.getFF(), this.f, pidfEpsilonFactor));
     }
 
     /**
      * Puts this motor's PIDF values to the SmartDashboard.
      */
     public void putPIDF() {
-        SmartDashboard.putNumber(pKey(), p);
-        SmartDashboard.putNumber(iKey(), i);
-        SmartDashboard.putNumber(dKey(), d);
-        SmartDashboard.putNumber(fKey(), f);
-    }
-
-    public void putPV(){
-        SmartDashboard.putNumber(name+" Position", getPosition());
-        SmartDashboard.putNumber(name+" Velocity", getVelocity());   
+        SmartDashboard.putNumber(name + " P", p);
+        SmartDashboard.putNumber(name + " I", i);
+        SmartDashboard.putNumber(name + " D", d);
+        SmartDashboard.putNumber(name + " F", f);
     }
 
     /**
-     * Sets the PIDF values for this motor. Call `updatePIDF` to send the values to the motor controller.
+     * Puts the position and velocity values to the SmartDashboard.
+     */
+    public void putPV() {
+        SmartDashboard.putNumber(name + " Position", getPosition());
+        SmartDashboard.putNumber(name + " Velocity", getVelocity());
+    }
+
+    /**
+     * Sets the PIDF values for this motor. Call `updatePIDF` to send the values to the motor
+     * controller.
+     * 
      * @param p The new proportional coefficient.
      * @param i The new integral coefficient.
      * @param d The new derivative coefficient.
@@ -169,6 +167,7 @@ public class PIDMotor {
 
     /**
      * Gets the position of the encoder in degrees.
+     * 
      * @return The position of the encoder in degrees.
      */
     public double getDegrees() {
@@ -180,12 +179,8 @@ public class PIDMotor {
      */
     public void fetchPIDFFromDashboard() {
         catchUninit();
-        setPIDF(
-            SmartDashboard.getNumber(pKey(), p),
-            SmartDashboard.getNumber(iKey(), i),
-            SmartDashboard.getNumber(dKey(), d),
-            SmartDashboard.getNumber(fKey(), f)
-        );
+        setPIDF(SmartDashboard.getNumber(name + " P", p), SmartDashboard.getNumber(name + " I", i), SmartDashboard.getNumber(name + " D", d),
+                SmartDashboard.getNumber(name + " F", f));
     }
 
     /**
@@ -226,6 +221,7 @@ public class PIDMotor {
 
     /**
      * Converts the units for this motor into encoder rotations.
+     * 
      * @param units The units specified by this motor to convert.
      * @return The number of rotations that correspond to the given units.
      */
@@ -235,6 +231,7 @@ public class PIDMotor {
 
     /**
      * Converts encoder rotations into units for this motor.
+     * 
      * @param units The number of rotations to convert.
      * @return The units specified by this motor that correspond to the given rotations.
      */
@@ -244,6 +241,7 @@ public class PIDMotor {
 
     /**
      * Sets the motor's target to a given unit value.
+     * 
      * @param units The units specified by this motor to target to.
      */
     public void setTarget(double units) {
@@ -253,6 +251,7 @@ public class PIDMotor {
 
     /**
      * Sets the motor to a given speed as a fraction of the maximum output, overriding the PID controller.
+     * 
      * @param speed A fraction from -1 to 1 specifying the power to set this motor to.
      */
     public void set(double speed) {
@@ -262,6 +261,7 @@ public class PIDMotor {
 
     /**
      * Sets the control type for this motor.
+     * 
      * @param ctype The control type to target.
      */
     public void setControlType(ControlType ctype) {
@@ -271,6 +271,7 @@ public class PIDMotor {
 
     /**
      * Sets this motor to have inverse rotation.
+     * 
      * @param state Whether or not to make this motor inverted.
      */
     public void setInverted(boolean state) {
@@ -279,24 +280,39 @@ public class PIDMotor {
 
     /**
      * Gets the encoder's current position.
-     * @return The position of the encoder.
+     * 
+     * @return Position in number of rotations.
      */
-    public double getPosition(){
+    public double getPosition() {
         return rotationsToUnits(encoder.getPosition());
     }
 
+    /**
+     * Gets whether the current position of the motor is within 10 revolutions of the target position.
+     * 
+     * @param targetP Target position of the motor.
+     * @return Whether position at target.
+     */
+    public boolean atPosition(double targetP) {
+        return ExtraMath.within(target, getPosition(), 10);
+    }
 
     /**
-     * Generates a trapezoidal path, like so:
+     * Gets the encoder's current velocity.
      * 
-     * V
-     * |      -------
-     * |     /       \
-     * |    /         \
-     * |----           -----
-     *           T
+     * @return Velocity in rotations per second.
      */
-    public void generateTrapezoidPath(double targetP, double targetV){
+    public double getVelocity() {
+        return encoder.getVelocity() / 60;
+    }
+
+    /**
+     * Generates a trapezoidal path for the motor to follow.
+     * 
+     * @param targetP The intended target position of the motor.
+     * @param targetV The intended target velocity of the motor.
+     */
+    public void generateTrapezoidPath(double targetP, double targetV) {
         motorCurrentState = new TrapezoidProfile.State(getPosition(), getVelocity());
         motorTargetState = new TrapezoidProfile.State(targetP, targetV);
         motorProfile = new TrapezoidProfile(motorConstraints, motorTargetState, motorCurrentState);
@@ -304,15 +320,13 @@ public class PIDMotor {
         motorTimer.start();
     }
 
-    /** After generating a trapezoidal path, run this function periodically to update the target of the PIDMotor */
-    public void runTrapezoidPath(){
+    /**
+     * After generating a trapezoidal path, run this function periodically to update the target of the PIDMotor
+     */
+    public void runTrapezoidPath() {
         TrapezoidProfile.State state = motorProfile.calculate(motorTimer.get());
         setTarget(state.position);
         // SmartDashboard.putNumber(name+" Trapezoid Output", state.position);
-        SmartDashboard.putNumber(name+" Position Error", getPosition()-state.position);
-    }
-    
-    public double getVelocity(){
-        return encoder.getVelocity()/60;
+        SmartDashboard.putNumber(name + " Position Error", getPosition() - state.position);
     }
 }

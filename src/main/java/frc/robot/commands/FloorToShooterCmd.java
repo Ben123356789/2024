@@ -4,46 +4,57 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.FlumperSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
+import frc.robot.subsystems.FlumperSubsystem.FlumperState;
 import frc.robot.subsystems.ShooterSubsystem.ShootState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FloorToShooterCmd extends Command {
-  private final FlumperSubsystem flumperSubsystem;
-  private final ShooterSubsystem shooterSubsystem;
-  private final ArmSubsystem armSubsystem;
+  private final FlumperSubsystem flumper;
+  private final ShooterSubsystem shooter;
+  private final ArmSubsystem arm;
   boolean isForwards;
+  ArmPosition target = ArmPosition.Intake;
 
   public FloorToShooterCmd(FlumperSubsystem flumper, ShooterSubsystem shooter, ArmSubsystem arm, boolean isForwards) {
-    flumperSubsystem = flumper;
-    shooterSubsystem = shooter;
-    armSubsystem = arm;
+    this.flumper = flumper;
+    this.shooter = shooter;
+    this.arm = arm;
     this.isForwards = isForwards;
     addRequirements(flumper, shooter, arm);
   }
 
+  /**
+   * Sets the target position of the arm to the Intake position.
+   */
   @Override
   public void initialize() {
-    armSubsystem.unsafeSetPosition(ArmPosition.Intake);
+    arm.unsafeSetPosition(target);
   }
 
+  /**
+   * Once the robot reaches the Intake position, run the flumper and shooter intake motors to either take in or spit out a note.
+   */
   @Override
   public void execute() {
-    if (armSubsystem.checkShoulderPosition() && armSubsystem.checkWristPosition()) {
+    if (arm.leftShoulderMotor.atPosition(target.shoulderPosition()) && arm.wristMotor.atPosition(target.wristPosition())) {
       if (isForwards) {
-        flumperSubsystem.eat();
-        shooterSubsystem.state = ShootState.Intake;
+        flumper.set(FlumperState.Eat);
+        shooter.state = ShootState.Intake;
       } else {
-        flumperSubsystem.spit();
-        shooterSubsystem.state = ShootState.ReverseIntake;
+        flumper.set(FlumperState.Spit);
+        shooter.state = ShootState.ReverseIntake;
       }
     }
   }
 
+  /**
+   * Once finished, halt flumper, pull back note into a prefire position, and return the arm to the stowed position.
+   */
   @Override
   public void end(boolean interrupted) {
-    flumperSubsystem.stop();
-    shooterSubsystem.state = ShootState.Preload;
-    armSubsystem.unsafeSetPosition(ArmPosition.Stowed);
+    flumper.set(FlumperState.Stop);
+    shooter.state = ShootState.Preload;
+    arm.unsafeSetPosition(ArmPosition.Stowed);
   }
 
   @Override
