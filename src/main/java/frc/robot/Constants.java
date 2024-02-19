@@ -18,6 +18,7 @@ public final class Constants {
     public static final int SHOOTER_BOTTOM_ID = 47;
     public static final int INTAKE_TOP_ID = 44;
     public static final int INTAKE_BOTTOM_ID = 45;
+    public static final double SHOOTER_ALLOWED_X_OFFSET = 5;
 
     // Shoulder motor IDs & set positions. Positions are in encoder revolutions.
     public static final int SHOULDER_LEFT_MOTOR_ID = 40;
@@ -25,13 +26,13 @@ public final class Constants {
     public static final double SHOULDER_ENCODER_MAX = -119;
     public static final double SHOULDER_STOWED_POSITION = 0;
     public static final double SHOULDER_INTAKE_POSITION = 0;
-    public static final double SHOULDER_SOURCE_POSITION = 0;
+    public static final double SHOULDER_SOURCE_POSITION = -90;
     public static final double SHOULDER_SPEAKER_HIGH_POSITION = 0;
     public static final double SHOULDER_SPEAKER_LOW_POSITION = 0;
     public static final double SHOULDER_AMP_POSITION = -76.1;
     public static final double SHOULDER_TRAP_POSITION = -110.0;
     public static final double SHOULDER_SUBWOOFER_POSITION = 0;
-    public static final double SHOULDER_PODIUM_HIGH_POSITION = 0;
+    public static final double SHOULDER_PODIUM_HIGH_POSITION = -114;
     public static final double SHOULDER_PODIUM_LOW_POSITION = 0;
 
     // Wrist motor ID & set positions. Positions are in encoder revolutions.
@@ -39,13 +40,13 @@ public final class Constants {
     public static final double WRIST_ENCODER_MAX = 150;
     public static final double WRIST_STOWED_POSITION = 0;
     public static final double WRIST_INTAKE_POSITION = 64.0;
-    public static final double WRIST_SOURCE_POSITION = 0;
+    public static final double WRIST_SOURCE_POSITION = 60;
     public static final double WRIST_SPEAKER_HIGH_POSITION = 0;
     public static final double WRIST_SPEAKER_LOW_POSITION = 0;
     public static final double WRIST_AMP_POSITION = 150;
     public static final double WRIST_TRAP_POSITION = 50.0;
     public static final double WRIST_SUBWOOFER_POSITION = 41.5;
-    public static final double WRIST_PODIUM_HIGH_POSITION = 0;
+    public static final double WRIST_PODIUM_HIGH_POSITION = 79;
     public static final double WRIST_PODIUM_LOW_POSITION = 0;
 
     // Elevator motor ID & set positions. Positions are in encoder revolutions.
@@ -71,4 +72,6 @@ public final class Constants {
 
     // LED Strip IDs
     public static final int[] LED_STRIP_ID = {21};
+
+    
 }

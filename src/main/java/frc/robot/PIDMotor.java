@@ -19,6 +19,7 @@ public class PIDMotor {
 
     double p, i, d, f;
     double target = 0.0;
+    double finalTarget = 0;
     double pidfEpsilonFactor = 1.001;
 
     RelativeEncoder encoder;
@@ -293,7 +294,7 @@ public class PIDMotor {
      * @return Whether position at target.
      */
     public boolean atPosition() {
-        return ExtraMath.within(target, getPosition(), 10);
+        return ExtraMath.within(finalTarget, getPosition(), 10);
     }
 
     /**
@@ -323,6 +324,7 @@ public class PIDMotor {
      */
     public void generateTrapezoidPath(double targetP, double targetV) {
         this.target = targetP;
+        this.finalTarget = targetP;
         motorCurrentState = new TrapezoidProfile.State(getPosition(), getVelocity());
         motorTargetState = new TrapezoidProfile.State(targetP, targetV);
         motorProfile = new TrapezoidProfile(motorConstraints, motorTargetState, motorCurrentState);

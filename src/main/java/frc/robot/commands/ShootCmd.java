@@ -9,16 +9,21 @@ public class ShootCmd extends Command {
 
   public ShootCmd(ShooterSubsystem shooter) {
     this.shooter = shooter;
-    //addRequirements(shooter);
+    // addRequirements(shooter);
   }
 
   @Override
   public void initialize() {
-    shooter.intakeState = IntakeState.ShootNow;
   }
-
+  
   @Override
-  public void execute() {}
+  public void execute() {
+    if (shooter.okToShoot) {
+      shooter.intakeState = IntakeState.ShootNow;
+    } else{
+      shooter.intakeState = IntakeState.Idle;
+    }
+  }
 
   @Override
   public void end(boolean interrupted) {

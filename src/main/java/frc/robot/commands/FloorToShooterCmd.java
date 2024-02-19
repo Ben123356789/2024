@@ -6,6 +6,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.FlumperSubsystem.FlumperState;
 import frc.robot.subsystems.ShooterSubsystem.IntakeState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class FloorToShooterCmd extends Command {
@@ -36,6 +37,8 @@ public class FloorToShooterCmd extends Command {
    */
   @Override
   public void execute() {
+    SmartDashboard.putBoolean("Is Shoulder at Position",arm.leftShoulderMotor.atPosition());
+    SmartDashboard.putBoolean("Is Wrist at Position",arm.wristMotor.atPosition());
     if (arm.leftShoulderMotor.atPosition() && arm.wristMotor.atPosition()) {
       if (isForwards) {
         flumper.set(FlumperState.Eat);
@@ -53,8 +56,9 @@ public class FloorToShooterCmd extends Command {
   @Override
   public void end(boolean interrupted) {
     flumper.set(FlumperState.Stop);
-    shooter.intakeState = IntakeState.Preload;
-    arm.unsafeSetPosition(ArmPosition.Stowed);
+
+    // shooter.intakeState = IntakeState.Preload;
+    // arm.unsafeSetPosition(ArmPosition.Stowed);
   }
 
   @Override

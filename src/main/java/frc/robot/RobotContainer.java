@@ -15,12 +15,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClimberLockCmd;
 import frc.robot.commands.ClimberPositionCmd;
 import frc.robot.commands.FloorToShooterCmd;
+import frc.robot.commands.PreloadCmd;
 import frc.robot.commands.FlumperCmd;
 import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.SnapToDegreeCmd;
 import frc.robot.commands.SpinUpShooterCmd;
+import frc.robot.commands.IntakeFromSourceCmd;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.drive.TunerConstants;
@@ -144,7 +146,7 @@ public class RobotContainer {
     // snapToAmpKeybind = new Keybind(driverController.getHID(), Button.X);
     // snapToSLKeybind = new DPadButton(driverController.getHID(), DPad.Left);
     // snapToSRKeybind = new DPadButton(driverController.getHID(), DPad.Right);
-    // intakeDriverKeybind = new AnalogTrigger(driverController.getHID(), Axis.RT, 0.5);
+    intakeDriverKeybind = new AnalogTrigger(driverController.getHID(), Axis.RT, 0.5);
     // snapToNoteKeybind = new Keybind(driverController.getHID(), Button.B);
 
     // initialize keybinds - codriver controller
@@ -166,7 +168,8 @@ public class RobotContainer {
     // snapToSLKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, -45));
     // snapToSRKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 45));
     // //snapToNoteKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, limelight1));
-    // intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
+    intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
+    intakeDriverKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
 
     // // bind codriver controls to commands
     subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
@@ -174,8 +177,10 @@ public class RobotContainer {
     // // you can ignore fixed position as it doesn't modify these
     altScoringKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Trap));
     altScoringKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
-    // recievingKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Source));
-    recievingKeybind.trigger()./*and(modifyArm.negate()).*/whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
+    //recievingKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Source));
+    recievingKeybind.trigger().and(modifyArm).whileTrue(new IntakeFromSourceCmd(arm, shooter, 3000));
+    recievingKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
+    recievingKeybind.trigger().and(modifyArm.negate()).whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
 
     // // y button!
     shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
@@ -184,8 +189,10 @@ public class RobotContainer {
     //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));%
     // shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
     //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumLow));
-    // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
-    //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumHigh));
+    shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
+        .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumHigh));
+    shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
+        .whileTrue(new SpinUpShooterCmd(shooter, 6000));
 
     // non positional
     shootTrigger.trigger().whileTrue(new ShootCmd(shooter));
@@ -195,6 +202,8 @@ public class RobotContainer {
     climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Max));
     climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Min));
     climberToggleLockKeybind.trigger().onTrue(new ClimberLockCmd(climber));
+
+
 
     // we dont have podium positions
   }

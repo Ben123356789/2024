@@ -74,11 +74,11 @@ public class ArmSubsystem extends SubsystemBase {
   
   public ArmSubsystem() {
     leftShoulderMotor = PIDMotor.makeMotor(Constants.SHOULDER_LEFT_MOTOR_ID, "Shoulder Left", 0.05, 0, 0, 0,
-        ControlType.kPosition, 70, 250);
+        ControlType.kPosition, 120, 300);
     rightShoulderMotor = PIDMotor.makeMotor(Constants.SHOULDER_RIGHT_MOTOR_ID, "Shoulder Right", 0.05, 0, 0, 0,
-        ControlType.kPosition, 70, 250);
+        ControlType.kPosition, 120, 300);
     rightShoulderMotor.follow(leftShoulderMotor, true);
-    wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", 0.05, 0, 0, 0, ControlType.kPosition, 140, 500);
+    wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", 0.05, 0, 0, 0, ControlType.kPosition, 150, 1000);
     elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, 100, 300);
 
     leftShoulderMotor.generateTrapezoidPath(0, 0);
@@ -91,13 +91,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-      if(isTrapezoidal){
+    if(isTrapezoidal){
       leftShoulderMotor.runTrapezoidPath();
       wristMotor.runTrapezoidPath();
       elevatorMotor.runTrapezoidPath();
     }
-    printDashboard();
-    SmartDashboard.putBoolean("isTrapezoidal", isTrapezoidal);
+    // printDashboard();
+    // SmartDashboard.putBoolean("isTrapezoidal", isTrapezoidal);
     // leftShoulderMotor.fetchPIDFFromDashboard();
     // wristMotor.fetchPIDFFromDashboard();
     // elevatorMotor.fetchPIDFFromDashboard();
@@ -112,7 +112,6 @@ public class ArmSubsystem extends SubsystemBase {
     leftShoulderMotor.generateTrapezoidPath(target.shoulderPosition(), 0);
     wristMotor.generateTrapezoidPath(target.wristPosition(), 0);
     elevatorMotor.generateTrapezoidPath(target.elevatorPosition(), 0);
-    System.out.println("Running unsafe set position");
   }
 
   public void safeManualLimelightSetPosition(double shoulderEncoderCount, double wristEncoderCount, double elevatorEncoderCount, boolean isTrapezoidal){

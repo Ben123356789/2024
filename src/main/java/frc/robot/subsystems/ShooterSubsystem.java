@@ -16,13 +16,14 @@ public class ShooterSubsystem extends SubsystemBase {
   Timer shooterTimer;
   public IntakeState intakeState;
   public ShooterState shooterState;
+  public boolean okToShoot = true;
 
   // TODO: Calculate velocity
   public double shooterV;
 
   public ShooterSubsystem() {
-    shooterTop = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Shooter Top", 0.00001, 0, 0, 0.00009, ControlType.kVelocity);
-    shooterBottom = PIDMotor.makeMotor(Constants.SHOOTER_BOTTOM_ID, "Shooter Bottom", 0.00001, 0, 0, 0.00009, ControlType.kVelocity);
+    shooterTop = PIDMotor.makeMotor(Constants.SHOOTER_TOP_ID, "Shooter Top", 0.00005, 0, 0.001, 0.00009, ControlType.kVelocity);
+    shooterBottom = PIDMotor.makeMotor(Constants.SHOOTER_BOTTOM_ID, "Shooter Bottom", 0.00005, 0, 0.001, 0.00009, ControlType.kVelocity);
     intakeTop = PIDMotor.makeMotor(Constants.INTAKE_TOP_ID, "Intake Top", 0, 0, 0, 0, ControlType.kPosition);
     intakeBottom = PIDMotor.makeMotor(Constants.INTAKE_BOTTOM_ID, "Intake Bottom", 0, 0, 0, 0, ControlType.kPosition);
 
@@ -49,7 +50,8 @@ public class ShooterSubsystem extends SubsystemBase {
     ShootAuto,
     Intake,
     ReverseIntake,
-    Preload
+    Preload,
+    ResetTimer
   }
 
   public enum ShooterState {
@@ -89,20 +91,20 @@ public class ShooterSubsystem extends SubsystemBase {
         intakeTop.setPercentOutput(1);
         break;
       case Intake: {
-        intakeBottom.setPercentOutput(-0.25);
-        intakeTop.setPercentOutput(0.25);
+        intakeBottom.setPercentOutput(-0.4);
+        intakeTop.setPercentOutput(0.4);
         shooterTimer.restart();
         intakeTop.resetEncoder();
         intakeBottom.resetEncoder();
       }
         break;
       case Preload: {
-        if (shooterTimer.get() < 0.2) {
+        if (shooterTimer.get() < 0.15) {
           intakeBottom.setPercentOutput(0);
           intakeTop.setPercentOutput(0);
           intakeTop.resetEncoder();
           intakeBottom.resetEncoder();
-        } else if (shooterTimer.get() > 0.5) {
+        } else if (shooterTimer.get() > 0.35) {
           intakeBottom.setPercentOutput(0.15);
           intakeTop.setPercentOutput(-0.15);
           if (Math.abs(intakeBottom.getPosition()) >= 1.375 || Math.abs(intakeTop.getPosition()) >= 1.375) {
@@ -117,6 +119,11 @@ public class ShooterSubsystem extends SubsystemBase {
         intakeBottom.setPercentOutput(-0.5);
         intakeTop.setPercentOutput(-0.5);
       }
+        break;
+      case ResetTimer:
+        shooterTimer.restart();
+        intakeTop.resetEncoder();
+        intakeBottom.resetEncoder();
         break;
     }
   }

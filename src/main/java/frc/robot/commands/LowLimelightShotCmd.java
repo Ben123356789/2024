@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import frc.robot.Constants;
+import frc.robot.ExtraMath;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.subsystems.ArmSubsystem;
@@ -17,6 +19,7 @@ public class LowLimelightShotCmd extends Command {
     double elevatorPosition;
     LimelightSubsystem limelight;
     ShooterSubsystem shooter;
+    boolean okToShoot;
 
     boolean shoulderSetCheck = false;
     boolean wristSetCheck = false;
@@ -30,8 +33,8 @@ public class LowLimelightShotCmd extends Command {
 
     double[][] shooterSpeed = {
             { 7.5, 7000 },
-            { 14, 5000 },
-            { 33, 3000 }     
+            { 14, 6000 },
+            { 33, 5000 }     
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
@@ -65,11 +68,17 @@ public class LowLimelightShotCmd extends Command {
             arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, false);
             shooter.shooterV = shooterRPM.interpolate(tag.ty);
             shooter.shooterState = ShooterState.SpinLimelight;
+            if(ExtraMath.within(tag.tx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET)){
+                shooter.okToShoot = true;
+            } else{
+                shooter.okToShoot = false;
+            }
         }
     }
 
     @Override
     public void end(boolean interrupted) {
+        shooter.okToShoot = true;
         shooter.shooterState = ShooterState.Idle;
         arm.isTrapezoidal = true;
         arm.unsafeSetPosition(ArmPosition.Stowed);
