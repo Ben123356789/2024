@@ -67,8 +67,8 @@ public class ShooterSubsystem extends SubsystemBase {
         break;
       case SpinFixed:
       case SpinLimelight:
-      shooterBottom.setTarget(shooterV);
-      shooterTop.setTarget(shooterV);
+        shooterBottom.setTarget(shooterV);
+        shooterTop.setTarget(shooterV);
       break;
       default:
         break;

@@ -13,6 +13,7 @@ public class ArmSubsystem extends SubsystemBase {
   public PIDMotor elevatorMotor;
   
   public ArmPosition target = ArmPosition.Stowed;
+  public boolean isTrapezoidal = true;
   
   public enum ArmPosition {
     Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Trap, SubWoofer, PodiumHigh, PodiumLow;
@@ -90,10 +91,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    leftShoulderMotor.runTrapezoidPath();
-    wristMotor.runTrapezoidPath();
-    elevatorMotor.runTrapezoidPath();
+      if(isTrapezoidal){
+      leftShoulderMotor.runTrapezoidPath();
+      wristMotor.runTrapezoidPath();
+      elevatorMotor.runTrapezoidPath();
+    }
     printDashboard();
+    SmartDashboard.putBoolean("isTrapezoidal", isTrapezoidal);
     // leftShoulderMotor.fetchPIDFFromDashboard();
     // wristMotor.fetchPIDFFromDashboard();
     // elevatorMotor.fetchPIDFFromDashboard();
@@ -108,6 +112,18 @@ public class ArmSubsystem extends SubsystemBase {
     leftShoulderMotor.generateTrapezoidPath(target.shoulderPosition(), 0);
     wristMotor.generateTrapezoidPath(target.wristPosition(), 0);
     elevatorMotor.generateTrapezoidPath(target.elevatorPosition(), 0);
+    System.out.println("Running unsafe set position");
+  }
+
+  public void safeManualLimelightSetPosition(double shoulderEncoderCount, double wristEncoderCount, double elevatorEncoderCount, boolean isTrapezoidal){
+    this.isTrapezoidal = isTrapezoidal;
+    //if(Math.abs(shoulderEncoderCount) > Constants.SHOULDER_ENCODER_MAX)
+    if(wristEncoderCount > Constants.WRIST_ENCODER_MAX){
+      System.err.println("tried to set wrist past max");
+      return;
+    } else {
+      wristMotor.setTarget(wristEncoderCount);  
+    }
   }
 
  /**

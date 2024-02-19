@@ -179,9 +179,9 @@ public class RobotContainer {
 
     // // y button!
     shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
-        .whileTrue(new LowLimelightShotCmd(arm, limelight1));
+        .whileTrue(new LowLimelightShotCmd(arm, shooter, limelight1));
     // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm.negate())
-    //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
+    //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));%
     // shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
     //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumLow));
     // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)

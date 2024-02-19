@@ -91,8 +91,8 @@ public class LimelightSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("speaker tag x position", 999);
       SmartDashboard.putNumber("speaker tag y position", 999);
     }
-
-    
-
+  }
+  public void setPipeline(int pipeline){
+    LimelightHelpers.setPipelineIndex("", pipeline);
   }
 }
