@@ -16,7 +16,7 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean isTrapezoidal = true;
   
   public enum ArmPosition {
-    Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Trap, SubWoofer, PodiumHigh, PodiumLow;
+    Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Amp2, Trap, SubWoofer, PodiumHigh, PodiumLow;
     
     public double shoulderPosition() {
       switch (this) {
@@ -26,6 +26,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerHigh: return Constants.SHOULDER_SPEAKER_HIGH_POSITION;
         case SpeakerLow: return Constants.SHOULDER_SPEAKER_LOW_POSITION;
         case Amp: return Constants.SHOULDER_AMP_POSITION;
+        case Amp2: return Constants.SHOULDER_AMP_DOWN_POSITION;
         case Trap: return Constants.SHOULDER_TRAP_POSITION;
         case SubWoofer: return Constants.SHOULDER_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.SHOULDER_PODIUM_HIGH_POSITION;
@@ -42,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerHigh: return Constants.WRIST_SPEAKER_HIGH_POSITION;
         case SpeakerLow: return Constants.WRIST_SPEAKER_LOW_POSITION;
         case Amp: return Constants.WRIST_AMP_POSITION;
+        case Amp2: return Constants.WRIST_AMP_DOWN_POSITION;
         case Trap: return Constants.WRIST_TRAP_POSITION;
         case SubWoofer: return Constants.WRIST_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.WRIST_PODIUM_HIGH_POSITION;
@@ -58,6 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
         case SpeakerHigh: return Constants.ELEVATOR_SPEAKER_HIGH_POSITION;
         case SpeakerLow: return Constants.ELEVATOR_SPEAKER_LOW_POSITION;
         case Amp: return Constants.ELEVATOR_AMP_POSITION;
+        case Amp2: return Constants.ELEVATOR_AMP_DOWN_POSITION;
         case Trap: return Constants.ELEVATOR_TRAP_POSITION;
         case SubWoofer: return Constants.ELEVATOR_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.ELEVATOR_PODIUM_HIGH_POSITION;
@@ -79,7 +82,7 @@ public class ArmSubsystem extends SubsystemBase {
         ControlType.kPosition, 120, 300);
     rightShoulderMotor.follow(leftShoulderMotor, true);
     wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", 0.05, 0, 0, 0, ControlType.kPosition, 150, 1000);
-    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, 100, 300);
+    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, 200, 500);
 
     leftShoulderMotor.generateTrapezoidPath(0, 0);
     wristMotor.generateTrapezoidPath(0, 0);
@@ -91,7 +94,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(isTrapezoidal){
+    if(isTrapezoidal && (!leftShoulderMotor.atPosition() || !wristMotor.atPosition() || !elevatorMotor.atPosition())) {
       leftShoulderMotor.runTrapezoidPath();
       wristMotor.runTrapezoidPath();
       elevatorMotor.runTrapezoidPath();
@@ -129,9 +132,9 @@ public class ArmSubsystem extends SubsystemBase {
   * Prints the positions and velocities of all the arm motors to the SmartDashboard.
   */
   public void printDashboard() {
-    SmartDashboard.putString("Arm Target Position", target.toString());
+    // SmartDashboard.putString("Arm Target Position", target.toString());
     leftShoulderMotor.putPV();
-    rightShoulderMotor.putPV();
+    // rightShoulderMotor.putPV();
     wristMotor.putPV();
     elevatorMotor.putPV();
   }

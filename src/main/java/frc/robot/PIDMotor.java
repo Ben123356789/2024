@@ -102,8 +102,8 @@ public class PIDMotor {
      */
     private void init() {
         if (!initialized) {
-            motor.restoreFactoryDefaults();
-            resetAll();
+            //motor.restoreFactoryDefaults();
+            //resetAll();
             // putPIDF();
             updatePIDF();
             initialized = true;

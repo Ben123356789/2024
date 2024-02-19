@@ -75,79 +75,94 @@ public class RobotContainer {
 
   public RobotContainer() {
     // pigeon = new PigeonSubsystem();
-    limelight1 = new LimelightSubsystem();
     // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
     // led = new LEDSubsystem(limelight1, pdp);
+    limelight1 = new LimelightSubsystem();
     arm = new ArmSubsystem();
     flumper = new FlumperSubsystem();
     shooter = new ShooterSubsystem();
     climber = new ClimberSubsystem();
     digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
+
+    drivetrain.seedFieldRelative();
     configureBindings();
   }
 
-  Keybind armStowKeybind;
-
-  // driver keybinds
-  Keybind ledKeybind;
-  AnalogTrigger leftKeybind;
-  AnalogTrigger rightKeybind;
+  /** Right Trigger */
   AnalogTrigger intakeDriverKeybind;
+
+  /** Y Button */
   Keybind snapTo0Keybind;
+
+  /** A Button */
   Keybind snapTo180Keybind;
+
+  /** X Button */
   Keybind snapToAmpKeybind;
-  /** SL = Stage Left */
+
+  /** SL = Stage Left - Dpad Left*/
   DPadButton snapToSLKeybind;
-  /** SR = Stage Right */
+
+  /** SR = Stage Right - Dpad Right*/
   DPadButton snapToSRKeybind;
+
+  /** B Button */
   Keybind snapToNoteKeybind;
-  Keybind shootTestKeybind;
 
   // codriver keybinds
+  /** Dpad Up */
   DPadButton climberMaxKeybind;
+  /** Dpad Down */
   DPadButton climberMinKeybind;
+  /** Dpad Left */
   DPadButton climberToggleLockKeybind;
-  /** Amp & Trap */
+
+  /** Amp & Trap - X*/
   Keybind altScoringKeybind;
-  /** Intake & Source */
+
+  /** Intake & Source - A*/
   Keybind recievingKeybind;
-  /** Speaker High & Low, Podium High & Low */
+
+  /** Speaker High & Low, Podium High & Low - Y*/
   Keybind shootPositionKeybind;
   Keybind subwooferKeybind;
   AnalogTrigger shootTrigger;
   AnalogTrigger spitTrigger;
+
   // Modifiers
+  /** Left Bumper */
   Trigger modifyArm;
+  /** Right Bumper */
   Trigger fixedArm;
 
   private void configureBindings() {
-    // drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-    //     drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with
-    //                                                                                        // negative Y (forward)
-    //         .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-    //         .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-    //     ));
+    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        ));
 
-    // driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
-    // driverController.b().whileTrue(drivetrain
-    //     .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
+    driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
+    driverController.b().whileTrue(drivetrain
+        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 
-    // // reset the field-centric heading on left bumper press
-    // driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    // reset the field-centric heading on left bumper press
+    driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
-    // drivetrain.registerTelemetry(logger::telemeterize);
+    drivetrain.registerTelemetry(logger::telemeterize);
 
     modifyArm = codriverController.leftBumper();
     fixedArm = codriverController.rightBumper();
 
     // initialize keybinds - driver controller
-    // snapTo0Keybind = new Keybind(driverController.getHID(), Button.Y);
-    // snapTo180Keybind = new Keybind(driverController.getHID(), Button.A);
-    // snapToAmpKeybind = new Keybind(driverController.getHID(), Button.X);
-    // snapToSLKeybind = new DPadButton(driverController.getHID(), DPad.Left);
-    // snapToSRKeybind = new DPadButton(driverController.getHID(), DPad.Right);
+    snapTo0Keybind = new Keybind(driverController.getHID(), Button.Y);
+    snapTo180Keybind = new Keybind(driverController.getHID(), Button.A);
+    snapToAmpKeybind = new Keybind(driverController.getHID(), Button.X);
+    snapToSLKeybind = new DPadButton(driverController.getHID(), DPad.Left);
+    snapToSRKeybind = new DPadButton(driverController.getHID(), DPad.Right);
+    snapToNoteKeybind = new Keybind(driverController.getHID(), Button.B);
     intakeDriverKeybind = new AnalogTrigger(driverController.getHID(), Axis.RT, 0.5);
-    // snapToNoteKeybind = new Keybind(driverController.getHID(), Button.B);
 
     // initialize keybinds - codriver controller
     climberMaxKeybind = new DPadButton(codriverController.getHID(), DPad.Up);
@@ -160,52 +175,53 @@ public class RobotContainer {
     shootTrigger = new AnalogTrigger(codriverController.getHID(), Axis.RT, 0.5);
     spitTrigger = new AnalogTrigger(codriverController.getHID(), Axis.LT, 0.5);
 
-    // // bind driver controls to commands
+    // bind driver controls to commands
     // snapTo0Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 0));
     // snapTo180Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 180));
     // snapToAmpKeybind.trigger().whileTrue(
     // new SnapToDegreeCmd(pigeon, () -> DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Red ? 90 : -90));
     // snapToSLKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, -45));
     // snapToSRKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 45));
-    // //snapToNoteKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, limelight1));
+    // snapToNoteKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, limelight1));
+
     intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
     intakeDriverKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
 
-    // // bind codriver controls to commands
+    // bind codriver controls to commands
     subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
-    subwooferKeybind.trigger().whileTrue(new SpinUpShooterCmd(shooter, 6000));
-    // // you can ignore fixed position as it doesn't modify these
-    altScoringKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Trap));
+    subwooferKeybind.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED));
+
+    altScoringKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp2));
     altScoringKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
-    //recievingKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Source));
-    recievingKeybind.trigger().and(modifyArm).whileTrue(new IntakeFromSourceCmd(arm, shooter, 3000));
+    altScoringKeybind.trigger().and(modifyArm.negate()).whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED));
+
+    recievingKeybind.trigger().and(modifyArm).whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));
     recievingKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
     recievingKeybind.trigger().and(modifyArm.negate()).whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
 
-    // // y button!
+    // y button! (main speaker shot)
     shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
         .whileTrue(new LowLimelightShotCmd(arm, shooter, limelight1));
     // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm.negate())
-    //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));%
-    // shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
-    //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumLow));
+    //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
+    shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
+        .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumLow));
+    shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
+        .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_LOW_SPEED));
     shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
         .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumHigh));
     shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
-        .whileTrue(new SpinUpShooterCmd(shooter, 6000));
+        .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_HIGH_SPEED));
 
     // non positional
-    shootTrigger.trigger().whileTrue(new ShootCmd(shooter));
-    spitTrigger.trigger()./**and(modifyArm.negate()).*/whileTrue(new FlumperCmd(flumper, FlumperState.Spit));
-    // spitTrigger.trigger().and(modifyArm).whileTrue(new FloorToShooterCmd(flumper, shooter, arm, false));
+    shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, true));
+    spitTrigger.trigger().and(modifyArm.negate()).whileTrue(new FlumperCmd(flumper, FlumperState.Spit));
+    spitTrigger.trigger().and(modifyArm).whileTrue(new ShootCmd(arm, shooter, false));
 
     climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Max));
     climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Min));
     climberToggleLockKeybind.trigger().onTrue(new ClimberLockCmd(climber));
 
-
-
-    // we dont have podium positions
   }
 
   public Command getAutonomousCommand() {

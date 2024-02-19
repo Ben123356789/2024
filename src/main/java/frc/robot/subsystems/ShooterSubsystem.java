@@ -116,7 +116,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
         break;
       case ReverseIntake: {
-        intakeBottom.setPercentOutput(-0.5);
+        intakeBottom.setPercentOutput(0.5);
         intakeTop.setPercentOutput(-0.5);
       }
         break;
