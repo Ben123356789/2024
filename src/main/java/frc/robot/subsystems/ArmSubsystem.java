@@ -68,6 +68,23 @@ public class ArmSubsystem extends SubsystemBase {
         default: return Constants.ELEVATOR_STOWED_POSITION;
       }
     }
+
+    public double elevatorMaxV() {
+      switch (this) {
+        case Stowed: return Constants.ELEVATOR_STOWED_MAXV;
+        case Intake: return Constants.ELEVATOR_INTAKE_MAXV;
+        case Source: return Constants.ELEVATOR_SOURCE_MAXV;
+        case SpeakerHigh: return Constants.ELEVATOR_SPEAKER_HIGH_MAXV;
+        case SpeakerLow: return Constants.ELEVATOR_SPEAKER_LOW_MAXV;
+        case Amp: return Constants.ELEVATOR_AMP_MAXV;
+        case Amp2: return Constants.ELEVATOR_AMP_DOWN_MAXV;
+        case Trap: return Constants.ELEVATOR_TRAP_MAXV;
+        case SubWoofer: return Constants.ELEVATOR_SUBWOOFER_MAXV;
+        case PodiumHigh: return Constants.ELEVATOR_PODIUM_HIGH_MAXV;
+        case PodiumLow: return Constants.ELEVATOR_PODIUM_LOW_MAXV;
+        default: return Constants.ELEVATOR_STOWED_MAXV;
+      }
+    }
   
   @Override
   public String toString() {
@@ -82,7 +99,7 @@ public class ArmSubsystem extends SubsystemBase {
         ControlType.kPosition, 120, 300);
     rightShoulderMotor.follow(leftShoulderMotor, true);
     wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", 0.05, 0, 0, 0, ControlType.kPosition, 150, 1000);
-    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, 200, 500);
+    elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, Constants.ELEVATOR_DEFAULT_MAXV, 500);
 
     leftShoulderMotor.generateTrapezoidPath(0, 0);
     wristMotor.generateTrapezoidPath(0, 0);
@@ -114,8 +131,10 @@ public class ArmSubsystem extends SubsystemBase {
     this.target = target;
     leftShoulderMotor.generateTrapezoidPath(target.shoulderPosition(), 0);
     wristMotor.generateTrapezoidPath(target.wristPosition(), 0);
-    elevatorMotor.generateTrapezoidPath(target.elevatorPosition(), 0);
+    elevatorMotor.generateTrapezoidPath(target.elevatorPosition(), 0, target.elevatorMaxV());
   }
+
+
 
   public void safeManualLimelightSetPosition(double shoulderEncoderCount, double wristEncoderCount, double elevatorEncoderCount, boolean isTrapezoidal){
     this.isTrapezoidal = isTrapezoidal;

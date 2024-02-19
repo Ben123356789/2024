@@ -21,6 +21,8 @@ public class PIDMotor {
     double target = 0.0;
     double finalTarget = 0;
     double pidfEpsilonFactor = 1.001;
+    double maxV;
+    double maxA;
 
     RelativeEncoder encoder;
     CANSparkMax motor;
@@ -39,6 +41,8 @@ public class PIDMotor {
         this.d = d;
         this.f = f;
         this.controlType = type;
+        this.maxV = maxV;
+        this.maxA = maxA;
 
         motor = new CANSparkMax(deviceID, MotorType.kBrushless);
         controller = motor.getPIDController();
@@ -323,11 +327,22 @@ public class PIDMotor {
      * @param targetV The intended target velocity of the motor.
      */
     public void generateTrapezoidPath(double targetP, double targetV) {
+        generateTrapezoidPath(targetP, targetV, maxV);
+    }
+
+    /**
+     * Generates a trapezoidal path for the motor to follow.
+     * 
+     * @param targetP The intended target position of the motor.
+     * @param targetV The intended target velocity of the motor.
+     */
+    public void generateTrapezoidPath(double targetP, double targetV, double maxV) {
+        Constraints newConstraints = new Constraints(maxV, maxA);
         this.target = targetP;
         this.finalTarget = targetP;
         motorCurrentState = new TrapezoidProfile.State(getPosition(), getVelocity());
         motorTargetState = new TrapezoidProfile.State(targetP, targetV);
-        motorProfile = new TrapezoidProfile(motorConstraints, motorTargetState, motorCurrentState);
+        motorProfile = new TrapezoidProfile(newConstraints, motorTargetState, motorCurrentState);
         motorTimer.reset();
         motorTimer.start();
     }
