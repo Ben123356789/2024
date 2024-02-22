@@ -87,7 +87,7 @@ public final class Constants {
 
     // Amp - Shooting Upwards
     public static final double SHOULDER_AMP_POSITION = -50;
-    public static final double WRIST_AMP_POSITION = 125;
+    public static final double WRIST_AMP_POSITION = 110;
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_AMP_POSITION = -10;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;

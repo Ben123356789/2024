@@ -160,7 +160,7 @@ public class RobotContainer {
     snapToSLKeybind = new DPadButton(driverController.getHID(), DPad.Left);
     snapToSRKeybind = new DPadButton(driverController.getHID(), DPad.Right);
     snapToNoteKeybind = new Keybind(driverController.getHID(), Button.B);
-		resetFieldCentricKeybind = new Keybind(driverController.getHID(), Button.LeftBumper);
+	resetFieldCentricKeybind = new Keybind(driverController.getHID(), Button.LeftBumper);
     intakeDriverKeybind = new AnalogTrigger(driverController.getHID(), Axis.RT, 0.5);
 
     // initialize keybinds - codriver controller
@@ -181,14 +181,16 @@ public class RobotContainer {
             double rate;
             if(limelight1.limelightRotation){
                 rate = -0.04*MaxAngularRate*limelight1.limelightRotationMagnitude;
-            } else{
+            } /*else if(pigeon.rotateToDegree){
+                rate = MaxAngularRate*pigeon.magnitudeToAngle;
+            } */else{
                rate = -driverController.getRightX() * MaxAngularRate;
             }
             return drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative Y (forward)
                 .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                 .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
-            }
-        ));
+        })
+    );
 
 		// not sure how brake will be toggled...
     driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
