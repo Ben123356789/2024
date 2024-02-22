@@ -84,7 +84,7 @@ public class RobotContainer {
     floorIntake = new FloorIntakeSubsystem();
     shooter = new ShooterSubsystem();
     climber = new ClimberSubsystem();
-    digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake);
+    digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
     // dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
 
     drivetrain.seedFieldRelative();
