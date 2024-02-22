@@ -12,14 +12,16 @@ public class DigitalIOSubsystem extends SubsystemBase {
     ArmSubsystem arm;
     ShooterSubsystem shooter;
     FloorIntakeSubsystem floorIntake;
+    ClimberSubsystem climber;
     boolean lastIterationBrakeButtonState, lastIterationZeroEncButtonState = false;
 
-    public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FloorIntakeSubsystem floorIntake) {
+    public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FloorIntakeSubsystem floorIntake, ClimberSubsystem climber) {
         zeroEncodersButton = new DigitalInput(1);
         brakeModeButton = new DigitalInput(2);
         this.arm = arm;
         this.shooter = shooter;
         this.floorIntake = floorIntake;
+        this.climber = climber;
         // buttonCooldown.start();
     }
 
@@ -35,16 +37,19 @@ public class DigitalIOSubsystem extends SubsystemBase {
                 arm.disableBrakeMode();
                 shooter.disableBrakeMode();
                 floorIntake.disableBrakeMode();
+                climber.disableBrakeMode();
             } else if (!brake && lastIterationBrakeButtonState) {
                 arm.enableBrakeMode();
                 shooter.enableBrakeMode();
                 floorIntake.enableBrakeMode();
+                climber.enableBrakeMode();
             }
 
             if (encoder && !lastIterationZeroEncButtonState) {
                 arm.zeroEncoders();
                 shooter.zeroEncoders();
                 floorIntake.zeroEncoders();
+                climber.zeroEncoders();
             }
         }/* else {
             arm.enableBrakeMode();
