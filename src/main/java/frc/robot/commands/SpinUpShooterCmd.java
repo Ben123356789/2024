@@ -26,7 +26,8 @@ public class SpinUpShooterCmd extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.shooterState = ShooterState.Idle;
-    shooter.shooterV = 0;
+    // shooter.shooterV = 0;
+    shooter.spinDownShooters();
   }
 
   @Override

@@ -2,6 +2,8 @@ package frc.robot.drive;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
@@ -45,6 +47,8 @@ public class Telemetry {
     /* Keep a reference of the last pose to calculate the speeds */
     private Pose2d m_lastPose = new Pose2d();
     private double lastTime = Utils.getCurrentTimeSeconds();
+
+    Translation2d velocities;
 
     /* Mechanisms to represent the swerve module states */
     private final Mechanism2d[] m_moduleMechanisms = new Mechanism2d[] {
@@ -90,11 +94,13 @@ public class Telemetry {
         Translation2d distanceDiff = pose.minus(m_lastPose).getTranslation();
         m_lastPose = pose;
 
-        Translation2d velocities = distanceDiff.div(diffTime);
+        velocities = distanceDiff.div(diffTime);
 
         speed.set(velocities.getNorm());
         velocityX.set(velocities.getX());
         velocityY.set(velocities.getY());
+        // SmartDashboard.putNumber("Velocity X", velocities.getX());
+        // SmartDashboard.putNumber("Velocity Y", velocities.getY());
         odomPeriod.set(state.OdometryPeriod);
 
         /* Telemeterize the module's states */
@@ -105,5 +111,13 @@ public class Telemetry {
 
             SmartDashboard.putData("Module " + i, m_moduleMechanisms[i]);
         }
+    }
+
+    public double getVelocityX(){
+        return velocities.getX();
+    }
+
+    public double getVelocityY(){
+        return velocities.getY();
     }
 }

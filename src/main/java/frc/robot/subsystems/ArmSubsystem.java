@@ -16,7 +16,8 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean isTrapezoidal = true;
   
   public enum ArmPosition {
-    Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Amp2, Trap, SubWoofer, PodiumHigh, PodiumLow;
+    Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Amp2, Trap,
+    SubWoofer, PodiumHigh, PodiumLow, ClimberUp, ClimberMid, ClimberLow;
     
     public double shoulderPosition() {
       switch (this) {
@@ -31,6 +32,9 @@ public class ArmSubsystem extends SubsystemBase {
         case SubWoofer: return Constants.SHOULDER_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.SHOULDER_PODIUM_HIGH_POSITION;
         case PodiumLow: return Constants.SHOULDER_PODIUM_LOW_POSITION;
+        case ClimberUp: return Constants.SHOULDER_CLIMBER_HIGH_POSITION;
+        case ClimberMid: return Constants.SHOULDER_CLIMBER_MID_POSITION;
+        case ClimberLow: return Constants.SHOULDER_CLIMBER_LOW_POSITION;
         default: return Constants.SHOULDER_STOWED_POSITION;
       }
     }
@@ -48,6 +52,9 @@ public class ArmSubsystem extends SubsystemBase {
         case SubWoofer: return Constants.WRIST_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.WRIST_PODIUM_HIGH_POSITION;
         case PodiumLow: return Constants.WRIST_PODIUM_LOW_POSITION;
+        case ClimberUp: return Constants.WRIST_CLIMBER_HIGH_POSITION;
+        case ClimberMid: return Constants.WRIST_CLIMBER_MID_POSITION;
+        case ClimberLow: return Constants.WRIST_CLIMBER_LOW_POSITION;
         default: return Constants.WRIST_STOWED_POSITION;
       }
     }
@@ -65,7 +72,30 @@ public class ArmSubsystem extends SubsystemBase {
         case SubWoofer: return Constants.ELEVATOR_SUBWOOFER_POSITION;
         case PodiumHigh: return Constants.ELEVATOR_PODIUM_HIGH_POSITION;
         case PodiumLow: return Constants.ELEVATOR_PODIUM_LOW_POSITION;
+        case ClimberUp: return Constants.ELEVATOR_CLIMBER_HIGH_POSITION;
+        case ClimberMid: return Constants.ELEVATOR_CLIMBER_MID_POSITION;
+        case ClimberLow: return Constants.ELEVATOR_CLIMBER_LOW_POSITION;
         default: return Constants.ELEVATOR_STOWED_POSITION;
+      }
+    }
+
+    public double wristMaxV() {
+      switch (this) {
+        case Stowed: return Constants.WRIST_STOWED_MAXV;
+        case Intake: return Constants.WRIST_INTAKE_MAXV;
+        case Source: return Constants.WRIST_SOURCE_MAXV;
+        case SpeakerHigh: return Constants.WRIST_SPEAKER_HIGH_MAXV;
+        case SpeakerLow: return Constants.WRIST_SPEAKER_LOW_MAXV;
+        case Amp: return Constants.WRIST_AMP_MAXV;
+        case Amp2: return Constants.WRIST_AMP_DOWN_MAXV;
+        case Trap: return Constants.WRIST_TRAP_MAXV;
+        case SubWoofer: return Constants.WRIST_SUBWOOFER_MAXV;
+        case PodiumHigh: return Constants.WRIST_PODIUM_HIGH_MAXV;
+        case PodiumLow: return Constants.WRIST_PODIUM_LOW_MAXV;
+        case ClimberUp: return Constants.WRIST_CLIMBER_HIGH_MAXV;
+        case ClimberMid: return Constants.WRIST_CLIMBER_MID_MAXV;
+        case ClimberLow: return Constants.WRIST_CLIMBER_LOW_MAXV;
+        default: return Constants.WRIST_STOWED_MAXV;
       }
     }
 
@@ -82,6 +112,9 @@ public class ArmSubsystem extends SubsystemBase {
         case SubWoofer: return Constants.ELEVATOR_SUBWOOFER_MAXV;
         case PodiumHigh: return Constants.ELEVATOR_PODIUM_HIGH_MAXV;
         case PodiumLow: return Constants.ELEVATOR_PODIUM_LOW_MAXV;
+        case ClimberUp: return Constants.ELEVATOR_CLIMBER_HIGH_MAXV;
+        case ClimberMid: return Constants.ELEVATOR_CLIMBER_MID_MAXV;
+        case ClimberLow: return Constants.ELEVATOR_CLIMBER_LOW_MAXV;
         default: return Constants.ELEVATOR_STOWED_MAXV;
       }
     }
@@ -116,7 +149,7 @@ public class ArmSubsystem extends SubsystemBase {
       wristMotor.runTrapezoidPath();
       elevatorMotor.runTrapezoidPath();
     }
-    // printDashboard();
+    printDashboard();
     // SmartDashboard.putBoolean("isTrapezoidal", isTrapezoidal);
     // leftShoulderMotor.fetchPIDFFromDashboard();
     // wristMotor.fetchPIDFFromDashboard();
@@ -130,7 +163,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void unsafeSetPosition(ArmPosition target) {
     this.target = target;
     leftShoulderMotor.generateTrapezoidPath(target.shoulderPosition(), 0);
-    wristMotor.generateTrapezoidPath(target.wristPosition(), 0);
+    wristMotor.generateTrapezoidPath(target.wristPosition(), 0, target.wristMaxV());
     elevatorMotor.generateTrapezoidPath(target.elevatorPosition(), 0, target.elevatorMaxV());
   }
 

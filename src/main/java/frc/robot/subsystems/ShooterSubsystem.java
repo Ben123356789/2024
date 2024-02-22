@@ -18,6 +18,9 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterState shooterState;
   public boolean okToShoot = true;
 
+  boolean slowDownShooters = false;
+  double currentVelocity = 0;
+
   // TODO: Calculate velocity
   public double shooterV;
 
@@ -41,6 +44,18 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     // TODO: calculate shooterV when in limelight shooter state
     manageShooterRollers();
+    if(slowDownShooters){
+      shooterBottom.setTarget(currentVelocity);
+      shooterTop.setTarget(currentVelocity);
+      currentVelocity -= 250;
+      if(currentVelocity <= 0 ){
+        shooterBottom.setTarget(0);
+        shooterTop.setTarget(0);
+      }
+      if(currentVelocity <= -2500){
+        slowDownShooters = false;
+      }
+    }
     printDashboard();
   }
 
@@ -60,12 +75,19 @@ public class ShooterSubsystem extends SubsystemBase {
     SpinLimelight,
   }
 
+  public void spinDownShooters(){
+    currentVelocity = shooterV;
+    slowDownShooters = true;
+  }
+
   public void manageShooterRollers() {
 
     switch (shooterState) {
       case Idle:
-        shooterBottom.setPercentOutput(0);
-        shooterTop.setPercentOutput(0);
+        if(!slowDownShooters){
+          shooterBottom.setPercentOutput(0);
+          shooterTop.setPercentOutput(0);
+        }
         break;
       case SpinFixed:
       case SpinLimelight:
@@ -79,6 +101,7 @@ public class ShooterSubsystem extends SubsystemBase {
     switch (intakeState) {
       // Stops all the motors.
       case Idle: {
+        // disableBrakeMode();
         intakeTop.setPercentOutput(0);
         intakeBottom.setPercentOutput(0);
       }
@@ -87,10 +110,12 @@ public class ShooterSubsystem extends SubsystemBase {
       // TODO
         break;
       case ShootNow:
+        // disableBrakeMode();
         intakeBottom.setPercentOutput(-1);
         intakeTop.setPercentOutput(1);
         break;
       case Intake: {
+        // enableBrakeMode();
         intakeBottom.setPercentOutput(-0.4);
         intakeTop.setPercentOutput(0.4);
         shooterTimer.restart();
@@ -99,6 +124,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
         break;
       case Preload: {
+        // disableBrakeMode();
         if (shooterTimer.get() < 0.15) {
           intakeBottom.setPercentOutput(0);
           intakeTop.setPercentOutput(0);
@@ -107,7 +133,7 @@ public class ShooterSubsystem extends SubsystemBase {
         } else if (shooterTimer.get() > 0.35) {
           intakeBottom.setPercentOutput(0.15);
           intakeTop.setPercentOutput(-0.15);
-          if (Math.abs(intakeBottom.getPosition()) >= 1.375 || Math.abs(intakeTop.getPosition()) >= 1.375) {
+          if (Math.abs(intakeBottom.getPosition()) >= 2.75 || Math.abs(intakeTop.getPosition()) >= 2.75) {
             intakeBottom.setPercentOutput(0);
             intakeTop.setPercentOutput(0);
             intakeState = IntakeState.Idle;
@@ -116,6 +142,7 @@ public class ShooterSubsystem extends SubsystemBase {
       }
         break;
       case ReverseIntake: {
+        // disableBrakeMode();
         intakeBottom.setPercentOutput(0.5);
         intakeTop.setPercentOutput(-0.5);
       }
@@ -135,14 +162,19 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTop.putPV();
   }
 
+
   public void disableBrakeMode() {
-    intakeBottom.setIdleCoastMode();
-    intakeTop.setIdleCoastMode();
+    //intakeBottom.setIdleCoastMode();
+    //intakeTop.setIdleCoastMode();
+    shooterTop.setIdleCoastMode();
+    shooterBottom.setIdleCoastMode();
   }
 
   public void enableBrakeMode() {
-    intakeBottom.setIdleBrakeMode();
-    intakeTop.setIdleBrakeMode();
+    //intakeBottom.setIdleBrakeMode();
+    //intakeTop.setIdleBrakeMode();
+    shooterTop.setIdleBrakeMode();
+    shooterBottom.setIdleBrakeMode();
   }
 
   public void zeroEncoders() {

@@ -19,12 +19,12 @@ public class ClimberSubsystem extends SubsystemBase {
     static final double RIGHT_SERVO_RELEASE_POS = 0.5;
     static final double ENGAGE_BACKING_DISTANCE = 3.0;
 
-    double target = 0.0;
+    public double target = 0.0;
     boolean ratchetEngaged = false;
 
-    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0.01, 0, 0, 0,
+    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0.02, 0, 0, 0,
             ControlType.kPosition);
-    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0.01, 0, 0, 0,
+    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0.02, 0, 0, 0,
             ControlType.kPosition);
     Servo leftRatchetServo = new Servo(LEFT_SERVO_CHANNEL);
     Servo rightRatchetServo = new Servo(RIGHT_SERVO_CHANNEL);
@@ -34,9 +34,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
         public double height(){
         switch(this){
-            case Max: return 950;
-            case Min: return 0;
-            case Mid: return 900;
+            case Max: return Constants.CLIMBER_HIGH_HEIGHT;
+            case Mid: return Constants.CLIMBER_MID_HEIGHT;
+            case Min: return Constants.CLIMBER_LOW_HEIGHT;
             default: return 0;
         }
     }
@@ -54,14 +54,25 @@ public class ClimberSubsystem extends SubsystemBase {
         return ExtraMath.average(leftMotor.getPosition(), rightMotor.getPosition());
     }
 
+    /**
+     * Sets a new desired height for the climbers.
+     * 
+     * @param newHeight
+     */
     public void setHeight(double newHeight) {
         target = newHeight;
     }
 
+    /**
+     * Engages the ratchet, which locks the climber mechanism.
+     */
     public void engageRatchet() {
         ratchetEngaged = true;
     }
 
+    /**
+     * Releases the ratchet, which unlocks the climber mechanism.
+     */
     public void disengageRatchet() {
         ratchetEngaged = false;
     }
@@ -78,8 +89,12 @@ public class ClimberSubsystem extends SubsystemBase {
         }
         leftRatchetServo.setPosition(ratchetEngaged ? LEFT_SERVO_ENGAGE_POS : LEFT_SERVO_RELEASE_POS);
         rightRatchetServo.setPosition(ratchetEngaged ? RIGHT_SERVO_ENGAGE_POS : RIGHT_SERVO_RELEASE_POS);
+        printDashboard();
     }
 
+    /**
+     * Toggles the ratchet between a locked and unlocked state.
+     */
     public void toggleRatchet(){
         if(ratchetEngaged){
             ratchetEngaged = false;
@@ -88,6 +103,9 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Prints the climber motor positions in revolutions.
+     */
     public void printDashboard() {
         SmartDashboard.putNumber("Left Climber Position", leftMotor.getPosition());
         SmartDashboard.putNumber("Right Climber Position", rightMotor.getPosition());

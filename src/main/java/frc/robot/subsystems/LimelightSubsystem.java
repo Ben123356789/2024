@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
@@ -9,6 +7,8 @@ import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 
 public class LimelightSubsystem extends SubsystemBase {
   public LimelightHelpers.LimelightResults llresults;
+  public boolean limelightRotation = false;
+  public double limelightRotationMagnitude = 0;
 
   public LimelightSubsystem() {
   }

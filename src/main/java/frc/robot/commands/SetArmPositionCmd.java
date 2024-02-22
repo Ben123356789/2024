@@ -1,11 +1,13 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
+import frc.robot.subsystems.ClimberSubsystem.ClimbState;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SetArmPositionCmd extends Command {
-  ArmSubsystem arm;
+  private final ArmSubsystem arm;
   double targetShoulderPosition;
   double targetWristPosition;
   double elevatorPosition;
@@ -23,7 +25,7 @@ public class SetArmPositionCmd extends Command {
 
   @Override
   public void initialize() {
-    arm.unsafeSetPosition(target);
+      arm.unsafeSetPosition(target);
   }
 
   @Override

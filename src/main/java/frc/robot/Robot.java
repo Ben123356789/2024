@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -37,12 +38,16 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumber("Current memory (MB)", Runtime.getRuntime().totalMemory() / (1024.0 * 1024.0));
     // SmartDashboard.putNumber("Maximum memory (MB)", Runtime.getRuntime().maxMemory() / (1024.0 * 1024.0));
   }
-
+  // XboxController testController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
+  // XboxController cotestController = new XboxController(Constants.CODRIVER_CONTROLLER_PORT);
   @Override
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    // testController.setRumble(RumbleType.kBothRumble, 0);
+    // cotestController.setRumble(RumbleType.kBothRumble, 0);
+  }
 
   @Override
   public void disabledExit() {}
@@ -83,7 +88,6 @@ public class Robot extends TimedRobot {
   }
 
   int currIndex = 0;
-  XboxController testController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
   
   double stickY;
   @Override

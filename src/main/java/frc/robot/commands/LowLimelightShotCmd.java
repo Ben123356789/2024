@@ -2,8 +2,8 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.ExtraMath;
-import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
+import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -20,31 +20,33 @@ public class LowLimelightShotCmd extends Command {
     LimelightSubsystem limelight;
     ShooterSubsystem shooter;
     boolean okToShoot;
+    Telemetry logger;
 
     boolean shoulderSetCheck = false;
     boolean wristSetCheck = false;
     boolean elevatorSetCheck;
 
     double[][] wristPosition = {
-            { 7.5, 23 },
-            { 14, 37 },
-            { 33, 45 }
+            { 8.3, 24 },
+            { 17, 27 },
+            { 33, 36.2 }
     };
 
     double[][] shooterSpeed = {
-            { 7.5, 7000 },
-            { 14, 6000 },
-            { 33, 5000 }     
+            { 8.3, 10000 },
+            { 17, 10000 },
+            { 33, 10000 }     
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
     LimelightTarget_Fiducial tag;
 
 
-    public LowLimelightShotCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight) {
+    public LowLimelightShotCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger) {
         this.arm = arm;
         this.shooter = shooter;
         this.limelight = limelight;
+        this.logger = logger;
         addRequirements(arm, shooter);
     }
 
@@ -54,6 +56,7 @@ public class LowLimelightShotCmd extends Command {
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(1);
+        okToShoot = false;
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
 
@@ -62,24 +65,34 @@ public class LowLimelightShotCmd extends Command {
         tag = limelight.getDataForId(7);
         if(tag == null){
             tag = limelight.getDataForId(4);
+            shooter.okToShoot = false;
         }
         if(tag != null){
+            limelight.limelightRotation = true;
+            double x = wrist.interpolate(tag.ty);
+            x = x + -1.5*logger.getVelocityX();
+            SmartDashboard.putNumber("vel x", logger.getVelocityX());
             SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
-            arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, false);
+            arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(tag.ty);
             shooter.shooterState = ShooterState.SpinLimelight;
             if(ExtraMath.within(tag.tx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET)){
+                limelight.limelightRotation = false;
                 shooter.okToShoot = true;
             } else{
                 shooter.okToShoot = false;
             }
+            limelight.limelightRotationMagnitude = tag.tx-logger.getVelocityY()*10;
+            SmartDashboard.putNumber("Tag X", tag.tx);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
+        limelight.limelightRotation = false;
         shooter.okToShoot = true;
         shooter.shooterState = ShooterState.Idle;
+        shooter.spinDownShooters();
         arm.isTrapezoidal = true;
         arm.unsafeSetPosition(ArmPosition.Stowed);
     }

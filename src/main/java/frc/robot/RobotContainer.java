@@ -33,6 +33,7 @@ import frc.robot.input.AnalogTrigger.Axis;
 import frc.robot.input.DPadButton.DPad;
 import frc.robot.input.Keybind.Button;
 import frc.robot.subsystems.ClimberSubsystem;
+// import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.subsystems.DigitalIOSubsystem;
 import frc.robot.subsystems.FlumperSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -69,12 +70,13 @@ public class RobotContainer {
   public ShooterSubsystem shooter;
   public ArmSubsystem arm;
   public DigitalIOSubsystem digitalio;
+  // public DashboardSubsystem dashboard;
   private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   private final CommandXboxController codriverController = new CommandXboxController(
       Constants.CODRIVER_CONTROLLER_PORT);
 
   public RobotContainer() {
-    // pigeon = new PigeonSubsystem();
+    pigeon = new PigeonSubsystem();
     // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
     // led = new LEDSubsystem(limelight1, pdp);
     limelight1 = new LimelightSubsystem();
@@ -83,6 +85,7 @@ public class RobotContainer {
     shooter = new ShooterSubsystem();
     climber = new ClimberSubsystem();
     digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
+    // dashboard = new DashboardSubsystem(arm, shooter, climber, flumper);
 
     drivetrain.seedFieldRelative();
     configureBindings();
@@ -115,6 +118,8 @@ public class RobotContainer {
   /** Dpad Down */
   DPadButton climberMinKeybind;
   /** Dpad Left */
+  DPadButton climberMidKeybind;
+  /** Dpad Right */
   DPadButton climberToggleLockKeybind;
 
   /** Amp & Trap - X*/
@@ -136,22 +141,6 @@ public class RobotContainer {
   Trigger fixedArm;
 
   private void configureBindings() {
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with
-                                                                                           // negative Y (forward)
-            .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-        ));
-
-    driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
-    driverController.b().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
-
-    // reset the field-centric heading on left bumper press
-    driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-
-    drivetrain.registerTelemetry(logger::telemeterize);
-
     modifyArm = codriverController.leftBumper();
     fixedArm = codriverController.rightBumper();
 
@@ -167,7 +156,8 @@ public class RobotContainer {
     // initialize keybinds - codriver controller
     climberMaxKeybind = new DPadButton(codriverController.getHID(), DPad.Up);
     climberMinKeybind = new DPadButton(codriverController.getHID(), DPad.Down);
-    climberToggleLockKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
+    climberMidKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
+    climberToggleLockKeybind = new DPadButton(codriverController.getHID(), DPad.Right);
     altScoringKeybind = new Keybind(codriverController.getHID(), Button.X);
     recievingKeybind = new Keybind(codriverController.getHID(), Button.A);
     shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
@@ -176,6 +166,29 @@ public class RobotContainer {
     spitTrigger = new AnalogTrigger(codriverController.getHID(), Axis.LT, 0.5);
 
     // bind driver controls to commands
+    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> {
+            double rate;
+            if(limelight1.limelightRotation){
+                rate = -0.04*MaxAngularRate*limelight1.limelightRotationMagnitude;
+            } else{
+               rate = -driverController.getRightX() * MaxAngularRate;
+            }
+            return drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative Y (forward)
+                .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
+            }
+        ));
+    driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
+    // driverController.y().onTrue(()->);
+    // driverController.b().whileTrue(drivetrain
+    //     .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
+    
+    // reset the field-centric heading on left bumper press
+    driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+
+    drivetrain.registerTelemetry(logger::telemeterize);
+
     // snapTo0Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 0));
     // snapTo180Keybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 180));
     // snapToAmpKeybind.trigger().whileTrue(
@@ -201,7 +214,7 @@ public class RobotContainer {
 
     // y button! (main speaker shot)
     shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
-        .whileTrue(new LowLimelightShotCmd(arm, shooter, limelight1));
+        .whileTrue(new LowLimelightShotCmd(arm, shooter, limelight1, logger));
     // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm.negate())
     //     .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
     shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
@@ -218,8 +231,9 @@ public class RobotContainer {
     spitTrigger.trigger().and(modifyArm.negate()).whileTrue(new FlumperCmd(flumper, FlumperState.Spit));
     spitTrigger.trigger().and(modifyArm).whileTrue(new ShootCmd(arm, shooter, false));
 
-    climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Max));
-    climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, ClimbState.Min));
+    climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
+    climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Min));
+    climberMidKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Mid));
     climberToggleLockKeybind.trigger().onTrue(new ClimberLockCmd(climber));
 
   }
