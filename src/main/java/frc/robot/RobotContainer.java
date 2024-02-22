@@ -94,6 +94,9 @@ public class RobotContainer {
   /** Right Trigger */
   AnalogTrigger intakeDriverKeybind;
 
+	/** Left Bumper */
+  Keybind resetFieldCentricKeybind;
+
   /** Y Button */
   Keybind snapTo0Keybind;
 
@@ -130,8 +133,14 @@ public class RobotContainer {
 
   /** Speaker High & Low, Podium High & Low - Y*/
   Keybind shootPositionKeybind;
+
+  /** B Button */
   Keybind subwooferKeybind;
+
+  /** Right Trigger */
   AnalogTrigger shootTrigger;
+
+	/** Left Trigger */
   AnalogTrigger spitTrigger;
 
   // Modifiers
@@ -151,6 +160,7 @@ public class RobotContainer {
     snapToSLKeybind = new DPadButton(driverController.getHID(), DPad.Left);
     snapToSRKeybind = new DPadButton(driverController.getHID(), DPad.Right);
     snapToNoteKeybind = new Keybind(driverController.getHID(), Button.B);
+		resetFieldCentricKeybind = new Keybind(driverController.getHID(), Button.LeftBumper);
     intakeDriverKeybind = new AnalogTrigger(driverController.getHID(), Axis.RT, 0.5);
 
     // initialize keybinds - codriver controller
@@ -179,13 +189,12 @@ public class RobotContainer {
                 .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
             }
         ));
+
+		// not sure how brake will be toggled...
     driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
-    // driverController.y().onTrue(()->);
-    // driverController.b().whileTrue(drivetrain
-    //     .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
     
     // reset the field-centric heading on left bumper press
-    driverController.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    resetFieldCentricKeybind.trigger().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
