@@ -66,7 +66,7 @@ public final class Constants {
     public static final double WRIST_SOURCE_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_SOURCE_POSITION = 0;
     public static final double ELEVATOR_SOURCE_MAXV = ELEVATOR_DEFAULT_MAXV;
-    public static final double SOURCE_INTAKE_SPEED = 3000;
+    public static final double SOURCE_INTAKE_SPEED = 4000;
 
 
     // Speaker High - Limelight
@@ -86,15 +86,15 @@ public final class Constants {
 
 
     // Amp - Shooting Upwards
-    public static final double SHOULDER_AMP_POSITION = -50;
-    public static final double WRIST_AMP_POSITION = 110;
+    public static final double SHOULDER_AMP_POSITION = -35;
+    public static final double WRIST_AMP_POSITION = 100;
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_AMP_POSITION = -10;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
     public static final double AMP_SHOOT_SPEED = 4000;
 
 
-    // Amp - Shooting out the back
+    // Amp2 - Shooting out the back
     public static final double SHOULDER_AMP_DOWN_POSITION = -82;
     public static final double WRIST_AMP_DOWN_POSITION = 60;
     public static final double WRIST_AMP_DOWN_MAXV = WRIST_DEFAULT_MAXV;
