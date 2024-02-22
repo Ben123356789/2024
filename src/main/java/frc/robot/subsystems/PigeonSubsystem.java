@@ -10,6 +10,9 @@ public class PigeonSubsystem extends SubsystemBase {
   public double X, Y, Z;
   public double accelX, accelY, accelZ;
   public double temp;
+  public boolean rotateToDegree = false;
+  public double magnitudeToAngle = 0;
+  public double targetAngle = 0;
 
   public PigeonSubsystem() {
     pigeon = new Pigeon2(Constants.PIGEON_ID,"DriveTrain");
@@ -44,4 +47,9 @@ public class PigeonSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Pigeon Acc Z", accelZ);
     SmartDashboard.putNumber("Pigeon Current Temp [C]", temp);
   }
+
+  // public double getRotationAngleFromZero(){
+    // broken
+    // return pigeon.getYaw().getValueAsDouble()-360*((int)pigeon.getYaw().getValueAsDouble()/360);
+  // }
 }
