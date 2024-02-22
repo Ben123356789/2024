@@ -13,7 +13,7 @@ public final class Constants {
     public static final int CLIMBER_RIGHT_ID = 52;
 
     // Floor intake motor ID
-    public static final int FLUMPER_ID = 32;
+    public static final int FLOOR_INTAKE_ID = 32;
 
     // Pigeon ID
     public static final int PIGEON_ID = 18;

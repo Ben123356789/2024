@@ -11,13 +11,13 @@
 //   ArmSubsystem arm;
 //   ShooterSubsystem shooter;
 //   ClimberSubsystem climber;
-//   FlumperSubsystem flumper;
+//   FloorIntakeSubsystem floorIntake;
 
-//   public DashboardSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, ClimberSubsystem climber, FlumperSubsystem flumper) {
+//   public DashboardSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, ClimberSubsystem climber, FloorIntakeSubsystem floorIntake) {
 //     this.arm = arm;
 //     this.shooter = shooter;
 //     this.climber = climber;
-//     this.flumper = flumper;
+//     this.floorIntake = floorIntake;
 //   }
 //   @Override
 //   public void periodic() {

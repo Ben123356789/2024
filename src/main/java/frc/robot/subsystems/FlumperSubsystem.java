@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.PIDMotor;
 
-public class FlumperSubsystem extends SubsystemBase {
-  public enum FlumperState {
+public class FloorIntakeSubsystem extends SubsystemBase {
+  public enum FloorIntakeState {
     Eat, Stop, Spit;
 
     public double speed() {
@@ -24,15 +24,15 @@ public class FlumperSubsystem extends SubsystemBase {
     }
   }
 
-  PIDMotor flumperMotor;
+  PIDMotor floorIntakeMotor;
   double speed;
-  FlumperState state = FlumperState.Stop;
+  FloorIntakeState state = FloorIntakeState.Stop;
   
-  public FlumperSubsystem() {
-    flumperMotor = PIDMotor.makeMotor(Constants.FLUMPER_ID,"Flumper",0,0,0,0,ControlType.kPosition);
+  public FloorIntakeSubsystem() {
+    floorIntakeMotor = PIDMotor.makeMotor(Constants.FLOOR_INTAKE_ID,"FloorIntake",0,0,0,0,ControlType.kPosition);
   }
 
-  public void set(FlumperState state) {
+  public void set(FloorIntakeState state) {
     this.state = state;
     set(state.speed());
   }
@@ -43,24 +43,24 @@ public class FlumperSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    flumperMotor.setPercentOutput(speed);
+    floorIntakeMotor.setPercentOutput(speed);
     printDashboard();
   }
 
   public void printDashboard() {
     SmartDashboard.putString("Shooter State:", state.toString());
-    flumperMotor.putPV();
+    floorIntakeMotor.putPV();
   }
 
   public void disableBrakeMode(){
-    flumperMotor.setIdleCoastMode();
+    floorIntakeMotor.setIdleCoastMode();
   }
 
   public void enableBrakeMode(){
-    flumperMotor.setIdleBrakeMode();
+    floorIntakeMotor.setIdleBrakeMode();
   }
 
   public void zeroEncoders(){
-    flumperMotor.resetEncoder();
+    floorIntakeMotor.resetEncoder();
   }
 }
