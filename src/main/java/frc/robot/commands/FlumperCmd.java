@@ -1,22 +1,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.FlumperSubsystem;
-import frc.robot.subsystems.FlumperSubsystem.FlumperState;
+import frc.robot.subsystems.FloorIntakeSubsystem;
+import frc.robot.subsystems.FloorIntakeSubsystem.FloorIntakeState;
 
-public class FlumperCmd extends Command {
-  private final FlumperSubsystem flumper;
-  FlumperState state;
+public class FloorIntakeCmd extends Command {
+  private final FloorIntakeSubsystem floorIntake;
+  FloorIntakeState state;
 
-  public FlumperCmd(FlumperSubsystem flumper, FlumperState state) {
-    this.flumper = flumper;
+  public FloorIntakeCmd(FloorIntakeSubsystem floorIntake, FloorIntakeState state) {
+    this.floorIntake = floorIntake;
     this.state = state;
-    addRequirements(flumper);
+    addRequirements(floorIntake);
   }
 
   @Override
   public void initialize() {
-    flumper.set(state);
+    floorIntake.set(state);
   }
 
   @Override
@@ -24,7 +24,7 @@ public class FlumperCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    flumper.set(FlumperState.Stop);
+    floorIntake.set(FloorIntakeState.Stop);
   }
 
   @Override

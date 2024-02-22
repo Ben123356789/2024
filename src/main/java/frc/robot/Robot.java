@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
     //   PIDMotor.makeMotor(30, "climber left", 0 , 0, 0, 0, ControlType.kPosition, 1),
     //   PIDMotor.makeMotor(31, "climber right", 0 , 0, 0, 0, ControlType.kPosition, 1),
     //   PIDMotor.makeMotor(42, "elevator", 0 , 0, 0, 0, ControlType.kPosition, 1),
-    //   PIDMotor.makeMotor(32, "flumper", 0 , 0, 0, 0, ControlType.kPosition, 1),
+    //   PIDMotor.makeMotor(32, "floorIntake", 0 , 0, 0, 0, ControlType.kPosition, 1),
     //   PIDMotor.makeMotor(40, "shoulder left", 0 , 0, 0, 0, ControlType.kPosition, 1),
     //   PIDMotor.makeMotor(41, "shoulder right", 0 , 0, 0, 0, ControlType.kPosition, 1),
     //   PIDMotor.makeMotor(43, "wrist", 0 , 0, 0, 0, ControlType.kPosition, 1),

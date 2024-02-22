@@ -11,15 +11,15 @@ public class DigitalIOSubsystem extends SubsystemBase {
     // Timer buttonCooldown;
     ArmSubsystem arm;
     ShooterSubsystem shooter;
-    FlumperSubsystem flumper;
+    FloorIntakeSubsystem floorIntake;
     boolean lastIterationBrakeButtonState, lastIterationZeroEncButtonState = false;
 
-    public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FlumperSubsystem flumper) {
+    public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FloorIntakeSubsystem floorIntake) {
         zeroEncodersButton = new DigitalInput(1);
         brakeModeButton = new DigitalInput(2);
         this.arm = arm;
         this.shooter = shooter;
-        this.flumper = flumper;
+        this.floorIntake = floorIntake;
         // buttonCooldown.start();
     }
 
@@ -34,22 +34,22 @@ public class DigitalIOSubsystem extends SubsystemBase {
             if (brake && !lastIterationBrakeButtonState) {
                 arm.disableBrakeMode();
                 shooter.disableBrakeMode();
-                flumper.disableBrakeMode();
+                floorIntake.disableBrakeMode();
             } else if (!brake && lastIterationBrakeButtonState) {
                 arm.enableBrakeMode();
                 shooter.enableBrakeMode();
-                flumper.enableBrakeMode();
+                floorIntake.enableBrakeMode();
             }
 
             if (encoder && !lastIterationZeroEncButtonState) {
                 arm.zeroEncoders();
                 shooter.zeroEncoders();
-                flumper.zeroEncoders();
+                floorIntake.zeroEncoders();
             }
         }/* else {
             arm.enableBrakeMode();
             shooter.enableBrakeMode();
-            flumper.enableBrakeMode();
+            floorIntake.enableBrakeMode();
         }*/
         lastIterationBrakeButtonState = brake;
         lastIterationZeroEncButtonState = encoder;

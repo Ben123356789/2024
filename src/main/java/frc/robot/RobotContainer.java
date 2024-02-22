@@ -16,7 +16,7 @@ import frc.robot.commands.ClimberLockCmd;
 import frc.robot.commands.ClimberPositionCmd;
 import frc.robot.commands.FloorToShooterCmd;
 import frc.robot.commands.PreloadCmd;
-import frc.robot.commands.FlumperCmd;
+import frc.robot.commands.FloorIntakeCmd;
 import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
@@ -35,14 +35,14 @@ import frc.robot.input.Keybind.Button;
 import frc.robot.subsystems.ClimberSubsystem;
 // import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.subsystems.DigitalIOSubsystem;
-import frc.robot.subsystems.FlumperSubsystem;
+import frc.robot.subsystems.FloorIntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.PigeonSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.ClimberSubsystem.ClimbState;
-import frc.robot.subsystems.FlumperSubsystem.FlumperState;
+import frc.robot.subsystems.FloorIntakeSubsystem.FloorIntakeState;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class RobotContainer {
@@ -66,7 +66,7 @@ public class RobotContainer {
   public LimelightSubsystem limelight1;
   public ClimberSubsystem climber;
   public PowerDistribution pdp;
-  public FlumperSubsystem flumper;
+  public FloorIntakeSubsystem floorIntake;
   public ShooterSubsystem shooter;
   public ArmSubsystem arm;
   public DigitalIOSubsystem digitalio;
@@ -81,11 +81,11 @@ public class RobotContainer {
     // led = new LEDSubsystem(limelight1, pdp);
     limelight1 = new LimelightSubsystem();
     arm = new ArmSubsystem();
-    flumper = new FlumperSubsystem();
+    floorIntake = new FloorIntakeSubsystem();
     shooter = new ShooterSubsystem();
     climber = new ClimberSubsystem();
-    digitalio = new DigitalIOSubsystem(arm, shooter, flumper);
-    // dashboard = new DashboardSubsystem(arm, shooter, climber, flumper);
+    digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake);
+    // dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
 
     drivetrain.seedFieldRelative();
     configureBindings();
@@ -197,7 +197,7 @@ public class RobotContainer {
     // snapToSRKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, 45));
     // snapToNoteKeybind.trigger().whileTrue(new SnapToDegreeCmd(pigeon, limelight1));
 
-    intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
+    intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
     intakeDriverKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
 
     // bind codriver controls to commands
@@ -210,7 +210,7 @@ public class RobotContainer {
 
     recievingKeybind.trigger().and(modifyArm).whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));
     recievingKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
-    recievingKeybind.trigger().and(modifyArm.negate()).whileTrue(new FloorToShooterCmd(flumper, shooter, arm, true));
+    recievingKeybind.trigger().and(modifyArm.negate()).whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
 
     // y button! (main speaker shot)
     shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
@@ -228,7 +228,7 @@ public class RobotContainer {
 
     // non positional
     shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, true));
-    spitTrigger.trigger().and(modifyArm.negate()).whileTrue(new FlumperCmd(flumper, FlumperState.Spit));
+    spitTrigger.trigger().and(modifyArm.negate()).whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit));
     spitTrigger.trigger().and(modifyArm).whileTrue(new ShootCmd(arm, shooter, false));
 
     climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
