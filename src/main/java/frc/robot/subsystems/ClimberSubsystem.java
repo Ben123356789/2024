@@ -110,4 +110,19 @@ public class ClimberSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Left Climber Position", leftMotor.getPosition());
         SmartDashboard.putNumber("Right Climber Position", rightMotor.getPosition());
     }
+
+    public void disableBrakeMode(){
+      leftMotor.setIdleCoastMode();
+      rightMotor.setIdleCoastMode();
+    }
+  
+    public void enableBrakeMode(){
+      leftMotor.setIdleBrakeMode();
+      rightMotor.setIdleBrakeMode();
+    }
+  
+    public void zeroEncoders(){
+      leftMotor.resetEncoder();
+      rightMotor.resetEncoder();
+    }
 }
