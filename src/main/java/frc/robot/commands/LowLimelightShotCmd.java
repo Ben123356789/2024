@@ -27,15 +27,15 @@ public class LowLimelightShotCmd extends Command {
     boolean elevatorSetCheck;
 
     double[][] wristPosition = {
-            { 8.3, 24 },
-            { 17, 27 },
-            { 33, 36.2 }
+            { 8.3, 22 },
+            { 17, 28.5 },
+            { 33, 37 }
     };
 
     double[][] shooterSpeed = {
             { 8.3, 10000 },
-            { 17, 10000 },
-            { 33, 10000 }     
+            { 17, 9000 },
+            { 33, 8000 }     
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;

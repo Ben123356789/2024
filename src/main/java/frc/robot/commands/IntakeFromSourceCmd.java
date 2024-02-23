@@ -31,7 +31,8 @@ public class IntakeFromSourceCmd extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    //shooter.shooterState = ShooterState.Idle;
+    shooter.shooterState = ShooterState.Idle;
+    shooter.spinDownShooters();
     // shooter.shooterV = 0;
   }
 

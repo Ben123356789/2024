@@ -5,6 +5,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
@@ -119,5 +120,9 @@ public class Telemetry {
 
     public double getVelocityY(){
         return velocities.getY();
+    }
+
+    public Rotation2d getAngle() {
+        return m_lastPose.getRotation();
     }
 }

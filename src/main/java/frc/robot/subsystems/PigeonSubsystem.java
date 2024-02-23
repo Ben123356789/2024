@@ -48,8 +48,7 @@ public class PigeonSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Pigeon Current Temp [C]", temp);
   }
 
-  // public double getRotationAngleFromZero(){
-    // broken
-    // return pigeon.getYaw().getValueAsDouble()-360*((int)pigeon.getYaw().getValueAsDouble()/360);
-  // }
+  public double getRotationAngleFromZero(){
+    return pigeon.getYaw().getValueAsDouble()%360;
+  }
 }

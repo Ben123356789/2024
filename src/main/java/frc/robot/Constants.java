@@ -54,15 +54,15 @@ public final class Constants {
 
     // Intake
     public static final double SHOULDER_INTAKE_POSITION = 0;
-    public static final double WRIST_INTAKE_POSITION = 64.0;
+    public static final double WRIST_INTAKE_POSITION = 64;
     public static final double WRIST_INTAKE_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_INTAKE_POSITION = 0;
     public static final double ELEVATOR_INTAKE_MAXV = ELEVATOR_DEFAULT_MAXV;
 
 
     // Source
-    public static final double SHOULDER_SOURCE_POSITION = -90;
-    public static final double WRIST_SOURCE_POSITION = 60;
+    public static final double SHOULDER_SOURCE_POSITION = -100;
+    public static final double WRIST_SOURCE_POSITION = 70;
     public static final double WRIST_SOURCE_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_SOURCE_POSITION = 0;
     public static final double ELEVATOR_SOURCE_MAXV = ELEVATOR_DEFAULT_MAXV;
@@ -86,12 +86,12 @@ public final class Constants {
 
 
     // Amp - Shooting Upwards
-    public static final double SHOULDER_AMP_POSITION = -35;
+    public static final double SHOULDER_AMP_POSITION = -40;
     public static final double WRIST_AMP_POSITION = 100;
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_AMP_POSITION = -10;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
-    public static final double AMP_SHOOT_SPEED = 4000;
+    public static final double AMP_SHOOT_SPEED = 3000;
 
 
     // Amp2 - Shooting out the back
