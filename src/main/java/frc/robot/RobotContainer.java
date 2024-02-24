@@ -288,12 +288,12 @@ public class RobotContainer {
 
         // bind codriver controls to commands
         subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
-        subwooferKeybind.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED));
+        subwooferKeybind.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED, false));
 
         altScoringKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp2));
         altScoringKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
         altScoringKeybind.trigger().and(modifyArm.negate())
-                .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED));
+                .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, true));
 
         recievingKeybind.trigger().and(modifyArm)
                 .whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));
@@ -309,11 +309,11 @@ public class RobotContainer {
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
                 .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumLow));
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
-                .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_LOW_SPEED));
+                .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_LOW_SPEED, false));
         shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
                 .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumHigh));
         shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
-                .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_HIGH_SPEED));
+                .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_HIGH_SPEED, false));
 
         // non positional
         shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, true));
