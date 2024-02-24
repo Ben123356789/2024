@@ -67,7 +67,6 @@ public class RobotContainer {
             .withDeadband(MaxSpeed * 0.1)//.withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                      // driving in open loop
-    private final SlewRateLimiter snapSlewLimiter = new SlewRateLimiter(MaxAngularRate*50);
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -190,10 +189,6 @@ public class RobotContainer {
         // bind driver controls to commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
-                    Rotation2d foo = logger.getAngle();
-                    SmartDashboard.putNumber("logger.getAngle()", foo.getRadians());
-
-                    snapSlewLimiter.calculate(foo.getRadians());
                     double rate;
                     if (limelight1.limelightRotation) {
                         rate = -0.026 * MaxAngularRate * limelight1.limelightRotationMagnitude;
@@ -211,31 +206,27 @@ public class RobotContainer {
         
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                    .withTargetDirection(Rotation2d.fromDegrees(0))
-                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
-                                                                                    // Y (forward)
-                            .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                .withTargetDirection(Rotation2d.fromDegrees(0))
+                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo90Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                    .withTargetDirection(Rotation2d.fromDegrees(90))
-                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
-                                                                                    // Y (forward)
-                            .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                .withTargetDirection(Rotation2d.fromDegrees(90))
+                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo180Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                    .withTargetDirection(Rotation2d.fromDegrees(180))
-                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
-                                                                                    // Y (forward)
-                            .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                .withTargetDirection(Rotation2d.fromDegrees(180))
+                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo270Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                    .withTargetDirection(Rotation2d.fromDegrees(-90))
-                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
-                                                                                    // Y (forward)
-                            .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                .withTargetDirection(Rotation2d.fromDegrees(-90))
+                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
 
 
