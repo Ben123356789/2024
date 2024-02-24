@@ -23,7 +23,7 @@ public final class Constants {
     public static final int SHOOTER_BOTTOM_ID = 47;
     public static final int INTAKE_TOP_ID = 44;
     public static final int INTAKE_BOTTOM_ID = 45;
-    public static final double SHOOTER_ALLOWED_X_OFFSET = 4;
+    public static final double SHOOTER_ALLOWED_X_OFFSET = 6;
     
     // Shoulder motor IDs and max
     public static final int SHOULDER_LEFT_MOTOR_ID = 40;
@@ -86,12 +86,12 @@ public final class Constants {
 
 
     // Amp - Shooting Upwards
-    public static final double SHOULDER_AMP_POSITION = -40;
-    public static final double WRIST_AMP_POSITION = 100;
+    public static final double SHOULDER_AMP_POSITION = -48;
+    public static final double WRIST_AMP_POSITION = 112;
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
-    public static final double ELEVATOR_AMP_POSITION = -10;
+    public static final double ELEVATOR_AMP_POSITION = -13;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
-    public static final double AMP_SHOOT_SPEED = 3000;
+    public static final double AMP_SHOOT_SPEED = 4500;
 
 
     // Amp2 - Shooting out the back

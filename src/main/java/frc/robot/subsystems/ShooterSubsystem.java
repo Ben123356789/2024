@@ -73,6 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
     Idle,
     SpinFixed,
     SpinLimelight,
+    SpinAmp;
   }
 
   public void spinDownShooters(){
@@ -94,6 +95,9 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterBottom.setTarget(shooterV);
         shooterTop.setTarget(shooterV);
       break;
+      case SpinAmp:
+        shooterTop.setTarget(shooterV);
+        shooterBottom.setPercentOutput(0);
       default:
         break;
     }

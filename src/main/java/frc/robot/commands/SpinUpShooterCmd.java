@@ -7,16 +7,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class SpinUpShooterCmd extends Command {
   private final ShooterSubsystem shooter;
   public double speed;
+  public boolean isAmp;
 
-  public SpinUpShooterCmd(ShooterSubsystem shooter, double speed) {
+  public SpinUpShooterCmd(ShooterSubsystem shooter, double speed, boolean isAmp) {
     this.shooter = shooter;
     this.speed = speed;
+    this.isAmp = isAmp;
     addRequirements(shooter);
   }
 
   @Override
   public void initialize() {
-    shooter.shooterState = ShooterState.SpinFixed;
+    if(isAmp){
+      shooter.shooterState = ShooterState.SpinAmp;
+    } else{
+      shooter.shooterState = ShooterState.SpinFixed;
+    }
     shooter.shooterV = speed;
   }
 
