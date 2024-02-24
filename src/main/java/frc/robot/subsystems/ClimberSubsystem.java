@@ -13,21 +13,21 @@ public class ClimberSubsystem extends SubsystemBase {
 
     static final int LEFT_SERVO_CHANNEL = 1;
     static final int RIGHT_SERVO_CHANNEL = 0;
-    static final double LEFT_SERVO_ENGAGE_POS = 0.5;
-    static final double LEFT_SERVO_RELEASE_POS = 0.42;
-    static final double RIGHT_SERVO_ENGAGE_POS = 0.38;
-    static final double RIGHT_SERVO_RELEASE_POS = 0.5;
+    public static final double LEFT_SERVO_ENGAGE_POS = 0.5;
+    public static final double LEFT_SERVO_RELEASE_POS = 0.42;
+    public static final double RIGHT_SERVO_ENGAGE_POS = 0.38;
+    public static final double RIGHT_SERVO_RELEASE_POS = 0.5;
     static final double ENGAGE_BACKING_DISTANCE = 3.0;
 
     public double target = 0.0;
     boolean ratchetEngaged = false;
 
-    PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0.02, 0, 0, 0,
+    public PIDMotor leftMotor = PIDMotor.makeMotor(Constants.CLIMBER_LEFT_ID, "Climber Left", 0.02, 0, 0, 0,
             ControlType.kPosition);
-    PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0.02, 0, 0, 0,
+    public PIDMotor rightMotor = PIDMotor.makeMotor(Constants.CLIMBER_RIGHT_ID, "Climber Right", 0.02, 0, 0, 0,
             ControlType.kPosition);
-    Servo leftRatchetServo = new Servo(LEFT_SERVO_CHANNEL);
-    Servo rightRatchetServo = new Servo(RIGHT_SERVO_CHANNEL);
+    public Servo leftRatchetServo = new Servo(LEFT_SERVO_CHANNEL);
+    public Servo rightRatchetServo = new Servo(RIGHT_SERVO_CHANNEL);
 
     public enum ClimbState {
         Max, Min, Mid;

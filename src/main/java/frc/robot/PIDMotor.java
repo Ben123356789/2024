@@ -106,8 +106,20 @@ public class PIDMotor {
      */
     private void init() {
         if (!initialized) {
-            //motor.restoreFactoryDefaults();
-            //resetAll();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            motor.restoreFactoryDefaults();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            resetAll();
             // putPIDF();
             updatePIDF();
             initialized = true;
@@ -194,8 +206,20 @@ public class PIDMotor {
      * Sends the PIDF values to the motor controller. Call when PIDF values are changed.
      */
     public void updatePIDF() {
+        try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         controller.setP(p);
         controller.setI(i);
+        try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         controller.setD(d);
         controller.setFF(f);
     }
@@ -223,7 +247,19 @@ public class PIDMotor {
      */
     public void resetAll() {
         resetEncoder();
+        try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         resetIAccum();
+        try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     }
 
     // /**

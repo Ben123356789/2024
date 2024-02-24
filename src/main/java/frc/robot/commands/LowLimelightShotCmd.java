@@ -55,7 +55,7 @@ public class LowLimelightShotCmd extends Command {
         // System.out.println("init");
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
-        limelight.setPipeline(1); // TODO: change to 0
+        limelight.setPipeline(0);
         okToShoot = false;
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }

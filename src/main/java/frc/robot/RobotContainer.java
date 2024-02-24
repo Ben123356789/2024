@@ -72,7 +72,9 @@ public class RobotContainer {
 
     public PigeonSubsystem pigeon;
     public LEDSubsystem led;
-    public LimelightSubsystem limelight1;
+    public LimelightSubsystem backLimelight;
+    public LimelightSubsystem leftLimelight;
+    public LimelightSubsystem rightLimelight;
     public ClimberSubsystem climber;
     public PowerDistribution pdp;
     public FloorIntakeSubsystem floorIntake;
@@ -80,7 +82,7 @@ public class RobotContainer {
     public ArmSubsystem arm;
     public DigitalIOSubsystem digitalio;
     // public DashboardSubsystem dashboard;
-    private final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
+    public final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
     private final CommandXboxController codriverController = new CommandXboxController(
             Constants.CODRIVER_CONTROLLER_PORT);
 
@@ -88,7 +90,9 @@ public class RobotContainer {
     pigeon = new PigeonSubsystem();
     // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
     // led = new LEDSubsystem(limelight1, pdp);
-    limelight1 = new LimelightSubsystem();
+    backLimelight = new LimelightSubsystem("limelight-back");
+    leftLimelight = new LimelightSubsystem("limelight-left");
+    rightLimelight = new LimelightSubsystem("limelight-right");
     arm = new ArmSubsystem();
     floorIntake = new FloorIntakeSubsystem();
     shooter = new ShooterSubsystem();
@@ -190,18 +194,18 @@ public class RobotContainer {
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
                     double rate;
-                    if (limelight1.limelightRotation) {
-                        rate = -0.026 * MaxAngularRate * limelight1.limelightRotationMagnitude;
+                    if (backLimelight.limelightRotation) {
+                        rate = -0.026 * MaxAngularRate * backLimelight.limelightRotationMagnitude;
                     } else if (pigeon.rotateToDegree) {
                         rate = MaxAngularRate * pigeon.magnitudeToAngle;
                     } else {
                         rate = -driverController.getRightX() * MaxAngularRate;
                     }
                     return drive
-                            .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
-                                                                                    // Y (forward)
-                            .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                            .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
+                        .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
+                                                                                // Y (forward)
+                        .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
                 }));
         
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
@@ -273,7 +277,7 @@ public class RobotContainer {
 
         // y button! (main speaker shot)
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
-                .whileTrue(new LowLimelightShotCmd(arm, shooter, limelight1, logger));
+                .whileTrue(new LowLimelightShotCmd(arm, shooter, backLimelight, logger));
         // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm.negate())
         // .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)

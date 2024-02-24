@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ClimberSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -34,7 +35,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+    if (!this.isTest()) {
+      CommandScheduler.getInstance().run();
+    }
     // SmartDashboard.putNumber("Current memory (MB)", Runtime.getRuntime().totalMemory() / (1024.0 * 1024.0));
     // SmartDashboard.putNumber("Maximum memory (MB)", Runtime.getRuntime().maxMemory() / (1024.0 * 1024.0));
   }
@@ -92,6 +95,37 @@ public class Robot extends TimedRobot {
   double stickY;
   @Override
   public void testPeriodic() {
+
+    if (m_robotContainer.driverController.getHID().getPOV() == 0) {
+      m_robotContainer.climber.leftMotor.setPercentOutput(0.1);
+    } else if (m_robotContainer.driverController.getHID().getPOV() == 180) {
+      m_robotContainer.climber.leftMotor.setPercentOutput(-0.1);
+    } else {
+      m_robotContainer.climber.leftMotor.setPercentOutput(0);
+    }
+
+    if (m_robotContainer.driverController.getHID().getPOV() == 270) {
+      m_robotContainer.climber.leftRatchetServo.setPosition(ClimberSubsystem.LEFT_SERVO_ENGAGE_POS);
+    }
+    if (m_robotContainer.driverController.getHID().getPOV() == 90) {
+      m_robotContainer.climber.leftRatchetServo.setPosition(ClimberSubsystem.LEFT_SERVO_RELEASE_POS);
+    }
+    
+    if (m_robotContainer.driverController.getHID().getYButton()) {
+      m_robotContainer.climber.rightMotor.setPercentOutput(-0.1);
+    } else if (m_robotContainer.driverController.getHID().getAButton()) {
+      m_robotContainer.climber.rightMotor.setPercentOutput(0.1);
+    } else {
+      m_robotContainer.climber.rightMotor.setPercentOutput(0);
+    }
+
+    if (m_robotContainer.driverController.getHID().getXButton()) {
+      m_robotContainer.climber.rightRatchetServo.setPosition(ClimberSubsystem.RIGHT_SERVO_ENGAGE_POS);
+    }
+    if (m_robotContainer.driverController.getHID().getBButton()) {
+      m_robotContainer.climber.rightRatchetServo.setPosition(ClimberSubsystem.RIGHT_SERVO_RELEASE_POS);
+    }
+
     
     // if(testController.getRightBumperPressed() && currIndex < motorArray.length-1){
     //   motorArray[currIndex].set(0);
