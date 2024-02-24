@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     if (!this.isTest()) {
       CommandScheduler.getInstance().run();
+      m_robotContainer.logger.putPose();
     }
     // SmartDashboard.putNumber("Current memory (MB)", Runtime.getRuntime().totalMemory() / (1024.0 * 1024.0));
     // SmartDashboard.putNumber("Maximum memory (MB)", Runtime.getRuntime().maxMemory() / (1024.0 * 1024.0));

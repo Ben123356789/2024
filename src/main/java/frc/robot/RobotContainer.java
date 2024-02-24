@@ -3,6 +3,8 @@ package frc.robot;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -64,11 +67,11 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final SwerveRequest.FieldCentricFacingAngle look = new SwerveRequest.FieldCentricFacingAngle()
-            .withDeadband(MaxSpeed * 0.1)//.withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.1)// .withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                      // driving in open loop
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    final Telemetry logger = new Telemetry(MaxSpeed);
 
     public PigeonSubsystem pigeon;
     public LEDSubsystem led;
@@ -86,24 +89,32 @@ public class RobotContainer {
     private final CommandXboxController codriverController = new CommandXboxController(
             Constants.CODRIVER_CONTROLLER_PORT);
 
-  public RobotContainer() {
-    pigeon = new PigeonSubsystem();
-    // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
-    // led = new LEDSubsystem(limelight1, pdp);
-    backLimelight = new LimelightSubsystem("limelight-back");
-    leftLimelight = new LimelightSubsystem("limelight-left");
-    rightLimelight = new LimelightSubsystem("limelight-right");
-    arm = new ArmSubsystem();
-    floorIntake = new FloorIntakeSubsystem();
-    shooter = new ShooterSubsystem();
-    climber = new ClimberSubsystem();
-    digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
-    // dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
+    private final SendableChooser<Command> autoChooser;
+
+    public RobotContainer() {
+        pigeon = new PigeonSubsystem();
+        // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
+        // led = new LEDSubsystem(limelight1, pdp);
+        backLimelight = new LimelightSubsystem("limelight-back");
+        leftLimelight = new LimelightSubsystem("limelight-left");
+        rightLimelight = new LimelightSubsystem("limelight-right");
+        arm = new ArmSubsystem();
+        floorIntake = new FloorIntakeSubsystem();
+        shooter = new ShooterSubsystem();
+        climber = new ClimberSubsystem();
+        digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
+        // dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
 
         look.HeadingController = new PhoenixPIDController(3.699, 0.00, 0.2);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
         configureBindings();
+        
+        autoChooser = AutoBuilder.buildAutoChooser();
+
+        // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /** Right Trigger */
@@ -123,6 +134,7 @@ public class RobotContainer {
 
     /** B Button */
     Keybind snapToNoteKeybind;
+    double angleFromNote = 0;
 
     // codriver keybinds
     /** Dpad Up */
@@ -172,11 +184,14 @@ public class RobotContainer {
         snapTo90Keybind = new Keybind(driverController.getHID(), Button.X);
         snapTo180Keybind = new Keybind(driverController.getHID(), Button.A);
         snapTo270Keybind = new Keybind(driverController.getHID(), Button.B);
-        //snapToNoteKeybind = new Keybind(driverController.getHID(), Button.B);
+
+        // snapToNoteKeybind = new Keybind(driverController.getHID(),
+        // Button.RightBumper);
+
         resetFieldCentricKeybind = new Keybind(driverController.getHID(), Button.LeftBumper);
         intakeDriverKeybind = new AnalogTrigger(driverController.getHID(), Axis.RT, 0.5);
         secretShoot = new AnalogTrigger(driverController.getHID(), Axis.LT, 0.5);
-        //secretAim = new Keybind(driverController.getHID(), Button.RightBumper);
+        // secretAim = new Keybind(driverController.getHID(), Button.RightBumper);
         dubiousSpit = new Keybind(driverController.getHID(), Button.RightBumper);
 
         // initialize keybinds - codriver controller
@@ -202,37 +217,47 @@ public class RobotContainer {
                         rate = -driverController.getRightX() * MaxAngularRate;
                     }
                     return drive
-                        .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
-                                                                                // Y (forward)
-                        .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
+                            .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
+                                                                                    // Y (forward)
+                            .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                            .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
                 }));
-        
+
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                .withTargetDirection(Rotation2d.fromDegrees(0))
-                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                    .withTargetDirection(Rotation2d.fromDegrees(0))
+                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo90Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                .withTargetDirection(Rotation2d.fromDegrees(90))
-                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                    .withTargetDirection(Rotation2d.fromDegrees(90))
+                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo180Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                .withTargetDirection(Rotation2d.fromDegrees(180))
-                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                    .withTargetDirection(Rotation2d.fromDegrees(180))
+                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo270Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
-                .withTargetDirection(Rotation2d.fromDegrees(-90))
-                .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
+                    .withTargetDirection(Rotation2d.fromDegrees(-90))
+                    .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
 
+        // snapToNoteKeybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
+
+        // if(ang)
+        // return look
+        // .withTargetDirection(Rotation2d.fromDegrees(angleFromNote))
+        // .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with
+        // negative Y (forward)
+        // .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with
+        // negative X (left)
+        // }));
 
         // not sure how brake will be toggled...
         driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -254,7 +279,8 @@ public class RobotContainer {
         // limelight1));
 
         // secretShoot.trigger().whileTrue(new ShootCmd(arm, shooter, true));
-        // secretAim.trigger().whileTrue(new LowLimelightShotCmd(arm, shooter, limelight1, logger));
+        // secretAim.trigger().whileTrue(new LowLimelightShotCmd(arm, shooter,
+        // limelight1, logger));
         dubiousSpit.trigger().whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit));
 
         intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
@@ -302,6 +328,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return autoChooser.getSelected();
     }
+
 }

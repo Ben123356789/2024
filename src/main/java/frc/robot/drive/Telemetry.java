@@ -122,6 +122,12 @@ public class Telemetry {
         return velocities.getY();
     }
 
+    public void putPose() {
+        SmartDashboard.putNumber("pose X", m_lastPose.getX());
+        SmartDashboard.putNumber("pose Y", m_lastPose.getY());
+        SmartDashboard.putNumber("pose Angle", m_lastPose.getRotation().getDegrees());
+    }
+
     public Rotation2d getAngle() {
         return m_lastPose.getRotation();
     }

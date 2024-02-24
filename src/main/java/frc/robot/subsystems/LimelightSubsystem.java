@@ -6,6 +6,24 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 
+// a: (0.83, -0.95)
+// b: (-0.02, 0.4)
+// SLOP; 1.35 / -0.85
+
+// y = mx + b
+// 0.4 = (1.35 / -0.85)(-0.02) + b
+// 0.4 - b = (1.35 / -0.85)(-0.02)
+// -b = (1.35 / -0.85)(-0.02) - 0.4
+// b = 0.4 - (1.35 / -0.85)(-0.02)
+
+// y = mx + b
+// b = y - mx
+// b = -0.95 - (1.35 / -0.85) * (0.83)
+
+
+// m = 1.35 / -0.85
+// b = 0.3682352941176472
+
 public class LimelightSubsystem extends SubsystemBase implements Runnable {
   public LimelightHelpers.LimelightResults llresults;
   public boolean limelightRotation = false;
@@ -91,20 +109,20 @@ public class LimelightSubsystem extends SubsystemBase implements Runnable {
   public void printDashboard() {
     synchronized (this) {
 
-      SmartDashboard.putNumber(dashboardKey() + " # of Results", resultLength());
-      for (int i = 0; i < resultLength(); i++) {
-        SmartDashboard.putString(dashboardKey() + " #" + (i + 1) + " Object Type",
-            llresults.targetingResults.targets_Detector[i].className);
-        SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " Confidence",
-            llresults.targetingResults.targets_Detector[i].confidence);
-        SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " X-Offset",
-            llresults.targetingResults.targets_Detector[i].tx);
-        SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " Y-Offset",
-            llresults.targetingResults.targets_Detector[i].ty);
-        SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " Area %",
-            llresults.targetingResults.targets_Detector[i].ta);
+      // SmartDashboard.putNumber(dashboardKey() + " # of Results", resultLength());
+      // for (int i = 0; i < resultLength(); i++) {
+      //   SmartDashboard.putString(dashboardKey() + " #" + (i + 1) + " Object Type",
+      //       llresults.targetingResults.targets_Detector[i].className);
+      //   SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " Confidence",
+      //       llresults.targetingResults.targets_Detector[i].confidence);
+      //   SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " X-Offset",
+      //       llresults.targetingResults.targets_Detector[i].tx);
+      //   SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " Y-Offset",
+      //       llresults.targetingResults.targets_Detector[i].ty);
+      //   SmartDashboard.putNumber(dashboardKey() + " #" + (i + 1) + " Area %",
+      //       llresults.targetingResults.targets_Detector[i].ta);
 
-      }
+      // }
 
       tag = getDataForId(7);
       if (tag == null) {
@@ -131,7 +149,7 @@ public class LimelightSubsystem extends SubsystemBase implements Runnable {
       synchronized (this) {
         llresults = LimelightHelpers.getLatestResults(name);
       }
-      printDashboard();
+      // printDashboard();
       try {
         Thread.sleep(10);
       } catch (InterruptedException iex) {

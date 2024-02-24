@@ -91,7 +91,7 @@ public final class Constants {
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_AMP_POSITION = -10;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
-    public static final double AMP_SHOOT_SPEED = 3000;
+    public static final double AMP_SHOOT_SPEED = 2500;
 
 
     // Amp2 - Shooting out the back
