@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.394093728358396,
-        "y": 5.55472336015897
+        "x": 1.732620431158025,
+        "y": 4.330063977896326
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.025278477907382,
-        "y": 2.15172441740895
+        "x": 4.002117908931189,
+        "y": 1.9017612815876748
       },
       "prevControl": {
-        "x": 0.5053379907329615,
-        "y": 0.6080960310068779
+        "x": 2.696378505782861,
+        "y": 2.7264044435913335
+      },
+      "nextControl": {
+        "x": 5.307857312079516,
+        "y": 1.0771181195840158
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.639119442730185,
+        "y": 0.7891301501029603
+      },
+      "prevControl": {
+        "x": 6.198130194996665,
+        "y": 0.9583505646302661
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "PreNotePickup"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -176.6890584853885,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
