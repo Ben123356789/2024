@@ -177,6 +177,8 @@ public class RobotContainer {
     /** Right Bumper */
     Trigger fixedArm;
 
+    Keybind spinUpTrap;
+
     Keybind dubiousSpit;
 
     AnalogTrigger secretShoot;
@@ -212,6 +214,7 @@ public class RobotContainer {
         subwooferKeybind = new Keybind(codriverController.getHID(), Button.B);
         shootTrigger = new AnalogTrigger(codriverController.getHID(), Axis.RT, 0.5);
         spitTrigger = new AnalogTrigger(codriverController.getHID(), Axis.LT, 0.5);
+        spinUpTrap = new Keybind(codriverController.getHID(), Button.Start);
         // bind driver controls to commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
@@ -321,6 +324,8 @@ public class RobotContainer {
                 .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumHigh));
         shootPositionKeybind.trigger().and(modifyArm).and(fixedArm)
                 .whileTrue(new SpinUpShooterCmd(shooter, Constants.PODIUM_HIGH_SPEED, false));
+
+        spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.TRAP_SHOOT_SPEED, true));
 
         // non positional
         shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, true));

@@ -103,11 +103,7 @@ public final class Constants {
 
 
     // Trap
-    public static final double SHOULDER_TRAP_POSITION = -110.0;
-    public static final double WRIST_TRAP_POSITION = 50.0;
-    public static final double WRIST_TRAP_MAXV = WRIST_DEFAULT_MAXV;
-    public static final double ELEVATOR_TRAP_POSITION = -80.0;
-    public static final double ELEVATOR_TRAP_MAXV = ELEVATOR_DEFAULT_MAXV;
+    public static final double TRAP_SHOOT_SPEED = 4500;
 
 
     // Subwoofer

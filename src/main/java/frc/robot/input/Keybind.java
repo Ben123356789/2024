@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Keybind implements BooleanSupplier {
     public enum Button {
-        A, B, X, Y, Start,
+        A, B, X, Y, Start, Back,
         LeftBumper, RightBumper,
         LeftStick, RightStick;
 
@@ -23,6 +23,7 @@ public class Keybind implements BooleanSupplier {
                 case LeftStick: return controller::getLeftStickButton;
                 case RightStick: return controller::getRightStickButton;
                 case Start: return controller::getStartButton;
+                case Back: return controller::getBackButton;
                 default: return () -> false;
             }
         }
