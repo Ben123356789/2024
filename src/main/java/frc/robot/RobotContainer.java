@@ -4,6 +4,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
@@ -108,6 +109,11 @@ public class RobotContainer {
         look.HeadingController = new PhoenixPIDController(3.699, 0.00, 0.2);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
+
+        NamedCommands.registerCommand("limelightShot", new LowLimelightShotCmd(arm, shooter, backLimelight, logger));
+        NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
+        NamedCommands.registerCommand("shoot", new ShootCmd(arm, shooter, true));
+
         configureBindings();
         
         autoChooser = AutoBuilder.buildAutoChooser();
