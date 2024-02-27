@@ -113,6 +113,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("limelightShot", new LowLimelightShotCmd(arm, shooter, backLimelight, logger));
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("shoot", new ShootCmd(arm, shooter, true));
+        NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
 
         configureBindings();
         
