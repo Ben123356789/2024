@@ -98,9 +98,9 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
 
     if (m_robotContainer.driverController.getHID().getPOV() == 0) {
-      m_robotContainer.climber.leftMotor.setPercentOutput(0.1);
+      m_robotContainer.climber.leftMotor.setPercentOutput(0.3);
     } else if (m_robotContainer.driverController.getHID().getPOV() == 180) {
-      m_robotContainer.climber.leftMotor.setPercentOutput(-0.1);
+      m_robotContainer.climber.leftMotor.setPercentOutput(-0.9);
     } else {
       m_robotContainer.climber.leftMotor.setPercentOutput(0);
     }
@@ -113,9 +113,10 @@ public class Robot extends TimedRobot {
     }
     
     if (m_robotContainer.driverController.getHID().getYButton()) {
-      m_robotContainer.climber.rightMotor.setPercentOutput(-0.1);
+      m_robotContainer.climber.rightMotor.setPercentOutput(-0.3);
     } else if (m_robotContainer.driverController.getHID().getAButton()) {
-      m_robotContainer.climber.rightMotor.setPercentOutput(0.1);
+      m_robotContainer.climber.rightMotor.setPercentOutput(0.9);
+    
     } else {
       m_robotContainer.climber.rightMotor.setPercentOutput(0);
     }

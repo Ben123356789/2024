@@ -145,7 +145,7 @@ public final class Constants {
     // Climber Mid
     public static final double SHOULDER_CLIMBER_MID_POSITION = -114;
     public static final double WRIST_CLIMBER_MID_POSITION = 145;
-    public static final double WRIST_CLIMBER_MID_MAXV = 75;
+    public static final double WRIST_CLIMBER_MID_MAXV = 40;
     public static final double ELEVATOR_CLIMBER_MID_POSITION = 0;
     public static final double ELEVATOR_CLIMBER_MID_MAXV = ELEVATOR_DEFAULT_MAXV;
 
@@ -157,7 +157,7 @@ public final class Constants {
     public static final double ELEVATOR_CLIMBER_LOW_MAXV = ELEVATOR_DEFAULT_MAXV;
 
     // Climber Heights
-    public static final double CLIMBER_HIGH_HEIGHT = 340;
+    public static final double CLIMBER_HIGH_HEIGHT = 400;
     public static final double CLIMBER_MID_HEIGHT = 110;
     public static final double CLIMBER_LOW_HEIGHT = 0;
 
