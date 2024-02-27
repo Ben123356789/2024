@@ -89,6 +89,7 @@ public class PIDMotor {
             double maxV, double maxA) {
         PIDMotor motor = new PIDMotor(deviceID, name, p, i, d, f, type, maxV, maxA);
         motor.init();
+        System.out.println("Finished initializing " + name);
         return motor;
     }
 
