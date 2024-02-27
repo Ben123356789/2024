@@ -3,8 +3,9 @@
   "robotLength": 0.9144,
   "holonomicMode": true,
   "pathFolders": [
-    "HardAuto",
-    "EzAuto"
+    "Daryll",
+    "Risky",
+    "Safe"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
