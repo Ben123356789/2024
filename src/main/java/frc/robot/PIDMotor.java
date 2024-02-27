@@ -33,7 +33,7 @@ public class PIDMotor {
     TrapezoidProfile.State motorCurrentState;
     TrapezoidProfile.State motorTargetState;
     Timer motorTimer;
-    private final int sleepTime = 50;
+    private final int sleepTime = 20;
 
     private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double maxV, double maxA) {
         this.name = name;
