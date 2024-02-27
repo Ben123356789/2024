@@ -106,7 +106,7 @@ public class RobotContainer {
         digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
         // dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
 
-        look.HeadingController = new PhoenixPIDController(3.699, 0.00, 0.2);
+        look.HeadingController = new PhoenixPIDController(3.699, 0.00, 0.);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
 
