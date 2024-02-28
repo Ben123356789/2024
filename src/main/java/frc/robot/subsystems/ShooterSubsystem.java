@@ -166,6 +166,10 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTop.putPV();
   }
 
+  public boolean isShooterAtVelocity(){
+    return shooterTop.atVelocity(200) && shooterBottom.atVelocity(200);
+  }
+
 
   public void disableBrakeMode() {
     //intakeBottom.setIdleCoastMode();

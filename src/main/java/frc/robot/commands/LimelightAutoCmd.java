@@ -80,7 +80,7 @@ public class LimelightAutoCmd extends Command {
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(tag.ty);
             shooter.shooterState = ShooterState.SpinLimelight;
-            if(ExtraMath.within(tag.tx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET) && shooterTimer.get() == 0){
+            if(ExtraMath.within(tag.tx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET) && shooterTimer.get() == 0 && shooter.isShooterAtVelocity()){
                 limelight.limelightRotation = false;
 
                 shooterTimer.restart();
