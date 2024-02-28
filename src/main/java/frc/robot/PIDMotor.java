@@ -33,6 +33,7 @@ public class PIDMotor {
     TrapezoidProfile.State motorCurrentState;
     TrapezoidProfile.State motorTargetState;
     Timer motorTimer;
+    private final int sleepTime = 20;
 
     private PIDMotor(int deviceID, String name, double p, double i, double d, double f, ControlType type, double maxV, double maxA) {
         this.name = name;
@@ -107,25 +108,26 @@ public class PIDMotor {
      */
     private void init() {
         if (!initialized) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+
             motor.restoreFactoryDefaults();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            sleep();
             resetAll();
+            sleep();
             // putPIDF();
             updatePIDF();
+            sleep();
             initialized = true;
         }
         motor.setIdleMode(IdleMode.kBrake);
+    }
+
+    public void sleep() {
+                    try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     }
 
     public void setIdleCoastMode(){
@@ -207,22 +209,14 @@ public class PIDMotor {
      * Sends the PIDF values to the motor controller. Call when PIDF values are changed.
      */
     public void updatePIDF() {
-        try {
-                Thread.sleep(150);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         controller.setP(p);
+        sleep();
         controller.setI(i);
-        try {
-                Thread.sleep(150);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        sleep();
         controller.setD(d);
+        sleep();
         controller.setFF(f);
+        sleep();
     }
 
     /**
@@ -248,19 +242,9 @@ public class PIDMotor {
      */
     public void resetAll() {
         resetEncoder();
-        try {
-                Thread.sleep(150);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        sleep();
         resetIAccum();
-        try {
-                Thread.sleep(150);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        sleep();
     }
 
     // /**
