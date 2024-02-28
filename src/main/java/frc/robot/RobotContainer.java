@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
+import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -32,6 +33,7 @@ import frc.robot.commands.SubwooferAutoCmd;
 import frc.robot.commands.SnapToDegreeCmd;
 import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.commands.IntakeFromSourceCmd;
+import frc.robot.commands.LimelightAutoCmd;
 import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.drive.TunerConstants;
@@ -111,6 +113,7 @@ public class RobotContainer {
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
 
+        NamedCommands.registerCommand("limelight", new LimelightAutoCmd(arm, shooter, backLimelight, logger));
         NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));        
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
