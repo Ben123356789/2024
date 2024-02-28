@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2,
-      "y": 2
+      "x": 1.3151581858719277,
+      "y": 5.572630034148957
     },
     "rotation": 0
   },
@@ -51,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "limlight"
+            "name": "limelight"
           }
         },
         {
@@ -88,7 +88,7 @@
         {
           "type": "named",
           "data": {
-            "name": "limlight"
+            "name": "limelight"
           }
         },
         {
@@ -125,7 +125,7 @@
         {
           "type": "named",
           "data": {
-            "name": "limlight"
+            "name": "limelight"
           }
         }
       ]
