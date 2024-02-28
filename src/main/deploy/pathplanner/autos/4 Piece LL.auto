@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3363329583802028,
-      "y": 5.511956166769477
+      "x": 2,
+      "y": 2
     },
     "rotation": 0
   },
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MiddleNote"
+                  "pathName": "Piece 1"
                 }
               },
               {
@@ -43,15 +43,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Return From Middle"
+            "waitTime": 0.3
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "subwoofer"
+            "name": "limlight"
           }
         },
         {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left Note"
+                  "pathName": "Piece 2"
                 }
               },
               {
@@ -80,15 +80,52 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Return From Left Note"
+            "waitTime": 0.3
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "subwoofer"
+            "name": "limlight"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Piece 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "preload"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "limlight"
           }
         }
       ]

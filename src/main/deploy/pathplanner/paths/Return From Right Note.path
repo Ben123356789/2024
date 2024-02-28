@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.639119442730185,
-        "y": 0.7891301501029603
+        "x": 2.8829057658115325,
+        "y": 4.090395958569695
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.735163750828273,
-        "y": 0.7891301501029603
+        "x": 2.5123472469167165,
+        "y": 4.9027742499929445
       },
       "isLocked": false,
-      "linkedName": "PreNotePickup"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.041936293476526,
-        "y": 0.79
+        "x": 1.3721671887732996,
+        "y": 5.529873281975662
       },
       "prevControl": {
-        "x": 7.911804270508852,
-        "y": 0.79
+        "x": 2.455338244009822,
+        "y": 5.529873281968787
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Risky",
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "4 Piece Subwoofer",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }
