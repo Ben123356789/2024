@@ -28,13 +28,13 @@ public class SubwooferAutoCmd extends Command {
     isDone = false;
     shootTimer = new Timer();
     shootTimer.restart();
+    arm.unsafeSetPosition(ArmPosition.SubWoofer);
   }
   
   @Override
   public void execute() {
     switch(state){
       case 0:
-        arm.unsafeSetPosition(ArmPosition.SubWoofer);
         shooter.shooterState = ShooterState.SpinFixed;
         shooter.shooterV = Constants.SUBWOOFER_SHOOT_SPEED;
         if(arm.leftShoulderMotor.atPosition() && arm.wristMotor.atPosition() && shootTimer.get() > 0.5){
