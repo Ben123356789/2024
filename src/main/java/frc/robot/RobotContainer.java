@@ -28,8 +28,8 @@ import frc.robot.commands.FloorIntakeCmd;
 import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
+import frc.robot.commands.SubwooferAutoCmd;
 import frc.robot.commands.SnapToDegreeCmd;
-import frc.robot.commands.SpinDownShootersCmd;
 import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.commands.IntakeFromSourceCmd;
 import frc.robot.drive.CommandSwerveDrivetrain;
@@ -111,12 +111,9 @@ public class RobotContainer {
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
 
-        NamedCommands.registerCommand("subwoofer", new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
-        NamedCommands.registerCommand("spinup", new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED, false));
+        NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));        
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
-        NamedCommands.registerCommand("shoot", new ShootCmd(arm, shooter, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
-        NamedCommands.registerCommand("stopSpinning", new SpinDownShootersCmd(shooter));
 
         configureBindings();
         
