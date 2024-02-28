@@ -47,7 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
     if(slowDownShooters){
       shooterBottom.setTarget(currentVelocity);
       shooterTop.setTarget(currentVelocity);
-      currentVelocity -= 250;
+      currentVelocity -= 800;
       if(currentVelocity <= 0 ){
         shooterBottom.setTarget(0);
         shooterTop.setTarget(0);
