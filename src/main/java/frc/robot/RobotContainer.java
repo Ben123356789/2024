@@ -59,7 +59,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class RobotContainer {
     // The following is swerve auto-generated code
     private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-    private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    public static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -113,7 +113,7 @@ public class RobotContainer {
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
 
-        NamedCommands.registerCommand("limelight", new LimelightAutoCmd(arm, shooter, backLimelight, logger));
+        NamedCommands.registerCommand("limelight", new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain, drive));
         NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));        
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));

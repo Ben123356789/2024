@@ -2,7 +2,9 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.ExtraMath;
+import frc.robot.RobotContainer;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
+import frc.robot.drive.CommandSwerveDrivetrain;
 import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -10,6 +12,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.ShooterSubsystem.IntakeState;
 import frc.robot.subsystems.ShooterSubsystem.ShooterState;
+
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +27,8 @@ public class LimelightAutoCmd extends Command {
     LimelightSubsystem limelight;
     ShooterSubsystem shooter;
     Telemetry logger;
+    CommandSwerveDrivetrain drivetrain;
+    private final SwerveRequest.FieldCentric drive;
 
     boolean shoulderSetCheck = false;
     boolean wristSetCheck = false;
@@ -46,11 +53,13 @@ public class LimelightAutoCmd extends Command {
     LimelightTarget_Fiducial tag;
 
 
-    public LimelightAutoCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger) {
+    public LimelightAutoCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger, CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentric drive) {
         this.arm = arm;
         this.shooter = shooter;
         this.limelight = limelight;
         this.logger = logger;
+        this.drivetrain = drivetrain;
+        this.drive = drive;
         addRequirements(arm, shooter);
     }
 
@@ -80,17 +89,28 @@ public class LimelightAutoCmd extends Command {
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(tag.ty);
             shooter.shooterState = ShooterState.SpinLimelight;
+
             if(ExtraMath.within(tag.tx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET) && shooterTimer.get() == 0 && shooter.isShooterAtVelocity()){
                 limelight.limelightRotation = false;
 
                 shooterTimer.restart();
                 shooter.intakeState = IntakeState.ShootNow;
+                System.out.println("Shot");
             }
             if(shooterTimer.get() > 0.3){
                 isDone = true;
             }
             limelight.limelightRotationMagnitude = tag.tx-logger.getVelocityY()*10;
             SmartDashboard.putNumber("Tag X", tag.tx);
+
+            drivetrain.applyRequest(() -> {
+                double rate = 0;
+                if (limelight.limelightRotation) {
+                    rate = -0.026 * RobotContainer.MaxAngularRate * limelight.limelightRotationMagnitude;
+                }
+                return drive
+                        .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
+            });
         }
     }
 
