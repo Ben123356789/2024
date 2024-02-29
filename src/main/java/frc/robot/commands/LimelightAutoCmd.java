@@ -71,6 +71,7 @@ public class LimelightAutoCmd extends Command {
         limelight.setPipeline(0);
         shooterTimer = new Timer();
         isDone = false;
+        drivetrain.registerTelemetry(logger::telemeterize);
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
 
