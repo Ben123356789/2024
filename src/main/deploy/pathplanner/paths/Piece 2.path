@@ -3,51 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8971580165382558,
-        "y": 6.9978551068213255
+        "x": 2.7261310078175716,
+        "y": 4.204413964383484
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7997347105805326,
-        "y": 7.126125363361838
+        "x": 2.1417887280219006,
+        "y": 4.4752067281912336
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4LL - Piece1End"
     },
     {
       "anchor": {
-        "x": 1.7284734569469142,
-        "y": 6.228233567578247
+        "x": 2.768887759997743,
+        "y": 5.3303417717946555
       },
       "prevControl": {
-        "x": 1.73631021081861,
-        "y": 6.482928068408358
+        "x": 2.4980949961899928,
+        "y": 5.00254000508001
       },
       "nextControl": {
-        "x": 1.699968955493467,
-        "y": 5.301837270341207
+        "x": 3.01312469127505,
+        "y": 5.6259970043935015
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8971580165382558,
-        "y": 5.544125532688618
+        "x": 1.9850139700279403,
+        "y": 6.541783083566167
       },
       "prevControl": {
-        "x": 1.6714644540400194,
-        "y": 5.529873281968787
+        "x": 1.7712302091270853,
+        "y": 6.5132785821127195
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "4LL - Piece2End"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 0,
+      "rotationDegrees": 84.64417495714483,
       "rotateFast": false
     }
   ],
@@ -61,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 24.145541960421657,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "4 Piece LL",
   "previewStartingState": {
-    "rotation": 39.98688624496416,
+    "rotation": -28.178590109959206,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -44,11 +44,11 @@ public class FloorIntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     floorIntakeMotor.setPercentOutput(speed);
-    printDashboard();
+    // printDashboard();
   }
 
   public void printDashboard() {
-    SmartDashboard.putString("Shooter State:", state.toString());
+    // SmartDashboard.putString("Shooter State:", state.toString());
     floorIntakeMotor.putPV();
   }
 

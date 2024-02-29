@@ -32,7 +32,7 @@ public class DigitalIOSubsystem extends SubsystemBase {
         encoder = !zeroEncodersButton.get();
 
         if (DriverStation.isDisabled()) {
-            SmartDashboard.putString("button values:", brake + " & " + encoder);
+            // SmartDashboard.putString("button values:", brake + " & " + encoder);
             if (brake && !lastIterationBrakeButtonState) {
                 arm.disableBrakeMode();
                 shooter.disableBrakeMode();

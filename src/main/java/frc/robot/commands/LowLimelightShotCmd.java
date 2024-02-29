@@ -71,8 +71,8 @@ public class LowLimelightShotCmd extends Command {
             limelight.limelightRotation = true;
             double x = wrist.interpolate(tag.ty);
             x = x + -1.5*logger.getVelocityX();
-            SmartDashboard.putNumber("vel x", logger.getVelocityX());
-            SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
+            // SmartDashboard.putNumber("vel x", logger.getVelocityX());
+            // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(tag.ty);
             shooter.shooterState = ShooterState.SpinLimelight;
@@ -83,7 +83,7 @@ public class LowLimelightShotCmd extends Command {
                 shooter.okToShoot = false;
             }
             limelight.limelightRotationMagnitude = tag.tx-logger.getVelocityY()*10;
-            SmartDashboard.putNumber("Tag X", tag.tx);
+            // SmartDashboard.putNumber("Tag X", tag.tx);
         }
     }
 

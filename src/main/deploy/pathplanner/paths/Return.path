@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9850139700279403,
-        "y": 6.541783083566167
+        "x": 8.170490785426017,
+        "y": 7.439674879349759
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2843112352891373,
-        "y": 6.7698190951937445
+        "x": 7.244094488188978,
+        "y": 7.3114046228092455
       },
       "isLocked": false,
-      "linkedName": "4LL - Piece2End"
+      "linkedName": "4LL - AlignEnd"
     },
     {
       "anchor": {
-        "x": 2.7831400107244666,
-        "y": 7.012107357548048
+        "x": 4.137103829763216,
+        "y": 6.313747071938589
       },
       "prevControl": {
-        "x": 2.498094996189993,
-        "y": 6.798323596647194
+        "x": 5.747608161882994,
+        "y": 6.784071345920471
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "4LL - Piece3End"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 29.054604099077142,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.981639368849347,
+    "rotation": 15.124007308310562,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "4 Piece LL",
   "previewStartingState": {
-    "rotation": 29.054604099077082,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

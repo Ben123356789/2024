@@ -132,9 +132,9 @@ public class ArmSubsystem extends SubsystemBase {
     leftShoulderMotor.generateTrapezoidPath(0, 0);
     wristMotor.generateTrapezoidPath(0, 0);
     elevatorMotor.generateTrapezoidPath(0, 0);
-    leftShoulderMotor.putPIDF();
-    wristMotor.putPIDF();
-    elevatorMotor.putPIDF();
+    // leftShoulderMotor.putPIDF();
+    // wristMotor.putPIDF();
+    // elevatorMotor.putPIDF();
   }
 
   @Override
@@ -144,7 +144,7 @@ public class ArmSubsystem extends SubsystemBase {
       wristMotor.runTrapezoidPath();
       elevatorMotor.runTrapezoidPath();
     }
-    printDashboard();
+    // printDashboard();
     // SmartDashboard.putBoolean("isTrapezoidal", isTrapezoidal);
     // leftShoulderMotor.fetchPIDFFromDashboard();
     // wristMotor.fetchPIDFFromDashboard();
@@ -180,10 +180,10 @@ public class ArmSubsystem extends SubsystemBase {
   */
   public void printDashboard() {
     // SmartDashboard.putString("Arm Target Position", target.toString());
-    leftShoulderMotor.putPV();
+    // leftShoulderMotor.putPV();
     // rightShoulderMotor.putPV();
-    wristMotor.putPV();
-    elevatorMotor.putPV();
+    // wristMotor.putPV();
+    // elevatorMotor.putPV();
   }
 
   public void disableBrakeMode(){
