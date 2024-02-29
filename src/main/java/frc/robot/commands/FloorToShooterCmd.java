@@ -55,7 +55,7 @@ public class FloorToShooterCmd extends Command {
    */
   @Override
   public void end(boolean interrupted) {
-    floorIntake.set(FloorIntakeState.Stop);
+    floorIntake.set(FloorIntakeState.Spit);
 
     // shooter.intakeState = IntakeState.Preload;
     // arm.unsafeSetPosition(ArmPosition.Stowed);

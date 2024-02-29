@@ -1,24 +1,15 @@
 package frc.robot;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
-import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ClimberLockCmd;
@@ -30,7 +21,6 @@ import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.SubwooferAutoCmd;
-import frc.robot.commands.SnapToDegreeCmd;
 import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.commands.IntakeFromSourceCmd;
 import frc.robot.commands.LimelightAutoCmd;
@@ -182,6 +172,8 @@ public class RobotContainer {
 
     Keybind dubiousSpit;
 
+    Keybind spinUpTrap;
+
     AnalogTrigger secretShoot;
     Keybind secretAim;
 
@@ -215,6 +207,7 @@ public class RobotContainer {
         subwooferKeybind = new Keybind(codriverController.getHID(), Button.B);
         shootTrigger = new AnalogTrigger(codriverController.getHID(), Axis.RT, 0.5);
         spitTrigger = new AnalogTrigger(codriverController.getHID(), Axis.LT, 0.5);
+        spinUpTrap = new Keybind(codriverController.getHID(), Button.Start);
         // bind driver controls to commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
@@ -291,10 +284,11 @@ public class RobotContainer {
         // secretShoot.trigger().whileTrue(new ShootCmd(arm, shooter, true));
         // secretAim.trigger().whileTrue(new LowLimelightShotCmd(arm, shooter,
         // limelight1, logger));
-        dubiousSpit.trigger().whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit));
+        dubiousSpit.trigger().whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit, 0));
 
         intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
         intakeDriverKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
+        intakeDriverKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 1));
 
         // bind codriver controls to commands
         subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
@@ -327,13 +321,14 @@ public class RobotContainer {
 
         // non positional
         shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, true));
-        spitTrigger.trigger().and(modifyArm.negate()).whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit));
+        spitTrigger.trigger().and(modifyArm.negate()).whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit, 0));
         spitTrigger.trigger().and(modifyArm).whileTrue(new ShootCmd(arm, shooter, false));
 
         climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
         climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Min));
         climberMidKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Mid));
         climberToggleLockKeybind.trigger().onTrue(new ClimberLockCmd(climber));
+        spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, 4500, true));
 
     }
 

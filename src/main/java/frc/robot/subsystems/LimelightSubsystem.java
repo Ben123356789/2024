@@ -130,11 +130,11 @@ public class LimelightSubsystem extends SubsystemBase implements Runnable {
       }
 
       if (tag != null) {
-        SmartDashboard.putNumber("speaker tag x position", tag.tx);
-        SmartDashboard.putNumber("speaker tag y position", tag.ty);
+        // SmartDashboard.putNumber("speaker tag x position", tag.tx);
+        // SmartDashboard.putNumber("speaker tag y position", tag.ty);
       } else {
-        SmartDashboard.putNumber("speaker tag x position", 999);
-        SmartDashboard.putNumber("speaker tag y position", 999);
+        // SmartDashboard.putNumber("speaker tag x position", 999);
+        // SmartDashboard.putNumber("speaker tag y position", 999);
       }
     }
   }

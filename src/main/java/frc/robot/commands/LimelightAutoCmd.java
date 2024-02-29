@@ -71,6 +71,8 @@ public class LimelightAutoCmd extends Command {
         limelight.setPipeline(0);
         shooterTimer = new Timer();
         isDone = false;
+        drivetrain.registerTelemetry(logger::telemeterize);
+
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
 
@@ -84,29 +86,35 @@ public class LimelightAutoCmd extends Command {
             limelight.limelightRotation = true;
             double x = wrist.interpolate(tag.ty);
             x = x + -1.5*logger.getVelocityX();
-            SmartDashboard.putNumber("vel x", logger.getVelocityX());
-            SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
+            // SmartDashboard.putNumber("vel x", logger.getVelocityX());
+            // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(tag.ty);
             shooter.shooterState = ShooterState.SpinLimelight;
 
-            if(ExtraMath.within(tag.tx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET) && shooterTimer.get() == 0 && shooter.isShooterAtVelocity()){
+            if(ExtraMath.within(tag.tx, 0, 8) && shooterTimer.get() == 0 && shooter.isShooterAtVelocity()){
                 limelight.limelightRotation = false;
 
                 shooterTimer.restart();
-                shooter.intakeState = IntakeState.ShootNow;
-                System.out.println("Shot");
+               
             }
-            if(shooterTimer.get() > 0.3){
+             if(shooterTimer.get() > 0.25 && shooterTimer.get() < 0.7    ){
+             shooter.intakeState = IntakeState.ShootNow;
+                System.out.println("Shot");
+             }
+            if(shooterTimer.get() > 0.8){
                 isDone = true;
             }
             limelight.limelightRotationMagnitude = tag.tx-logger.getVelocityY()*10;
-            SmartDashboard.putNumber("Tag X", tag.tx);
+            // SmartDashboard.putNumber("Tag X", tag.tx);
 
             drivetrain.applyRequest(() -> {
                 double rate = 0;
+                System.out.println("got here");
                 if (limelight.limelightRotation) {
                     rate = -0.026 * RobotContainer.MaxAngularRate * limelight.limelightRotationMagnitude;
+                   // SmartDashboard.putNumber( "Rate:" , rate);
+                   
                 }
                 return drive
                         .withRotationalRate(rate); // Drive counterclockwise with negative X (left)

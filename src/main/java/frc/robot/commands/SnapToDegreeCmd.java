@@ -43,9 +43,9 @@ public class SnapToDegreeCmd extends Command {
   public void execute() {
     yaw = pigeonSubsystem.Y;
     rotate = ExtraMath.degreeDistance(yaw, target.getAsDouble());
-    SmartDashboard.putNumber("Snap Target", target.getAsDouble());
-    SmartDashboard.putNumber("Snap Rotation Value", rotate);
-    SmartDashboard.putBoolean("Is at Target Rotation?", rotate <=1 && rotate >= -1);
+    // SmartDashboard.putNumber("Snap Target", target.getAsDouble());
+    // SmartDashboard.putNumber("Snap Rotation Value", rotate);
+    // SmartDashboard.putBoolean("Is at Target Rotation?", rotate <=1 && rotate >= -1);
     // Have robot rotate "rotate" degrees
   }
 

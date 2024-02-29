@@ -79,7 +79,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        printDashboard();
+        // printDashboard();
         if(!ratchetEngaged){
             leftMotor.setTarget(target);
             rightMotor.setTarget(-target);
@@ -89,7 +89,7 @@ public class ClimberSubsystem extends SubsystemBase {
         }
         leftRatchetServo.setPosition(ratchetEngaged ? LEFT_SERVO_ENGAGE_POS : LEFT_SERVO_RELEASE_POS);
         rightRatchetServo.setPosition(ratchetEngaged ? RIGHT_SERVO_ENGAGE_POS : RIGHT_SERVO_RELEASE_POS);
-        printDashboard();
+        // printDashboard();
     }
 
     /**
