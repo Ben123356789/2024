@@ -30,8 +30,6 @@ public class ShootCmd extends Command {
       } else{
         shooter.intakeState = IntakeState.ShootNow;
       }
-    } else{
-      shooter.intakeState = IntakeState.Idle;
     }
   }
 
