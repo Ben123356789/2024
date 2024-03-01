@@ -56,7 +56,7 @@ public class LowLimelightShotCmd extends Command {
         shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
         shooter.okToShoot = false;
-        RobotContainer.speedMultiplier = 0.5;
+        RobotContainer.speedMultiplier = 0.55;
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
 
