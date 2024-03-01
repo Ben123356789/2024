@@ -230,6 +230,12 @@ public class RobotContainer {
                             .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
                 }));
 
+        driverController.back().and(driverController.start()).and(driverController.a()).whileTrue(
+                drivetrain.applyRequest(() -> {
+                        return point.withModuleDirection(new Rotation2d(0));
+                })
+        )
+
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
                     .withTargetDirection(Rotation2d.fromDegrees(0))

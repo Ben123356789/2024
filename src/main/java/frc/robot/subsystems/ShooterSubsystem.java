@@ -4,6 +4,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -47,7 +49,11 @@ public class ShooterSubsystem extends SubsystemBase {
     if(slowDownShooters){
       shooterBottom.setTarget(currentVelocity);
       shooterTop.setTarget(currentVelocity);
-      currentVelocity -= 800;
+      if (DriverStation.isAutonomous()){
+        currentVelocity -= 800;
+      } else {
+        currentVelocity -= 250;
+      }
       if(currentVelocity <= 0 ){
         shooterBottom.setTarget(0);
         shooterTop.setTarget(0);
