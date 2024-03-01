@@ -234,7 +234,7 @@ public class RobotContainer {
                 drivetrain.applyRequest(() -> {
                         return point.withModuleDirection(new Rotation2d(0));
                 })
-        )
+        );
 
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
