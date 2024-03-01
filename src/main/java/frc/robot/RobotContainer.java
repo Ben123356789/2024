@@ -146,11 +146,11 @@ public class RobotContainer {
     /** Dpad Right */
     DPadButton climberToggleLockKeybind;
 
-    /** Amp & Trap - X */
-    Keybind altScoringKeybind;
+    /** Amp & Amp2 - X */
+    Keybind ampKeybind;
 
     /** Intake & Source - A */
-    Keybind recievingKeybind;
+    Keybind intakeKeybind;
 
     /** Speaker High & Low, Podium High & Low - Y */
     Keybind shootPositionKeybind;
@@ -201,8 +201,8 @@ public class RobotContainer {
         climberMinKeybind = new DPadButton(codriverController.getHID(), DPad.Down);
         climberMidKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
         climberToggleLockKeybind = new DPadButton(codriverController.getHID(), DPad.Right);
-        altScoringKeybind = new Keybind(codriverController.getHID(), Button.X);
-        recievingKeybind = new Keybind(codriverController.getHID(), Button.A);
+        ampKeybind = new Keybind(codriverController.getHID(), Button.X);
+        intakeKeybind = new Keybind(codriverController.getHID(), Button.A);
         shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
         subwooferKeybind = new Keybind(codriverController.getHID(), Button.B);
         shootTrigger = new AnalogTrigger(codriverController.getHID(), Axis.RT, 0.5);
@@ -294,22 +294,23 @@ public class RobotContainer {
         subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
         subwooferKeybind.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED, false));
 
-        altScoringKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp2));
-        altScoringKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
-        altScoringKeybind.trigger().and(modifyArm.negate())
+        ampKeybind.trigger().and(modifyArm).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp2));
+        ampKeybind.trigger().and(modifyArm.negate()).whileTrue(new SetArmPositionCmd(arm, ArmPosition.Amp));
+        ampKeybind.trigger().and(modifyArm.negate())
                 .whileTrue(new SpinUpShooterCmd(shooter, Constants.AMP_SHOOT_SPEED, true));
 
-        recievingKeybind.trigger().and(modifyArm)
+        intakeKeybind.trigger().and(modifyArm)
                 .whileTrue(new IntakeFromSourceCmd(arm, shooter, Constants.SOURCE_INTAKE_SPEED));
-        recievingKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
-        recievingKeybind.trigger().and(modifyArm.negate())
+        intakeKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
+        intakeKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 0));
+        intakeKeybind.trigger().and(modifyArm.negate())
                 .whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
 
         // y button! (main speaker shot)
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
                 .whileTrue(new LowLimelightShotCmd(arm, shooter, backLimelight, logger));
         // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm.negate())
-        // .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
+        //         .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
                 .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumLow));
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
