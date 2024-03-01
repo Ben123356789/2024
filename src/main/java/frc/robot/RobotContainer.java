@@ -52,7 +52,7 @@ public class RobotContainer {
     public static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -92,6 +92,8 @@ public class RobotContainer {
         backLimelight = new LimelightSubsystem("limelight-back");
         leftLimelight = new LimelightSubsystem("limelight-left");
         rightLimelight = new LimelightSubsystem("limelight-right");
+        drivetrain.limelight = backLimelight;
+
         arm = new ArmSubsystem();
         floorIntake = new FloorIntakeSubsystem();
         shooter = new ShooterSubsystem();
@@ -104,12 +106,12 @@ public class RobotContainer {
         drivetrain.seedFieldRelative();
 
         NamedCommands.registerCommand("limelight", new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain, drive));
-        NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));        
+        NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
 
         configureBindings();
-        
+
         autoChooser = AutoBuilder.buildAutoChooser();
 
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
@@ -212,8 +214,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
                     double rate;
-                    if (backLimelight.limelightRotation) {
-                        rate = -0.026 * MaxAngularRate * backLimelight.limelightRotationMagnitude;
+                    if (backLimelight.limelightRotation && backLimelight.tagTv) {
+                        rate = -0.026 * MaxAngularRate * backLimelight.tagTx;
                     } else if (pigeon.rotateToDegree) {
                         rate = MaxAngularRate * pigeon.magnitudeToAngle;
                     } else {
@@ -322,7 +324,8 @@ public class RobotContainer {
 
         // non positional
         shootTrigger.trigger().whileTrue(new ShootCmd(arm, shooter, true));
-        spitTrigger.trigger().and(modifyArm.negate()).whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit, 0));
+        spitTrigger.trigger().and(modifyArm.negate())
+                .whileTrue(new FloorIntakeCmd(floorIntake, FloorIntakeState.Spit, 0));
         spitTrigger.trigger().and(modifyArm).whileTrue(new ShootCmd(arm, shooter, false));
 
         climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));

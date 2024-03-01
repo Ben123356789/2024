@@ -39,7 +39,6 @@ public class LowLimelightShotCmd extends Command {
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
-    LimelightTarget_Fiducial tag;
 
 
     public LowLimelightShotCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger) {
@@ -52,7 +51,6 @@ public class LowLimelightShotCmd extends Command {
 
     @Override
     public void initialize() {
-        // System.out.println("init");
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
@@ -62,27 +60,21 @@ public class LowLimelightShotCmd extends Command {
 
     @Override
     public void execute() {
-        tag = limelight.getDataForId(7);
-        if(tag == null){
-            tag = limelight.getDataForId(4);
-            shooter.okToShoot = false;
-        }
-        if(tag != null){
-            limelight.limelightRotation = true;
-            double x = wrist.interpolate(tag.ty);
+        limelight.limelightRotation = limelight.tagTv;
+        if(limelight.limelightRotation){
+            double x = wrist.interpolate(limelight.tagTy);
             x = x + -1.5*logger.getVelocityX();
             // SmartDashboard.putNumber("vel x", logger.getVelocityX());
             // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);
-            shooter.shooterV = shooterRPM.interpolate(tag.ty);
+            shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
             shooter.shooterState = ShooterState.SpinLimelight;
-            if(ExtraMath.within(tag.tx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET)){
+            if(ExtraMath.within(limelight.tagTx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET)){
                 limelight.limelightRotation = false;
                 shooter.okToShoot = true;
             } else{
                 shooter.okToShoot = false;
             }
-            limelight.limelightRotationMagnitude = tag.tx-logger.getVelocityY()*10;
             // SmartDashboard.putNumber("Tag X", tag.tx);
         }
     }

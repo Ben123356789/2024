@@ -103,9 +103,9 @@ public class LEDSubsystem extends SubsystemBase {
         for (int i = 0; i < conditions.length; i++) {
             conditions[i] = false;
         }
-        if (limelight1.resultLength() > 0) {
-            conditions[0] = true;
-        }
+        // if (limelight1.resultLength() > 0) {
+        //     conditions[0] = true;
+        // }
     }
 
     // Based on the conditions, decides which module to use
@@ -135,20 +135,20 @@ public class LEDSubsystem extends SubsystemBase {
     // Draws cursors that vary in position and size depending on the location of notes
     public void followNote() {
         setColour(Color.kBlack, showingBuffer, fullStrip);
-        for (int i = 0; i < limelight1.resultLength(); i++) {
-            int size = (int) ExtraMath.rangeMap(limelight1.getTargets()[i].ta, 0, 1, fullStrip.start, fullStrip.end);
-            Color color;
-            if(limelight1.getTargets()[i].className.equals("redbobot")){
-                color = Color.kRed;
-            } else if(limelight1.getTargets()[i].className.equals("bluebobot")){
-                color = Color.kBlue;
-            } else if (limelight1.resultLargestAreaTarget() == i) {
-                color = Color.kWhite; 
-            } else {
-                color = Color.kOrangeRed;
-            }
-            drawCursor(limelight1.getTargets()[i].tx, -29.8, 29.8, fullStrip, showingBuffer, color, size);
-        }
+        // for (int i = 0; i < limelight1.resultLength(); i++) {
+        //     int size = (int) ExtraMath.rangeMap(limelight1.getTargets()[i].ta, 0, 1, fullStrip.start, fullStrip.end);
+        //     Color color;
+        //     if(limelight1.getTargets()[i].className.equals("redbobot")){
+        //         color = Color.kRed;
+        //     } else if(limelight1.getTargets()[i].className.equals("bluebobot")){
+        //         color = Color.kBlue;
+        //     } else if (limelight1.resultLargestAreaTarget() == i) {
+        //         color = Color.kWhite; 
+        //     } else {
+        //         color = Color.kOrangeRed;
+        //     }
+        //     drawCursor(limelight1.getTargets()[i].tx, -29.8, 29.8, fullStrip, showingBuffer, color, size);
+        // }
     }
 
     // Gets voltage from the PDP and displays it as a percentage

@@ -46,14 +46,13 @@ public class LimelightAutoCmd extends Command {
     double[][] shooterSpeed = {
             { 8.3, 10000 },
             { 17, 9000 },
-            { 33, 8000 }     
+            { 33, 8000 }
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
-    LimelightTarget_Fiducial tag;
 
-
-    public LimelightAutoCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger, CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentric drive) {
+    public LimelightAutoCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger,
+            CommandSwerveDrivetrain drivetrain, SwerveRequest.FieldCentric drive) {
         this.arm = arm;
         this.shooter = shooter;
         this.limelight = limelight;
@@ -65,7 +64,6 @@ public class LimelightAutoCmd extends Command {
 
     @Override
     public void initialize() {
-        // System.out.println("init");
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
@@ -78,47 +76,30 @@ public class LimelightAutoCmd extends Command {
 
     @Override
     public void execute() {
-        tag = limelight.getDataForId(7);
-        if(tag == null){
-            tag = limelight.getDataForId(4);
-        }
-        if(tag != null){
+        if (limelight.tagTv) {
             limelight.limelightRotation = true;
-            double x = wrist.interpolate(tag.ty);
-            x = x + -1.5*logger.getVelocityX();
+            double x = wrist.interpolate(limelight.tagTy);
+            x = x + -1.5 * logger.getVelocityX();
             // SmartDashboard.putNumber("vel x", logger.getVelocityX());
-            // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
+            // SmartDashboard.putNumber("Calculated Wrist Position:",
+            // wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);
-            shooter.shooterV = shooterRPM.interpolate(tag.ty);
+            shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
             shooter.shooterState = ShooterState.SpinLimelight;
 
-            if(ExtraMath.within(tag.tx, 0, 8) && shooterTimer.get() == 0 && shooter.isShooterAtVelocity()){
+            if (ExtraMath.within(limelight.tagTx, 0, 8) && shooterTimer.get() == 0 && shooter.isShooterAtVelocity()) {
                 limelight.limelightRotation = false;
 
                 shooterTimer.restart();
-               
+
             }
-             if(shooterTimer.get() > 0.25 && shooterTimer.get() < 0.7    ){
-             shooter.intakeState = IntakeState.ShootNow;
-                System.out.println("Shot");
-             }
-            if(shooterTimer.get() > 0.8){
+            if (shooterTimer.get() > 0.25 && shooterTimer.get() < 0.7) {
+                shooter.intakeState = IntakeState.ShootNow;
+            }
+            if (shooterTimer.get() > 0.8) {
                 isDone = true;
             }
-            limelight.limelightRotationMagnitude = tag.tx-logger.getVelocityY()*10;
             // SmartDashboard.putNumber("Tag X", tag.tx);
-
-            drivetrain.applyRequest(() -> {
-                double rate = 0;
-                System.out.println("got here");
-                if (limelight.limelightRotation) {
-                    rate = -0.026 * RobotContainer.MaxAngularRate * limelight.limelightRotationMagnitude;
-                   // SmartDashboard.putNumber( "Rate:" , rate);
-                   
-                }
-                return drive
-                        .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
-            });
         }
     }
 

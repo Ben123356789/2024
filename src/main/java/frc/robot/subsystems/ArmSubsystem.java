@@ -206,4 +206,8 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor.resetEncoder();
     elevatorMotor.resetEncoder();
   }
+
+  public boolean armAtPostion(){
+    return leftShoulderMotor.atPosition() && wristMotor.atPosition() && elevatorMotor.atPosition();
+  }
 }
