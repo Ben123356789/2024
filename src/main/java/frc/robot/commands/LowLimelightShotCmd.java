@@ -70,7 +70,7 @@ public class LowLimelightShotCmd extends Command {
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
             shooter.shooterState = ShooterState.SpinLimelight;
             if(ExtraMath.within(limelight.tagTx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET)){
-                limelight.limelightRotation = false;
+                // limelight.limelightRotation = false;
                 shooter.okToShoot = true;
             } else{
                 shooter.okToShoot = false;
