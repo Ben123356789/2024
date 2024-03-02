@@ -16,7 +16,7 @@ public class ArmSubsystem extends SubsystemBase {
   
   public enum ArmPosition {
     Stowed, Intake, Source, SpeakerHigh, SpeakerLow, Amp, Amp2, Trap,
-    SubWoofer, PodiumHigh, PodiumLow, ClimberUp, ClimberMid, ClimberLow;
+    SubWoofer, PodiumHigh, PodiumLow, ClimberUp, ClimberMid, ClimberLow, ClimberStowed, ClimberCompact;
     
     public double shoulderPosition() {
       switch (this) {
@@ -33,6 +33,8 @@ public class ArmSubsystem extends SubsystemBase {
         case ClimberUp: return Constants.SHOULDER_CLIMBER_HIGH_POSITION;
         case ClimberMid: return Constants.SHOULDER_CLIMBER_MID_POSITION;
         case ClimberLow: return Constants.SHOULDER_CLIMBER_LOW_POSITION;
+        case ClimberStowed: return Constants.SHOULDER_CLIMBER_STOWED_POSITION;
+        case ClimberCompact: return Constants.SHOULDER_CLIMBER_COMPACT_POSITION;
         default: return Constants.SHOULDER_STOWED_POSITION;
       }
     }
@@ -52,6 +54,8 @@ public class ArmSubsystem extends SubsystemBase {
         case ClimberUp: return Constants.WRIST_CLIMBER_HIGH_POSITION;
         case ClimberMid: return Constants.WRIST_CLIMBER_MID_POSITION;
         case ClimberLow: return Constants.WRIST_CLIMBER_LOW_POSITION;
+        case ClimberStowed: return Constants.WRIST_CLIMBER_STOWED_POSITION;
+        case ClimberCompact: return Constants.WRIST_CLIMBER_COMPACT_POSITION;
         default: return Constants.WRIST_STOWED_POSITION;
       }
     }
@@ -71,6 +75,8 @@ public class ArmSubsystem extends SubsystemBase {
         case ClimberUp: return Constants.ELEVATOR_CLIMBER_HIGH_POSITION;
         case ClimberMid: return Constants.ELEVATOR_CLIMBER_MID_POSITION;
         case ClimberLow: return Constants.ELEVATOR_CLIMBER_LOW_POSITION;
+        case ClimberStowed: return Constants.ELEVATOR_CLIMBER_STOWED_POSITION;
+        case ClimberCompact: return Constants.ELEVATOR_CLIMBER_COMPACT_POSITION;
         default: return Constants.ELEVATOR_STOWED_POSITION;
       }
     }
@@ -90,6 +96,8 @@ public class ArmSubsystem extends SubsystemBase {
         case ClimberUp: return Constants.WRIST_CLIMBER_HIGH_MAXV;
         case ClimberMid: return Constants.WRIST_CLIMBER_MID_MAXV;
         case ClimberLow: return Constants.WRIST_CLIMBER_LOW_MAXV;
+        case ClimberStowed: return Constants.WRIST_CLIMBER_STOWED_MAXV;
+        case ClimberCompact: return Constants.WRIST_CLIMBER_COMPACT_MAXV;
         default: return Constants.WRIST_STOWED_MAXV;
       }
     }
@@ -109,6 +117,8 @@ public class ArmSubsystem extends SubsystemBase {
         case ClimberUp: return Constants.ELEVATOR_CLIMBER_HIGH_MAXV;
         case ClimberMid: return Constants.ELEVATOR_CLIMBER_MID_MAXV;
         case ClimberLow: return Constants.ELEVATOR_CLIMBER_LOW_MAXV;
+        case ClimberStowed: return Constants.ELEVATOR_CLIMBER_STOWED_MAXV;
+        case ClimberCompact: return Constants.ELEVATOR_CLIMBER_COMPACT_MAXV;
         default: return Constants.ELEVATOR_STOWED_MAXV;
       }
     }

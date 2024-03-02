@@ -22,13 +22,16 @@ public class ClimberPositionCmd extends Command {
   @Override
   public void initialize() {
     climber.setHeight(state.height());
-    if(state == ClimbState.Max){
-      arm.unsafeSetPosition(ArmPosition.ClimberUp);
-    } else if(state == ClimbState.Mid){
-      arm.unsafeSetPosition(ArmPosition.ClimberMid);
-    } else if(state == ClimbState.Min){
-      arm.unsafeSetPosition(ArmPosition.ClimberLow);
+    switch (state) {
+      case Max: arm.unsafeSetPosition(ArmPosition.ClimberUp); break;
+      case Mid: arm.unsafeSetPosition(ArmPosition.ClimberMid); break;
+      case Min: arm.unsafeSetPosition(ArmPosition.ClimberLow); break;
+      case Stowed: arm.unsafeSetPosition(ArmPosition.ClimberStowed); break;
+      case Compact: arm.unsafeSetPosition(ArmPosition.ClimberCompact); break;
+      default: break;
     }
+
+
     isFinished = true;
   }
 
@@ -36,7 +39,13 @@ public class ClimberPositionCmd extends Command {
   public void execute() {}
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    if(state == ClimbState.Stowed){
+      climber.disableMotors(true);
+    } else{
+      climber.disableMotors(false);
+    }
+  }
 
   @Override
   public boolean isFinished() {

@@ -146,7 +146,9 @@ public class RobotContainer {
     /** Dpad Left */
     DPadButton climberMidKeybind;
     /** Dpad Right */
-    DPadButton climberToggleLockKeybind;
+    DPadButton climberStowKeybind;
+    /** Back Button */
+    Keybind climberCompactKeybind;
 
     /** Amp & Amp2 - X */
     Keybind ampKeybind;
@@ -204,7 +206,8 @@ public class RobotContainer {
         climberMaxKeybind = new DPadButton(codriverController.getHID(), DPad.Up);
         climberMinKeybind = new DPadButton(codriverController.getHID(), DPad.Down);
         climberMidKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
-        climberToggleLockKeybind = new DPadButton(codriverController.getHID(), DPad.Right);
+        climberStowKeybind = new DPadButton(codriverController.getHID(), DPad.Right);
+        climberCompactKeybind = new Keybind(codriverController.getHID(), Button.Back);
         ampKeybind = new Keybind(codriverController.getHID(), Button.X);
         intakeKeybind = new Keybind(codriverController.getHID(), Button.A);
         shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
@@ -339,7 +342,8 @@ public class RobotContainer {
         climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
         climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Min));
         climberMidKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Mid));
-        climberToggleLockKeybind.trigger().onTrue(new ClimberLockCmd(climber));
+        climberStowKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Stowed));
+        climberCompactKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Compact));
         spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, 4500, true));
 
     }
