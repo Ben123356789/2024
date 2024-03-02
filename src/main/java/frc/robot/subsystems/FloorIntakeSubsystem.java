@@ -29,6 +29,7 @@ public class FloorIntakeSubsystem extends SubsystemBase {
   
   public FloorIntakeSubsystem() {
     floorIntakeMotor = PIDMotor.makeMotor(Constants.FLOOR_INTAKE_ID,"FloorIntake",0,0,0,0,ControlType.kPosition);
+    floorIntakeMotor.setCurrentLimit(30);
   }
 
   public void set(FloorIntakeState state) {

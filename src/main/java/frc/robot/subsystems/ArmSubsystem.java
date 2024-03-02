@@ -138,6 +138,11 @@ public class ArmSubsystem extends SubsystemBase {
     wristMotor = PIDMotor.makeMotor(Constants.WRIST_MOTOR_ID, "Wrist", 0.05, 0, 0, 0, ControlType.kPosition, 150, 1000);
     elevatorMotor = PIDMotor.makeMotor(Constants.ELEVATOR_MOTOR_ID, "Elevator", 0.06, 0, 0, 0, ControlType.kPosition, Constants.ELEVATOR_DEFAULT_MAXV, 500);
 
+    leftShoulderMotor.setCurrentLimit(30);
+    rightShoulderMotor.setCurrentLimit(30);
+    wristMotor.setCurrentLimit(30);
+    elevatorMotor.setCurrentLimit(30);
+
     leftShoulderMotor.generateTrapezoidPath(0, 0);
     wristMotor.generateTrapezoidPath(0, 0);
     elevatorMotor.generateTrapezoidPath(0, 0);

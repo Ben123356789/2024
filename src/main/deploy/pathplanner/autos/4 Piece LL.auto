@@ -160,9 +160,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "limelight"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Final"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "limelight"
+                }
+              }
+            ]
           }
         }
       ]

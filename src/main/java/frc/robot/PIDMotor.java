@@ -385,4 +385,8 @@ public class PIDMotor {
     public void setCurrentLimit(int limit){
         motor.setSmartCurrentLimit(limit);
     }
+
+    public double getCurrent(){
+        return motor.getOutputCurrent();
+    }
 }

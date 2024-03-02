@@ -29,6 +29,11 @@ public class ShooterSubsystem extends SubsystemBase {
     intakeTop = PIDMotor.makeMotor(Constants.INTAKE_TOP_ID, "Intake Top", 0, 0, 0, 0, ControlType.kPosition);
     intakeBottom = PIDMotor.makeMotor(Constants.INTAKE_BOTTOM_ID, "Intake Bottom", 0, 0, 0, 0, ControlType.kPosition);
 
+    shooterBottom.setCurrentLimit(40);
+    shooterTop.setCurrentLimit(40);
+    intakeBottom.setCurrentLimit(30);
+    intakeTop.setCurrentLimit(30);
+
     shooterBottom.setIdleCoastMode();
     shooterTop.setIdleCoastMode();
     shooterBottom.setInverted(true);

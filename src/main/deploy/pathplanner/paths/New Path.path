@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.170490785426017,
-        "y": 7.439674879349759
+        "x": 1.3509924162705473,
+        "y": 5.511956166769477
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.244094488188978,
-        "y": 7.3114046228092455
+        "x": 2.53840850538844,
+        "y": 6.215610145506006
       },
       "isLocked": false,
-      "linkedName": "4LL - AlignEnd"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.971878515185602,
-        "y": 6.56743713487427
+        "x": 3.5242570485140976,
+        "y": 6.4562695792058244
       },
       "prevControl": {
-        "x": 6.58238284730538,
-        "y": 7.037761408856152
+        "x": 2.1022896331506957,
+        "y": 5.884550721482395
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Return End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -38,12 +38,12 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 4.5,
-    "rotation": 15.124007308310562,
+    "velocity": 0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Piece LL",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

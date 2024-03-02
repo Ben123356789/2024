@@ -21,6 +21,7 @@ import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.SubwooferAutoCmd;
+import frc.robot.commands.ZeroArmCommand;
 import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.commands.IntakeFromSourceCmd;
 import frc.robot.commands.LimelightAutoCmd;
@@ -146,6 +147,7 @@ public class RobotContainer {
     /** B Button */
     Keybind snapToNoteKeybind;
     double angleFromNote = 0;
+    Keybind zeroArmKeybind;
 
     // codriver keybinds
     /** Dpad Up */
@@ -201,6 +203,8 @@ public class RobotContainer {
         snapTo90Keybind = new Keybind(driverController.getHID(), Button.X);
         snapTo180Keybind = new Keybind(driverController.getHID(), Button.A);
         snapTo270Keybind = new Keybind(driverController.getHID(), Button.B);
+
+        zeroArmKeybind = new Keybind(driverController.getHID(), Button.Start);
 
         // snapToNoteKeybind = new Keybind(driverController.getHID(),
         // Button.RightBumper);
@@ -342,6 +346,8 @@ public class RobotContainer {
         intakeDriverKeybind.trigger().whileTrue(new FloorToShooterCmd(floorIntake, shooter, arm, true));
         intakeDriverKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
         intakeDriverKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 1));
+
+        zeroArmKeybind.trigger().whileTrue(new ZeroArmCommand(arm));
 
         // bind codriver controls to commands
         subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));

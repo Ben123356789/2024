@@ -6,7 +6,7 @@ public final class Constants {
     private Constants() {}
 
     // SmartDashboard State
-    public static final DashState DASH_STATE = DashState.Off;
+    public static final DashState DASH_STATE = DashState.Temp;
 
     // Climber motor IDs
     public static final int CLIMBER_LEFT_ID = 30;
