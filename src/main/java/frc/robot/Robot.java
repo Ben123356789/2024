@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
             CommandScheduler.getInstance().run();
             m_robotContainer.logger.putPose();
         }
-        // SmartDashboard.putNumber("Current memory (MB)",
+                // SmartDashboard.putNumber("Current memory (MB)",
         // Runtime.getRuntime().totalMemory() / (1024.0 * 1024.0));
         // SmartDashboard.putNumber("Maximum memory (MB)",
         // Runtime.getRuntime().maxMemory() / (1024.0 * 1024.0));
@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        // testController.setRumble(RumbleType.kBothRumble, 0);
+                // testController.setRumble(RumbleType.kBothRumble, 0);
         // cotestController.setRumble(RumbleType.kBothRumble, 0);
     }
 

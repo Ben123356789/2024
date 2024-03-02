@@ -78,6 +78,9 @@ public class RobotContainer {
     public ShooterSubsystem shooter;
     public ArmSubsystem arm;
     public DigitalIOSubsystem digitalio;
+
+    boolean shouldStayDegree;
+    Rotation2d stayDegree, angleOffset;
     public DashboardSubsystem dashboard;
     public final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
     private final CommandXboxController codriverController = new CommandXboxController(
@@ -94,6 +97,10 @@ public class RobotContainer {
         rightLimelight = new LimelightSubsystem("limelight-right");
         drivetrain.limelight = backLimelight;
 
+        shouldStayDegree = false;
+        stayDegree = new Rotation2d(0);
+        angleOffset = drivetrain.getState().Pose.getRotation();
+
         arm = new ArmSubsystem();
         floorIntake = new FloorIntakeSubsystem();
         shooter = new ShooterSubsystem();
@@ -105,7 +112,8 @@ public class RobotContainer {
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
 
-        NamedCommands.registerCommand("limelight", new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain, drive));
+        NamedCommands.registerCommand("limelight",
+                new LimelightAutoCmd(arm, shooter, backLimelight, logger, drivetrain, drive));
         NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
@@ -117,6 +125,7 @@ public class RobotContainer {
         // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
     }
 
     /** Right Trigger */
@@ -219,45 +228,70 @@ public class RobotContainer {
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> {
                     double rate;
+
+                    SmartDashboard.putNumber("Stay Degree", stayDegree.getDegrees());
+                    SmartDashboard.putNumber("Logger Angle", drivetrain.getState().Pose.getRotation().getDegrees());
+                    SmartDashboard.putNumber("Angle Offset", angleOffset.getDegrees());
+
                     if (backLimelight.limelightRotation && backLimelight.tagTv) {
-                        rate = -0.026 * MaxAngularRate * (backLimelight.tagTx + (-10*logger.getVelocityY()));
-                    } else if (pigeon.rotateToDegree) {
-                        rate = MaxAngularRate * pigeon.magnitudeToAngle;
+                        rate = -0.026 * MaxAngularRate * (backLimelight.tagTx + (-10 * logger.getVelocityY()));
+                        shouldStayDegree = false;
                     } else {
+
+                        if (ExtraMath.within(driverController.getRightX(), 0, 0.1) && !shouldStayDegree) {
+                            shouldStayDegree = true;
+                            stayDegree = Rotation2d.fromDegrees(drivetrain.getState().Pose.getRotation().getDegrees() - angleOffset.getDegrees());
+
+                        } else if (!ExtraMath.within(driverController.getRightX(), 0, 0.1)) {
+                            shouldStayDegree = false;
+                        }
+
                         rate = -driverController.getRightX() * MaxAngularRate;
                     }
-                    return drive
-                            .withVelocityX(-driverController.getLeftY() * MaxSpeed * speedMultiplier) // Drive forward with// negative
-                                                                                    // Y (forward)
-                            .withVelocityY(-driverController.getLeftX() * MaxSpeed * speedMultiplier) // Drive left with negative X (left)
-                            .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
+
+                    if (shouldStayDegree) {
+
+                        return look
+                                .withVelocityX(-driverController.getLeftY() * MaxSpeed * speedMultiplier) 
+                                .withVelocityY(-driverController.getLeftX() * MaxSpeed * speedMultiplier) 
+                                .withTargetDirection(stayDegree);
+
+                    } else{
+                        return drive
+                                .withVelocityX(-driverController.getLeftY() * MaxSpeed * speedMultiplier)
+                                .withVelocityY(-driverController.getLeftX() * MaxSpeed * speedMultiplier) 
+                                .withRotationalRate(rate);
+                    }
                 }));
 
         driverController.back().and(driverController.start()).and(driverController.a()).whileTrue(
                 drivetrain.applyRequest(() -> {
-                        return point.withModuleDirection(new Rotation2d(0));
-                })
-        );
+                    return point.withModuleDirection(new Rotation2d(0));
+                }));
 
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
+            stayDegree = Rotation2d.fromDegrees(0);
             return look
                     .withTargetDirection(Rotation2d.fromDegrees(0))
                     .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo90Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
+            stayDegree = Rotation2d.fromDegrees(90);
             return look
                     .withTargetDirection(Rotation2d.fromDegrees(90))
                     .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo180Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
+            stayDegree = Rotation2d.fromDegrees(180);
             return look
                     .withTargetDirection(Rotation2d.fromDegrees(180))
                     .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-driverController.getLeftX() * MaxSpeed); // Drive left with negative X (left)
         }));
         snapTo270Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
+            stayDegree = Rotation2d.fromDegrees(-90);
             return look
                     .withTargetDirection(Rotation2d.fromDegrees(-90))
                     .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
@@ -279,7 +313,13 @@ public class RobotContainer {
         driverController.back().whileTrue(drivetrain.applyRequest(() -> brake));
 
         // reset the field-centric heading on left bumper press
-        resetFieldCentricKeybind.trigger().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+        resetFieldCentricKeybind.trigger().onTrue(drivetrain.runOnce(() -> {
+            drivetrain.seedFieldRelative();
+            angleOffset = drivetrain.getState().Pose.getRotation();
+            stayDegree = new Rotation2d(0);
+
+
+        }));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -323,7 +363,7 @@ public class RobotContainer {
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm.negate())
                 .whileTrue(new LowLimelightShotCmd(arm, shooter, backLimelight, logger));
         // shootPositionKeybind.trigger().and(modifyArm).and(fixedArm.negate())
-        //         .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
+        // .whileTrue(new SetArmPositionCmd(arm, ArmPosition.SpeakerHigh));
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
                 .whileTrue(new SetArmPositionCmd(arm, ArmPosition.PodiumLow));
         shootPositionKeybind.trigger().and(modifyArm.negate()).and(fixedArm)
