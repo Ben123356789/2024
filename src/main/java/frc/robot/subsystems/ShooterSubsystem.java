@@ -180,15 +180,15 @@ public class ShooterSubsystem extends SubsystemBase {
   public void disableBrakeMode() {
     //intakeBottom.setIdleCoastMode();
     //intakeTop.setIdleCoastMode();
-    shooterTop.setIdleCoastMode();
-    shooterBottom.setIdleCoastMode();
+    // shooterTop.setIdleCoastMode();
+    // shooterBottom.setIdleCoastMode();
   }
 
   public void enableBrakeMode() {
     //intakeBottom.setIdleBrakeMode();
     //intakeTop.setIdleBrakeMode();
-    shooterTop.setIdleBrakeMode();
-    shooterBottom.setIdleBrakeMode();
+    // shooterTop.setIdleBrakeMode();
+    // shooterBottom.setIdleBrakeMode();
   }
 
   public void zeroEncoders() {
