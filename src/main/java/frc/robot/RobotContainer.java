@@ -34,7 +34,7 @@ import frc.robot.input.AnalogTrigger.Axis;
 import frc.robot.input.DPadButton.DPad;
 import frc.robot.input.Keybind.Button;
 import frc.robot.subsystems.ClimberSubsystem;
-// import frc.robot.subsystems.DashboardSubsystem;
+import frc.robot.subsystems.DashboardSubsystem;
 import frc.robot.subsystems.DigitalIOSubsystem;
 import frc.robot.subsystems.FloorIntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -106,9 +106,9 @@ public class RobotContainer {
         shooter = new ShooterSubsystem();
         climber = new ClimberSubsystem();
         digitalio = new DigitalIOSubsystem(arm, shooter, floorIntake, climber);
-        // dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
+        dashboard = new DashboardSubsystem(arm, shooter, climber, floorIntake);
 
-        look.HeadingController = new PhoenixPIDController(3.699, 0.00, 0.);
+        look.HeadingController = new PhoenixPIDController(3.7, 0.00, 0.);
         look.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
         drivetrain.seedFieldRelative();
 
@@ -194,7 +194,7 @@ public class RobotContainer {
         modifyArm = codriverController.leftBumper();
         fixedArm = codriverController.rightBumper();
 
-        // initialize keybinds - driver controller
+        // Driver Controller - Keybind Initialization
         snapTo0Keybind = new Keybind(driverController.getHID(), Button.Y);
         snapTo90Keybind = new Keybind(driverController.getHID(), Button.X);
         snapTo180Keybind = new Keybind(driverController.getHID(), Button.A);
@@ -209,7 +209,7 @@ public class RobotContainer {
         // secretAim = new Keybind(driverController.getHID(), Button.RightBumper);
         dubiousSpit = new Keybind(driverController.getHID(), Button.RightBumper);
 
-        // initialize keybinds - codriver controller
+        // Codriver Controller - Keybind Initialization
         climberMaxKeybind = new DPadButton(codriverController.getHID(), DPad.Up);
         climberMinKeybind = new DPadButton(codriverController.getHID(), DPad.Down);
         climberMidKeybind = new DPadButton(codriverController.getHID(), DPad.Left);

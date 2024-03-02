@@ -1,11 +1,6 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,7 +8,7 @@ import frc.robot.Constants;
 import frc.robot.PIDMotor;
 
 public class ShooterSubsystem extends SubsystemBase {
-  PIDMotor shooterTop, shooterBottom, intakeTop, intakeBottom;
+  public PIDMotor shooterTop, shooterBottom, intakeTop, intakeBottom;
 
   Timer shooterTimer;
   public IntakeState intakeState;
@@ -62,7 +57,6 @@ public class ShooterSubsystem extends SubsystemBase {
         slowDownShooters = false;
       }
     }
-    printDashboard();
   }
 
   public enum IntakeState {
@@ -163,13 +157,6 @@ public class ShooterSubsystem extends SubsystemBase {
         intakeBottom.resetEncoder();
         break;
     }
-  }
-
-  public void printDashboard() {
-    SmartDashboard.putString("Intake State:", intakeState.toString());
-    SmartDashboard.putString("Shooter State:", shooterState.toString());
-    shooterBottom.putPV();
-    shooterTop.putPV();
   }
 
   public boolean isShooterAtVelocity(){
