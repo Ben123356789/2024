@@ -1,12 +1,12 @@
 package frc.robot;
 
-// import frc.robot.subsystems.DashboardSubsystem.DashState;
+import frc.robot.subsystems.DashboardSubsystem.DashState;
 
 public final class Constants {
     private Constants() {}
 
     // SmartDashboard State
-    // public static final DashState DASH_STATE = DashState.Off;
+    public static final DashState DASH_STATE = DashState.Off;
 
     // Climber motor IDs
     public static final int CLIMBER_LEFT_ID = 30;

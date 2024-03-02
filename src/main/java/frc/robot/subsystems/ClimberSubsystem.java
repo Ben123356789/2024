@@ -79,7 +79,6 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // printDashboard();
         if(!ratchetEngaged){
             leftMotor.setTarget(target);
             rightMotor.setTarget(-target);
@@ -89,7 +88,6 @@ public class ClimberSubsystem extends SubsystemBase {
         }
         leftRatchetServo.setPosition(ratchetEngaged ? LEFT_SERVO_ENGAGE_POS : LEFT_SERVO_RELEASE_POS);
         rightRatchetServo.setPosition(ratchetEngaged ? RIGHT_SERVO_ENGAGE_POS : RIGHT_SERVO_RELEASE_POS);
-        // printDashboard();
     }
 
     /**
@@ -101,14 +99,6 @@ public class ClimberSubsystem extends SubsystemBase {
         } else{
             ratchetEngaged = true;
         }
-    }
-
-    /**
-     * Prints the climber motor positions in revolutions.
-     */
-    public void printDashboard() {
-        SmartDashboard.putNumber("Left Climber Position", leftMotor.getPosition());
-        SmartDashboard.putNumber("Right Climber Position", rightMotor.getPosition());
     }
 
     public void disableBrakeMode(){

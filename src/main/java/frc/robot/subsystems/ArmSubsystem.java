@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.ControlType;
 import frc.robot.Constants;
 import frc.robot.PIDMotor;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -132,9 +131,6 @@ public class ArmSubsystem extends SubsystemBase {
     leftShoulderMotor.generateTrapezoidPath(0, 0);
     wristMotor.generateTrapezoidPath(0, 0);
     elevatorMotor.generateTrapezoidPath(0, 0);
-    // leftShoulderMotor.putPIDF();
-    // wristMotor.putPIDF();
-    // elevatorMotor.putPIDF();
   }
 
   @Override
@@ -144,11 +140,6 @@ public class ArmSubsystem extends SubsystemBase {
       wristMotor.runTrapezoidPath();
       elevatorMotor.runTrapezoidPath();
     }
-    // printDashboard();
-    // SmartDashboard.putBoolean("isTrapezoidal", isTrapezoidal);
-    // leftShoulderMotor.fetchPIDFFromDashboard();
-    // wristMotor.fetchPIDFFromDashboard();
-    // elevatorMotor.fetchPIDFFromDashboard();
   }
 
   /**
@@ -173,17 +164,6 @@ public class ArmSubsystem extends SubsystemBase {
     } else {
       wristMotor.setTarget(wristEncoderCount);  
     }
-  }
-
- /**
-  * Prints the positions and velocities of all the arm motors to the SmartDashboard.
-  */
-  public void printDashboard() {
-    // SmartDashboard.putString("Arm Target Position", target.toString());
-    // leftShoulderMotor.putPV();
-    // rightShoulderMotor.putPV();
-    // wristMotor.putPV();
-    // elevatorMotor.putPV();
   }
 
   public void disableBrakeMode(){
