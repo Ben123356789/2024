@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import frc.robot.Constants;
 import frc.robot.ExtraMath;
+import frc.robot.RobotContainer;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.drive.Telemetry;
 import frc.robot.subsystems.ArmSubsystem;
@@ -9,6 +10,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.ShooterSubsystem.ShooterState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -19,7 +21,6 @@ public class LowLimelightShotCmd extends Command {
     double elevatorPosition;
     LimelightSubsystem limelight;
     ShooterSubsystem shooter;
-    boolean okToShoot;
     Telemetry logger;
 
     boolean shoulderSetCheck = false;
@@ -34,12 +35,11 @@ public class LowLimelightShotCmd extends Command {
 
     double[][] shooterSpeed = {
             { 8.3, 10000 },
-            { 17, 9000 },
-            { 33, 8000 }     
+            { 17, 9500 },
+            { 33, 9000 }     
     };
     LinearInterpolation wrist;
     LinearInterpolation shooterRPM;
-
 
     public LowLimelightShotCmd(ArmSubsystem arm, ShooterSubsystem shooter, LimelightSubsystem limelight, Telemetry logger) {
         this.arm = arm;
@@ -47,6 +47,7 @@ public class LowLimelightShotCmd extends Command {
         this.limelight = limelight;
         this.logger = logger;
         addRequirements(arm, shooter);
+
     }
 
     @Override
@@ -54,7 +55,8 @@ public class LowLimelightShotCmd extends Command {
         wrist = new LinearInterpolation(wristPosition);
         shooterRPM = new LinearInterpolation(shooterSpeed);
         limelight.setPipeline(0);
-        okToShoot = false;
+        shooter.okToShoot = false;
+        RobotContainer.speedMultiplier = 0.55;
         // arm.safeManualLimelightSetPosition(0, wrist.interpolate(tag.ty), 0, true);
     }
 
@@ -64,15 +66,15 @@ public class LowLimelightShotCmd extends Command {
         if(limelight.limelightRotation){
             double x = wrist.interpolate(limelight.tagTy);
             x = x + -1.5*logger.getVelocityX();
-            // SmartDashboard.putNumber("vel x", logger.getVelocityX());
+            SmartDashboard.putNumber("vel y", logger.getVelocityY());
             // SmartDashboard.putNumber("Calculated Wrist Position:", wrist.interpolate(tag.ty));
             arm.safeManualLimelightSetPosition(0, x, 0, false);
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
             shooter.shooterState = ShooterState.SpinLimelight;
-            if(ExtraMath.within(limelight.tagTx, 0, Constants.SHOOTER_ALLOWED_X_OFFSET)){
-                limelight.limelightRotation = false;
+            if(ExtraMath.within(limelight.tagTx, 10*logger.getVelocityY(), Constants.SHOOTER_ALLOWED_X_OFFSET)){
+                // limelight.limelightRotation = false;
                 shooter.okToShoot = true;
-            } else{
+            } else {
                 shooter.okToShoot = false;
             }
             // SmartDashboard.putNumber("Tag X", tag.tx);
@@ -81,6 +83,7 @@ public class LowLimelightShotCmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        RobotContainer.speedMultiplier = 1;
         limelight.limelightRotation = false;
         shooter.okToShoot = true;
         shooter.shooterState = ShooterState.Idle;

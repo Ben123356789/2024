@@ -44,7 +44,11 @@ public class ShooterSubsystem extends SubsystemBase {
     if(slowDownShooters){
       shooterBottom.setTarget(currentVelocity);
       shooterTop.setTarget(currentVelocity);
-      currentVelocity -= 800;
+      if (DriverStation.isAutonomous()){
+        currentVelocity -= 800;
+      } else {
+        currentVelocity -= 250;
+      }
       if(currentVelocity <= 0 ){
         shooterBottom.setTarget(0);
         shooterTop.setTarget(0);

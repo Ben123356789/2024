@@ -179,6 +179,8 @@ public class RobotContainer {
     AnalogTrigger secretShoot;
     Keybind secretAim;
 
+    public static double speedMultiplier = 1;
+
     private void configureBindings() {
         modifyArm = codriverController.leftBumper();
         fixedArm = codriverController.rightBumper();
@@ -215,18 +217,24 @@ public class RobotContainer {
                 drivetrain.applyRequest(() -> {
                     double rate;
                     if (backLimelight.limelightRotation && backLimelight.tagTv) {
-                        rate = -0.026 * MaxAngularRate * backLimelight.tagTx;
+                        rate = -0.026 * MaxAngularRate * (backLimelight.tagTx + (-10*logger.getVelocityY()));
                     } else if (pigeon.rotateToDegree) {
                         rate = MaxAngularRate * pigeon.magnitudeToAngle;
                     } else {
                         rate = -driverController.getRightX() * MaxAngularRate;
                     }
                     return drive
-                            .withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with// negative
+                            .withVelocityX(-driverController.getLeftY() * MaxSpeed * speedMultiplier) // Drive forward with// negative
                                                                                     // Y (forward)
-                            .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                            .withVelocityY(-driverController.getLeftX() * MaxSpeed * speedMultiplier) // Drive left with negative X (left)
                             .withRotationalRate(rate); // Drive counterclockwise with negative X (left)
                 }));
+
+        driverController.back().and(driverController.start()).and(driverController.a()).whileTrue(
+                drivetrain.applyRequest(() -> {
+                        return point.withModuleDirection(new Rotation2d(0));
+                })
+        );
 
         snapTo0Keybind.trigger().whileTrue(drivetrain.applyRequest(() -> {
             return look
