@@ -81,7 +81,7 @@ public class RobotContainer {
 
     boolean shouldStayDegree;
     Rotation2d stayDegree, angleOffset;
-    // public DashboardSubsystem dashboard;
+    public DashboardSubsystem dashboard;
     public final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
     private final CommandXboxController codriverController = new CommandXboxController(
             Constants.CODRIVER_CONTROLLER_PORT);
