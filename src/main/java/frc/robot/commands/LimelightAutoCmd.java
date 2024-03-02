@@ -40,7 +40,7 @@ public class LimelightAutoCmd extends Command {
     double[][] wristPosition = {
             { 8.3, 22 },
             { 17, 28.5 },
-            { 33, 37 }
+            { 33, 36.5   }
     };
 
     double[][] shooterSpeed = {
@@ -77,7 +77,8 @@ public class LimelightAutoCmd extends Command {
     @Override
     public void execute() {
         if (limelight.tagTv) {
-            limelight.limelightRotation = true;
+            //limelight.limelightRotation = true;
+            // System.out.println("limelight rotation on");
             double x = wrist.interpolate(limelight.tagTy);
             x = x + -1.5 * logger.getVelocityX();
             // SmartDashboard.putNumber("vel x", logger.getVelocityX());
@@ -87,16 +88,16 @@ public class LimelightAutoCmd extends Command {
             shooter.shooterV = shooterRPM.interpolate(limelight.tagTy);
             shooter.shooterState = ShooterState.SpinLimelight;
 
-            if (ExtraMath.within(limelight.tagTx, 0, 8) && shooterTimer.get() == 0 && shooter.isShooterAtVelocity()) {
-                limelight.limelightRotation = false;
-
+            System.out.println(shooter.isShooterAtVelocity());
+            if (ExtraMath.within(limelight.tagTx, 0, 8) && shooterTimer.get() == 0 /*&& shooter.isShooterAtVelocity()*/) {
+                //limelight.limelightRotation = false;
+                System.out.println("Limelight rotation off");
                 shooterTimer.restart();
-
             }
-            if (shooterTimer.get() > 0.25 && shooterTimer.get() < 0.7) {
+            if (shooterTimer.get() > 0.4 && shooterTimer.get() < 0.7) {
                 shooter.intakeState = IntakeState.ShootNow;
             }
-            if (shooterTimer.get() > 0.8) {
+            if (shooterTimer.get() > 0.7) {
                 isDone = true;
             }
             // SmartDashboard.putNumber("Tag X", tag.tx);

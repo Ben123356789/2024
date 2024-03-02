@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.170490785426017,
-        "y": 7.439674879349759
+        "x": 8.284508791239805,
+        "y": 7.4966838822566535
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.244094488188978,
-        "y": 7.3114046228092455
+        "x": 7.358112494002766,
+        "y": 7.36841362571614
       },
       "isLocked": false,
       "linkedName": "4LL - AlignEnd"
@@ -32,13 +32,13 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 4.5,
+    "velocity": 4.0,
     "rotation": 15.124007308310562,
     "rotateFast": false
   },
@@ -48,5 +48,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

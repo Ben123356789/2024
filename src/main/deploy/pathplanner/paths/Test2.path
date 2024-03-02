@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3509924162705473,
-        "y": 5.511956166769477
+        "x": 3.8378065645020185,
+        "y": 6.556035334292892
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.53840850538844,
-        "y": 6.215610145506006
+        "x": 3.1679507803460054,
+        "y": 6.185476815398077
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TestMidPoint"
     },
     {
       "anchor": {
-        "x": 3.5242570485140976,
-        "y": 6.4562695792058244
+        "x": 1.8424914627607036,
+        "y": 5.586882284875681
       },
       "prevControl": {
-        "x": 2.1022896331506957,
-        "y": 5.884550721482395
+        "x": 2.654869754183953,
+        "y": 5.9574408037704965
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -45,8 +45,8 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 22.75097634278771,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -167,7 +167,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean isShooterAtVelocity(){
-    return shooterTop.atVelocity(50) && shooterBottom.atVelocity(200);
+    return shooterTop.atVelocity(500) && shooterBottom.atVelocity(500);
   }
 
 

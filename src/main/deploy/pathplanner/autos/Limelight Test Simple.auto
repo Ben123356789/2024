@@ -14,13 +14,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Test1"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "limelight"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Test2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "limelight"
+                }
+              }
+            ]
           }
         }
       ]
