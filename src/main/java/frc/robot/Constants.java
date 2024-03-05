@@ -9,7 +9,7 @@ public final class Constants {
     public static final int BOT_DISCRIMINATION_PORT = 0;
 
     // SmartDashboard State
-    public static final DashState DASH_STATE = DashState.Off;
+    public static final DashState DASH_STATE = DashState.Temp;
 
     // Climber motor IDs
     public static final int CLIMBER_LEFT_ID = 30;
@@ -94,7 +94,7 @@ public final class Constants {
     public static final double WRIST_AMP_MAXV = WRIST_DEFAULT_MAXV;
     public static final double ELEVATOR_AMP_POSITION = -13;
     public static final double ELEVATOR_AMP_MAXV = ELEVATOR_DEFAULT_MAXV;
-    public static final double AMP_SHOOT_SPEED = 4500;
+    public static final double AMP_SHOOT_SPEED = 5500;
 
 
     // Amp2 - Shooting out the back
@@ -144,7 +144,7 @@ public final class Constants {
     // Climber Mid
     public static final double SHOULDER_CLIMBER_MID_POSITION = -114;
     public static final double WRIST_CLIMBER_MID_POSITION = 145;
-    public static final double WRIST_CLIMBER_MID_MAXV = 40;
+    public static final double WRIST_CLIMBER_MID_MAXV = 75;
     public static final double ELEVATOR_CLIMBER_MID_POSITION = 0;
     public static final double ELEVATOR_CLIMBER_MID_MAXV = ELEVATOR_DEFAULT_MAXV;
 
@@ -155,10 +155,25 @@ public final class Constants {
     public static final double ELEVATOR_CLIMBER_LOW_POSITION = -92;
     public static final double ELEVATOR_CLIMBER_LOW_MAXV = ELEVATOR_DEFAULT_MAXV;
 
+    // Climber Stowed
+    public static final double SHOULDER_CLIMBER_STOWED_POSITION = 0;
+    public static final double WRIST_CLIMBER_STOWED_POSITION = 0;
+    public static final double WRIST_CLIMBER_STOWED_MAXV = WRIST_DEFAULT_MAXV;
+    public static final double ELEVATOR_CLIMBER_STOWED_POSITION = 0;
+    public static final double ELEVATOR_CLIMBER_STOWED_MAXV = ELEVATOR_DEFAULT_MAXV;
+
+    // Climber Compact
+    public static final double SHOULDER_CLIMBER_COMPACT_POSITION = -114;
+    public static final double WRIST_CLIMBER_COMPACT_POSITION = 0;
+    public static final double WRIST_CLIMBER_COMPACT_MAXV = WRIST_DEFAULT_MAXV;
+    public static final double ELEVATOR_CLIMBER_COMPACT_POSITION = -92;
+    public static final double ELEVATOR_CLIMBER_COMPACT_MAXV = ELEVATOR_DEFAULT_MAXV;
+
     // Climber Heights
     public static final double CLIMBER_HIGH_HEIGHT = 400;
     public static final double CLIMBER_MID_HEIGHT = 110;
-    public static final double CLIMBER_LOW_HEIGHT = 0;
+    public static final double CLIMBER_LOW_HEIGHT = -5;
+    public static final double CLIMBER_STOWED_HEIGHT = 0;
 
     // Limelight Shooter Variable Height RPMs
     public static final double SHOOTER_LOW_RPM = 10000;

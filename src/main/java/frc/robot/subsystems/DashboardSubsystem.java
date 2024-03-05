@@ -6,7 +6,7 @@ import frc.robot.Constants;
 
 public class DashboardSubsystem extends SubsystemBase {
   public enum DashState{
-    Off, PV, Competition, PID;
+    Off, PV, Competition, PID, Temp;
   }
 
   DashState state = Constants.DASH_STATE;
@@ -32,6 +32,9 @@ public class DashboardSubsystem extends SubsystemBase {
         break;
       case PID:
         putPIDF();
+        break;
+      case Temp:
+        temp();
         break;
       case Off:
       default:
@@ -61,5 +64,10 @@ public class DashboardSubsystem extends SubsystemBase {
     shooter.intakeBottom.putPIDF();
     climber.leftMotor.putPIDF();
     climber.rightMotor.putPIDF();
+  }
+
+  public void temp(){
+    SmartDashboard.putNumber("Shooter Top Current", shooter.shooterTop.getCurrent());
+    SmartDashboard.putNumber("Shooter Bottom Current", shooter.shooterBottom.getCurrent());
   }
 }

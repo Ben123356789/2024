@@ -369,12 +369,24 @@ public class PIDMotor {
     }
 
     /**
-     * After generating a trapezoidal path, run this function periodically to update the target of the PIDMotor
+     * After generating a trapezoidal path, run this function periodically to update the target of the PIDMotor.
      */
     public void runTrapezoidPath() {
         TrapezoidProfile.State state = motorProfile.calculate(motorTimer.get());
         setTarget(state.position);
         // SmartDashboard.putNumber(name+" Trapezoid Output", state.position);
         SmartDashboard.putNumber(name + " Position Error", getPosition() - state.position);
+    }
+
+    /**
+     * Sets the current limit of the motor.
+     * @param limit Current limit in amps.
+     */
+    public void setCurrentLimit(int limit){
+        motor.setSmartCurrentLimit(limit);
+    }
+
+    public double getCurrent(){
+        return motor.getOutputCurrent();
     }
 }

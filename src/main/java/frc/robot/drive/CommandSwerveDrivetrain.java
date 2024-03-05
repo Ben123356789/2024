@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -40,8 +41,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency,
             SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        configurePathPlanner();
         PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+        configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -49,8 +50,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
-        configurePathPlanner();
         PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+        configurePathPlanner();
+
         if (Utils.isSimulation()) {
             startSimThread();
         }
@@ -59,17 +61,21 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public Optional<Rotation2d> getRotationTargetOverride() {
         // Some condition that should decide if we want to override rotation
+        System.out.println("Ran getRotation");
         if (limelight.limelightRotation) {
             // Return an optional containing the rotation override (this should be a field
             // relative rotation)
-            Rotation2d targetRelativeToRobot = Rotation2d.fromDegrees(limelight.tagTx);
+            Rotation2d targetRelativeToRobot = Rotation2d.fromDegrees(-limelight.tagTx);
             Rotation2d currentRotation = getState().Pose.getRotation();
             Rotation2d absolute = new Rotation2d(targetRelativeToRobot.getRadians() + currentRotation.getRadians());
+            SmartDashboard.putNumber("Current Rotation", currentRotation.getDegrees());
+            SmartDashboard.putNumber("Absolute Rotation", absolute.getDegrees());
             return Optional.of(absolute);
         } else {
             // return an empty optional when we don't want to override the path's rotation
             return Optional.empty();
         }
+
     }
 
     private void configurePathPlanner() {

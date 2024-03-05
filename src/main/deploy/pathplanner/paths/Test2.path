@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9114102672649795,
-        "y": 5.572630034148957
+        "x": 3.8378065645020185,
+        "y": 6.556035334292892
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9585455043925961,
-        "y": 5.5579705762586125
+        "x": 3.1679507803460054,
+        "y": 6.185476815398077
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TestMidPoint"
     },
     {
       "anchor": {
-        "x": 1.4149239409589933,
-        "y": 5.572630034148957
+        "x": 1.8424914627607036,
+        "y": 5.586882284875681
       },
       "prevControl": {
-        "x": 2.3971076196120658,
-        "y": 5.572630034148957
+        "x": 2.654869754183953,
+        "y": 5.9574408037704965
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -43,10 +43,10 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "4 Piece Subwoofer",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 22.75097634278771,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

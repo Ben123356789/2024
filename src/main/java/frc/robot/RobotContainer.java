@@ -21,6 +21,7 @@ import frc.robot.commands.LowLimelightShotCmd;
 import frc.robot.commands.SetArmPositionCmd;
 import frc.robot.commands.ShootCmd;
 import frc.robot.commands.SubwooferAutoCmd;
+import frc.robot.commands.ZeroArmCommand;
 import frc.robot.commands.SpinUpShooterCmd;
 import frc.robot.commands.IntakeFromSourceCmd;
 import frc.robot.commands.LimelightAutoCmd;
@@ -146,6 +147,7 @@ public class RobotContainer {
     /** B Button */
     Keybind snapToNoteKeybind;
     double angleFromNote = 0;
+    Keybind zeroArmKeybind;
 
     // codriver keybinds
     /** Dpad Up */
@@ -155,7 +157,9 @@ public class RobotContainer {
     /** Dpad Left */
     DPadButton climberMidKeybind;
     /** Dpad Right */
-    DPadButton climberToggleLockKeybind;
+    DPadButton climberStowKeybind;
+    /** Back Button */
+    Keybind climberCompactKeybind;
 
     /** Amp & Amp2 - X */
     Keybind ampKeybind;
@@ -200,6 +204,8 @@ public class RobotContainer {
         snapTo180Keybind = new Keybind(driverController.getHID(), Button.A);
         snapTo270Keybind = new Keybind(driverController.getHID(), Button.B);
 
+        zeroArmKeybind = new Keybind(driverController.getHID(), Button.Start);
+
         // snapToNoteKeybind = new Keybind(driverController.getHID(),
         // Button.RightBumper);
 
@@ -213,7 +219,8 @@ public class RobotContainer {
         climberMaxKeybind = new DPadButton(codriverController.getHID(), DPad.Up);
         climberMinKeybind = new DPadButton(codriverController.getHID(), DPad.Down);
         climberMidKeybind = new DPadButton(codriverController.getHID(), DPad.Left);
-        climberToggleLockKeybind = new DPadButton(codriverController.getHID(), DPad.Right);
+        climberStowKeybind = new DPadButton(codriverController.getHID(), DPad.Right);
+        climberCompactKeybind = new Keybind(codriverController.getHID(), Button.Back);
         ampKeybind = new Keybind(codriverController.getHID(), Button.X);
         intakeKeybind = new Keybind(codriverController.getHID(), Button.A);
         shootPositionKeybind = new Keybind(codriverController.getHID(), Button.Y);
@@ -340,6 +347,8 @@ public class RobotContainer {
         intakeDriverKeybind.trigger().onFalse(new PreloadCmd(shooter, arm));
         intakeDriverKeybind.trigger().onFalse(new FloorIntakeCmd(floorIntake, FloorIntakeState.Stop, 1));
 
+        zeroArmKeybind.trigger().whileTrue(new ZeroArmCommand(arm));
+
         // bind codriver controls to commands
         subwooferKeybind.trigger().whileTrue(new SetArmPositionCmd(arm, ArmPosition.SubWoofer));
         subwooferKeybind.trigger().whileTrue(new SpinUpShooterCmd(shooter, Constants.SUBWOOFER_SHOOT_SPEED, false));
@@ -379,7 +388,8 @@ public class RobotContainer {
         climberMaxKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Max));
         climberMinKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Min));
         climberMidKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Mid));
-        climberToggleLockKeybind.trigger().onTrue(new ClimberLockCmd(climber));
+        climberStowKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Stowed));
+        climberCompactKeybind.trigger().onTrue(new ClimberPositionCmd(climber, arm, ClimbState.Compact));
         spinUpTrap.trigger().whileTrue(new SpinUpShooterCmd(shooter, 4500, true));
 
     }
