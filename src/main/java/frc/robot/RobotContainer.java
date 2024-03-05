@@ -91,10 +91,10 @@ public class RobotContainer {
     public RobotContainer() {
         pigeon = new PigeonSubsystem();
         // pdp = new PowerDistribution(Constants.PDP_ID, ModuleType.kCTRE);
-        // led = new LEDSubsystem(limelight1, pdp);
         backLimelight = new LimelightSubsystem("limelight-back");
         leftLimelight = new LimelightSubsystem("limelight-left");
         rightLimelight = new LimelightSubsystem("limelight-right");
+        led = new LEDSubsystem(pdp);
         drivetrain.limelight = backLimelight;
 
         shouldStayDegree = false;
