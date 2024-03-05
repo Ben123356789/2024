@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9143338058755885,
-        "y": 5.531335051274091
+        "x": 1.328428690111538,
+        "y": 5.518363150740554
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.62197994481459,
-        "y": 6.162819391165847
+        "x": 2.3284286901115383,
+        "y": 5.518363150740554
       },
       "isLocked": false,
-      "linkedName": "MLL - Intake"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.2243786937716323,
-        "y": 6.782609576615164
+        "x": 2.9078895212422267,
+        "y": 6.561587279944157
       },
       "prevControl": {
-        "x": 2.58689748148727,
-        "y": 6.221290163378048
+        "x": 2.9078895212422267,
+        "y": 5.561587279944157
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MLL - Post Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -38,12 +38,12 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0,
+    "velocity": 0.0,
+    "rotation": 90.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Moving LL Shot",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

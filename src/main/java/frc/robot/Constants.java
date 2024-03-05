@@ -5,6 +5,9 @@ import frc.robot.subsystems.DashboardSubsystem.DashState;
 public final class Constants {
     private Constants() {}
 
+    // The port for discerning between the practice and competition bot
+    public static final int BOT_DISCRIMINATION_PORT = 0;
+
     // SmartDashboard State
     public static final DashState DASH_STATE = DashState.Off;
 
