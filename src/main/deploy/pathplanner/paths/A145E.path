@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.647842406795925,
+        "y": 6.82682809810064
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.177518132814044,
+        "y": 6.727062343013575
+      },
+      "isLocked": false,
+      "linkedName": "A145DEND"
+    },
+    {
+      "anchor": {
+        "x": 3.8378065645020185,
+        "y": 6.370756074845483
+      },
+      "prevControl": {
+        "x": 4.507662348658031,
+        "y": 6.556035334292892
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "A145EEND"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.3,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 17.87869659584123,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "A145",
+  "previewStartingState": {
+    "rotation": 14.931417178137485,
+    "velocity": 4.0
+  },
+  "useDefaultConstraints": false
+}

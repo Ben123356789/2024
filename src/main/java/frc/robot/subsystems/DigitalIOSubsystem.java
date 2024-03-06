@@ -2,11 +2,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DigitalIOSubsystem extends SubsystemBase {
     DigitalInput zeroEncodersButton;
     DigitalInput brakeModeButton;
+    DigitalInput button3;
+    DigitalInput button4;
     // Timer buttonCooldown;
     ArmSubsystem arm;
     ShooterSubsystem shooter;
@@ -17,6 +20,8 @@ public class DigitalIOSubsystem extends SubsystemBase {
     public DigitalIOSubsystem(ArmSubsystem arm, ShooterSubsystem shooter, FloorIntakeSubsystem floorIntake, ClimberSubsystem climber) {
         zeroEncodersButton = new DigitalInput(1);
         brakeModeButton = new DigitalInput(2);
+        button3 = new DigitalInput(3);
+        button4 = new DigitalInput(4);
         this.arm = arm;
         this.shooter = shooter;
         this.floorIntake = floorIntake;
@@ -26,6 +31,16 @@ public class DigitalIOSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putBoolean("Button 1", zeroEncodersButton.get());
+        SmartDashboard.putBoolean("Button 2", brakeModeButton.get());
+        SmartDashboard.putBoolean("Button 3", button3.get());
+        SmartDashboard.putBoolean("Button 4", button4.get());
+        // SmartDashboard.putBoolean("Button 5", brakeModeButton.get());
+        // SmartDashboard.putBoolean("Button 6", brakeModeButton.get());
+        // SmartDashboard.putBoolean("Button 7", brakeModeButton.get());
+        // SmartDashboard.putBoolean("Button 8", brakeModeButton.get());
+        // SmartDashboard.putBoolean("Button 9", brakeModeButton.get());
+
         boolean brake, encoder;
         brake = !brakeModeButton.get();
         encoder = !zeroEncodersButton.get();

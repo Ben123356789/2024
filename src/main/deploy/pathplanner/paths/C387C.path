@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.441085993283098,
+        "y": 4.389693223830892
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1560409787486248,
+        "y": 1.781531340840459
+      },
+      "isLocked": false,
+      "linkedName": "C387BEND"
+    },
+    {
+      "anchor": {
+        "x": 8.113481782519122,
+        "y": 1.0119098015973804
+      },
+      "prevControl": {
+        "x": 6.987553975107952,
+        "y": 1.3824683204921968
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "C387CEND"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -38.796552098308155,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.3,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -55.30484646876611,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "C387",
+  "previewStartingState": {
+    "rotation": 13.62699485989141,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

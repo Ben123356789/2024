@@ -6,10 +6,15 @@
     "4 Piece LL",
     "4 Piece Moving LL From Subwoofer",
     "4 Piece Subwoofer",
+    "A145",
+    "C387",
+    "D87654",
     "Moving LL Shot",
     "Multi Horzontal Moving LL Shot"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Numbered Autos"
+  ],
   "defaultMaxVel": 4.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

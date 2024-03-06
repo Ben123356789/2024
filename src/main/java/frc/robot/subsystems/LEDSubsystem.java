@@ -91,6 +91,9 @@ public class LEDSubsystem extends SubsystemBase {
         case 0:
             followNote();
             break;
+        case 1:
+            
+            break;
         default:
             displayVoltage();
             break;
