@@ -3,36 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9143338058755885,
-        "y": 5.531335051274091
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 2.62197994481459,
-        "y": 6.162819391165847
-      },
-      "isLocked": false,
-      "linkedName": "MLL - Intake"
-    },
-    {
-      "anchor": {
         "x": 2.2243786937716323,
         "y": 6.782609576615164
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4009020939657093,
+        "y": 5.986351545149646
+      },
+      "isLocked": false,
+      "linkedName": "MLL - Post Shot"
+    },
+    {
+      "anchor": {
+        "x": 2.556898225435407,
+        "y": 5.420865568571993
+      },
       "prevControl": {
-        "x": 2.58689748148727,
-        "y": 6.221290163378048
+        "x": 2.4204016103994217,
+        "y": 5.918103237631654
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MLL - Post Shot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
