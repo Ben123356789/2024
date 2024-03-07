@@ -118,6 +118,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("subwoofer", new SubwooferAutoCmd(arm, shooter));
         NamedCommands.registerCommand("intake", new FloorToShooterCmd(floorIntake, shooter, arm, true));
         NamedCommands.registerCommand("preload", new PreloadCmd(shooter, arm));
+        NamedCommands.registerCommand("popcorn", new PopcornAutoCmd(floorIntake, shooter, arm, Constants.Popcorn_SPEED));
 
         configureBindings();
 
